@@ -1,0 +1,231 @@
+/* pages/verify/verify.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F7F7F9;
+  padding-top: 48rpx;
+}
+
+/* ---------- 标题 ---------- */
+
+.head {
+  padding: 0 48rpx;
+}
+
+.head-title {
+  font-size: 44rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  letter-spacing: 2rpx;
+}
+
+.head-sub {
+  margin-top: 16rpx;
+  font-size: 23rpx;
+  color: #8A8A9E;
+  line-height: 1.6;
+}
+
+/* ---------- 输入 ---------- */
+
+.panel {
+  margin: 40rpx 24rpx 0;
+  padding: 32rpx;
+  border-radius: 20rpx;
+  background-color: #FFFFFF;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-radius: 12rpx;
+  background-color: #F5F5F8;
+  font-size: 30rpx;
+  color: #1A1A24;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+  letter-spacing: 2rpx;
+}
+
+.ph {
+  color: #C0C0CC;
+  letter-spacing: 1rpx;
+}
+
+.btn {
+  width: 140rpx;
+  height: 88rpx;
+  margin-left: 16rpx;
+  border-radius: 12rpx;
+  background-color: #FF5C39;
+  color: #FFFFFF;
+  font-size: 27rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn--disabled {
+  background-color: #E0E0E8;
+  color: #A8A8B8;
+}
+
+.hint {
+  margin-top: 18rpx;
+  font-size: 21rpx;
+  color: #A8A8B8;
+  text-align: center;
+}
+
+/* ---------- 结果 ---------- */
+
+.result {
+  margin: 28rpx 24rpx 0;
+  padding: 48rpx 36rpx 36rpx;
+  border-radius: 20rpx;
+  background-color: #FFFFFF;
+  text-align: center;
+}
+
+.res-badge {
+  width: 96rpx;
+  height: 96rpx;
+  margin: 0 auto;
+  border-radius: 48rpx;
+  font-size: 46rpx;
+  line-height: 96rpx;
+  color: #FFFFFF;
+}
+
+.result--ok .res-badge {
+  background-color: #FF5C39;
+  box-shadow: 0 8rpx 24rpx rgba(255, 92, 57, 0.28);
+}
+
+.result--fail .res-badge {
+  background-color: #B0B0BE;
+}
+
+.result--warn .res-badge {
+  background-color: #E0A020;
+  box-shadow: 0 8rpx 24rpx rgba(224, 160, 32, 0.26);
+}
+
+.res-title {
+  margin-top: 24rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.result--ok .res-title {
+  color: #1A1A24;
+}
+
+.result--warn .res-title {
+  color: #B8860B;
+}
+
+.result--fail .res-title {
+  color: #6A6A7C;
+}
+
+.res-sub {
+  margin-top: 12rpx;
+  font-size: 23rpx;
+  color: #8A8A9E;
+  line-height: 1.6;
+}
+
+.res-detail {
+  margin-top: 36rpx;
+  padding-top: 28rpx;
+  border-top: 1rpx solid #F0F0F4;
+}
+
+.res-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.res-k {
+  font-size: 23rpx;
+  color: #8A8A9E;
+}
+
+.res-v {
+  font-size: 25rpx;
+  color: #1A1A24;
+  font-weight: 500;
+}
+
+.res-v--mono {
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+  letter-spacing: 1rpx;
+}
+
+.res-v--warn {
+  color: #B8860B;
+}
+
+.res-actions {
+  margin-top: 32rpx;
+}
+
+.res-btn {
+  display: inline-block;
+  padding: 14rpx 48rpx;
+  border-radius: 36rpx;
+  border: 1rpx solid #E4E4EC;
+  font-size: 24rpx;
+  color: #6A6A7C;
+}
+
+/* ---------- 说明 ---------- */
+
+.tips {
+  margin: 36rpx 32rpx 0;
+}
+
+.tips-title {
+  font-size: 22rpx;
+  color: #A8A8B8;
+  margin-bottom: 14rpx;
+  letter-spacing: 1rpx;
+}
+
+.tip {
+  font-size: 22rpx;
+  color: #9C9CAC;
+  line-height: 2;
+}
+
+/* ---------- 联系 ---------- */
+
+.contact-btn {
+  margin: 56rpx 24rpx 0;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  background-color: #FFFFFF;
+  color: #FF5C39;
+  font-size: 26rpx;
+  border: 1rpx solid rgba(255, 92, 57, 0.3);
+}
+
+.contact-btn::after {
+  border: none;
+}
+
+.bottom-space {
+  height: calc(60rpx + env(safe-area-inset-bottom));
+}

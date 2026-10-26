@@ -1,0 +1,12 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "拾光手办",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "goods-card": "/components/goods-card/goods-card",
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-view": "/components/loading-view/loading-view",
+    "section-header": "/components/section-header/section-header"
+  }
+}

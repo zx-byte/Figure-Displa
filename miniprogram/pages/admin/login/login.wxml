@@ -1,0 +1,35 @@
+<!-- pages/admin/login/login.wxml -->
+<view class="page">
+
+  <view class="header">
+    <view class="lock">◈</view>
+    <view class="title">管理后台</view>
+    <view class="sub">仅限工作室经营者使用</view>
+  </view>
+
+  <view class="form">
+    <view class="label">管理口令</view>
+    <input
+      class="input"
+      password="{{true}}"
+      value="{{password}}"
+      placeholder="请输入管理口令"
+      placeholder-class="ph"
+      confirm-type="done"
+      bindinput="onPasswordInput"
+      bindconfirm="onSubmit"
+    />
+    <view class="hint">口令校验通过后可管理商品、订单与定制进度</view>
+
+    <view class="submit {{submitting ? 'submit--disabled' : ''}}" bindtap="onSubmit" hover-class="submit--hover">
+      {{submitting ? '验证中…' : '进入后台'}}
+    </view>
+
+    <view class="back" bindtap="onBack">返回个人中心</view>
+  </view>
+
+  <view class="footer">
+    当前账号需在管理员白名单内，口令错误或账号无权限均无法进入
+  </view>
+
+</view>

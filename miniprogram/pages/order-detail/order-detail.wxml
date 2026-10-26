@@ -1,0 +1,257 @@
+<!-- pages/order-detail/order-detail.wxml -->
+<view class="page">
+
+  <loading-view wx:if="{{loading}}" type="detail" />
+
+  <empty-state
+    wx:elif="{{loadError}}"
+    icon="error"
+    text="订单加载失败"
+    subText="订单可能已被删除，或网络出现波动"
+    actionText="重新加载"
+    bind:action="onRetry"
+  />
+
+  <block wx:else>
+    <!-- 状态头 -->
+    <view class="status-head">
+      <view class="status-title">{{statusText}}</view>
+      <view class="status-desc">{{statusDesc}}</view>
+      <view wx:if="{{countdown && countdown !== '00:00'}}" class="status-countdown">
+        剩余支付时间 {{countdown}}
+      </view>
+    </view>
+
+    <!-- 物流 -->
+    <view wx:if="{{showExpress}}" class="card">
+      <view class="card-title">物流信息</view>
+      <view class="express-row">
+        <text class="express-company">{{order.expressCompany}}</text>
+        <text class="express-no">{{order.expressNo}}</text>
+        <text class="express-copy" bindtap="onCopyExpress">复制</text>
+      </view>
+      <view wx:if="{{deliverTimeText}}" class="express-time">发货时间 {{deliverTimeText}}</view>
+
+      <!-- 轨迹时间线 -->
+      <view wx:if="{{traceLoading}}" class="trace-loading">正在查询物流轨迹…</view>
+
+      <view wx:elif="{{traceAvailable && traces.length}}" class="trace-wrap">
+        <view class="trace-head">
+          <text class="trace-title">物流轨迹</text>
+          <text class="trace-refresh" bindtap="onRefreshTrace">刷新</text>
+        </view>
+        <view class="trace-list">
+          <view
+            wx:for="{{traces}}"
+            wx:key="index"
+            class="trace-item {{index === 0 ? 'trace-item--active' : ''}}"
+          >
+            <view class="trace-dot-col">
+              <view class="trace-dot"></view>
+              <view wx:if="{{index < traces.length - 1}}" class="trace-line"></view>
+            </view>
+            <view class="trace-content">
+              <view class="trace-desc">{{item.desc}}</view>
+              <view class="trace-time">{{item.time}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 轨迹不可用：降级为复制单号自行查询 -->
+      <view wx:elif="{{traceLoaded}}" class="trace-fallback">
+        <text class="trace-fallback-text">物流轨迹暂不可用，可复制单号到快递官网或小程序查询</text>
+        <text class="trace-refresh" bindtap="onRefreshTrace">重试</text>
+      </view>
+    </view>
+
+    <!-- 收货地址 -->
+    <view class="card">
+      <view class="card-title">收货信息</view>
+      <view class="addr-person">
+        <text class="addr-name">{{order.address.name}}</text>
+        <text class="addr-phone">{{order.address.phone}}</text>
+      </view>
+      <view class="addr-detail">{{order.address.regionText}} {{order.address.detail}}</view>
+    </view>
+
+    <!-- 商品 -->
+    <view class="card">
+      <view class="card-title">作品明细</view>
+      <view
+        wx:for="{{goods}}"
+        wx:key="productId"
+        class="goods-row"
+        data-id="{{item.productId}}"
+        bindtap="goProduct"
+      >
+        <image class="goods-cover" src="{{item.image}}" mode="aspectFill" />
+        <view class="goods-info">
+          <view class="goods-name ellipsis-2">{{item.name}}</view>
+          <view wx:if="{{item.spec}}" class="goods-spec">规格：{{item.spec}}</view>
+          <view wx:if="{{item.limitNo}}" class="goods-limit">限量编号 No.{{item.limitNo}}</view>
+        </view>
+        <view class="goods-price-col">
+          <text class="goods-price">¥{{item.priceText}}</text>
+          <text class="goods-count">×{{item.count}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 售后进度 -->
+    <view wx:if="{{afterSale}}" class="card aftersale-card">
+      <view class="card-title">售后信息</view>
+      <view class="as-head">
+        <text class="as-type">{{asTypeText}}</text>
+        <text class="as-status as-status-{{afterSale.status}}">{{asStatusText}}</text>
+      </view>
+      <view class="as-desc">{{asStatusDesc}}</view>
+      <view class="as-row">
+        <text class="as-label">售后原因</text>
+        <text class="as-value">{{asReasonText}}</text>
+      </view>
+      <view wx:if="{{afterSale.description}}" class="as-row as-row--top">
+        <text class="as-label">问题描述</text>
+        <text class="as-value as-value--multi">{{afterSale.description}}</text>
+      </view>
+      <view wx:if="{{afterSale.images && afterSale.images.length}}" class="as-images">
+        <image
+          wx:for="{{afterSale.images}}"
+          wx:key="*this"
+          class="as-img"
+          src="{{item}}"
+          mode="aspectFill"
+          data-src="{{item}}"
+          bindtap="onPreviewAsImage"
+        />
+      </view>
+      <view wx:if="{{afterSale.refundNo}}" class="as-row">
+        <text class="as-label">退款单号</text>
+        <text class="as-value">{{afterSale.refundNo}}</text>
+      </view>
+      <view wx:if="{{afterSale.processNote}}" class="as-row">
+        <text class="as-label">商家备注</text>
+        <text class="as-value">{{afterSale.processNote}}</text>
+      </view>
+    </view>
+
+    <!-- 金额 -->
+    <view class="card">
+      <view class="amount-row">
+        <text class="amount-label">商品合计</text>
+        <text class="amount-value">¥{{totalText}}</text>
+      </view>
+      <view class="amount-row">
+        <text class="amount-label">运费</text>
+        <text class="amount-value">{{freightText === '免运费' ? '免运费' : '¥' + freightText}}</text>
+      </view>
+      <view class="divider"></view>
+      <view class="amount-row amount-row--total">
+        <text class="amount-label">实付金额</text>
+        <text class="amount-total"><text class="price-symbol">¥</text>{{payAmountText}}</text>
+      </view>
+    </view>
+
+    <!-- 订单信息 -->
+    <view class="card">
+      <view class="card-title">订单信息</view>
+      <view class="info-row">
+        <text class="info-label">订单编号</text>
+        <view class="info-value-row">
+          <text class="info-value">{{order.orderNo}}</text>
+          <text class="info-copy" bindtap="onCopyOrderNo">复制</text>
+        </view>
+      </view>
+      <view class="info-row">
+        <text class="info-label">下单时间</text>
+        <text class="info-value">{{createTimeText}}</text>
+      </view>
+      <view wx:if="{{payTimeText}}" class="info-row">
+        <text class="info-label">支付时间</text>
+        <text class="info-value">{{payTimeText}}</text>
+      </view>
+      <view wx:if="{{order.remark}}" class="info-row">
+        <text class="info-label">订单备注</text>
+        <text class="info-value">{{order.remark}}</text>
+      </view>
+    </view>
+
+    <view class="bottom-holder"></view>
+
+    <!-- 操作栏 -->
+    <view class="action-bar">
+      <button class="action-plain" open-type="contact">联系客服</button>
+      <view wx:if="{{canAfterSale}}" class="btn btn-line" bindtap="onAfterSale">申请售后</view>
+      <view wx:if="{{canCancelAfterSale}}" class="btn btn-line" bindtap="onCancelAfterSale">撤销申请</view>
+      <view wx:if="{{canCancel}}" class="btn btn-line" bindtap="onCancel">取消订单</view>
+      <view wx:if="{{canPay}}" class="btn btn-fill" bindtap="onPay">立即支付</view>
+      <view wx:if="{{canConfirm}}" class="btn btn-fill" bindtap="onConfirm">确认收货</view>
+    </view>
+  </block>
+
+  <!-- 售后申请弹层 -->
+  <view wx:if="{{afterSaleVisible}}" class="mask" bindtap="onCloseAfterSale">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">申请售后</view>
+      <view class="sheet-sub">请如实描述遇到的问题，商家将在 24 小时内响应</view>
+
+      <view class="sheet-label">售后类型</view>
+      <view class="as-type-list">
+        <view
+          wx:for="{{asTypeOptions}}"
+          wx:key="value"
+          class="as-type-item {{asType === item.value ? 'as-type-item--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectAsType"
+        >
+          <view class="as-type-name">{{item.text}}</view>
+          <view class="as-type-desc">{{item.desc}}</view>
+        </view>
+      </view>
+
+      <view class="sheet-label">售后原因</view>
+      <view class="as-reason-list">
+        <view
+          wx:for="{{asReasonOptions}}"
+          wx:key="value"
+          class="as-reason-item {{asReason === item.value ? 'as-reason-item--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onSelectAsReason"
+        >
+          {{item.text}}
+        </view>
+      </view>
+
+      <view class="sheet-label">问题描述（至少 10 字）</view>
+      <textarea
+        class="as-textarea"
+        value="{{asDescription}}"
+        maxlength="300"
+        placeholder="请描述具体问题，如开裂位置、缺件情况等"
+        placeholder-class="ph"
+        bindinput="onAsDescInput"
+      />
+      <view class="as-count">{{asDescription.length}}/300</view>
+
+      <view class="sheet-label">凭证图片（选填，最多 6 张）</view>
+      <view class="as-img-grid">
+        <view wx:for="{{asImages}}" wx:key="*this" class="as-img-cell">
+          <image class="as-img-thumb" src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="onPreviewAsImage" />
+          <view class="as-img-del" data-index="{{index}}" catchtap="onRemoveAsImage">×</view>
+        </view>
+        <view wx:if="{{asImages.length < 6}}" class="as-img-add" bindtap="onChooseAsImages">
+          <text class="as-img-add-icon">＋</text>
+          <text class="as-img-add-text">上传</text>
+        </view>
+      </view>
+
+      <view class="sheet-actions">
+        <view class="sheet-btn sheet-btn--ghost" bindtap="onCloseAfterSale">取消</view>
+        <view class="sheet-btn sheet-btn--primary" bindtap="onSubmitAfterSale">
+          {{asSubmitting ? '提交中…' : '提交申请'}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

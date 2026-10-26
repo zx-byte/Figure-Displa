@@ -1,0 +1,98 @@
+<!-- pages/order-confirm/order-confirm.wxml -->
+<view class="page">
+
+  <!-- 收货地址 -->
+  <view class="address-card" bindtap="goSelectAddress" hover-class="address-card--hover">
+    <block wx:if="{{address}}">
+      <view class="addr-main">
+        <view class="addr-person">
+          <text class="addr-name">{{address.name}}</text>
+          <text class="addr-phone">{{address.phone}}</text>
+        </view>
+        <view class="addr-detail">{{address.regionText}} {{address.detail}}</view>
+      </view>
+      <text class="addr-arrow">›</text>
+    </block>
+    <block wx:else>
+      <view class="addr-empty">
+        <text class="addr-empty-icon">＋</text>
+        <text>添加收货地址</text>
+      </view>
+      <text class="addr-arrow">›</text>
+    </block>
+  </view>
+
+  <!-- 商品明细 -->
+  <view class="card">
+    <view class="card-title">作品明细</view>
+    <view wx:for="{{items}}" wx:key="productId" class="goods-row">
+      <image class="goods-cover" src="{{item.cover}}" mode="aspectFill" />
+      <view class="goods-info">
+        <view class="goods-name ellipsis-2">{{item.name}}</view>
+        <view wx:if="{{item.spec}}" class="goods-spec">规格：{{item.spec}}</view>
+        <view class="goods-bottom">
+          <view class="goods-price"><text class="price-symbol">¥</text>{{item.priceText}}</view>
+          <view class="goods-count">×{{item.count}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="card">
+    <view class="card-title">订单备注</view>
+    <textarea
+      class="remark-input"
+      value="{{remark}}"
+      placeholder="选填：如包装要求、指定发货时间等"
+      placeholder-class="remark-placeholder"
+      maxlength="100"
+      bindinput="onRemarkInput"
+      auto-height="{{true}}"
+    />
+    <view class="remark-count">{{remark.length}}/100</view>
+  </view>
+
+  <!-- 金额明细 -->
+  <view class="card">
+    <view class="amount-row">
+      <text class="amount-label">商品合计</text>
+      <text class="amount-value">¥{{totalText}}</text>
+    </view>
+    <view class="amount-row">
+      <text class="amount-label">运费</text>
+      <text class="amount-value {{freight === 0 ? 'amount-free' : ''}}">{{freight === 0 ? '免运费' : '¥' + freightText}}</text>
+    </view>
+    <view wx:if="{{freightTip}}" class="freight-tip">{{freightTip}}</view>
+    <view class="divider"></view>
+    <view class="amount-row amount-row--total">
+      <text class="amount-label">应付金额</text>
+      <text class="amount-total"><text class="price-symbol">¥</text>{{payAmountText}}</text>
+    </view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="tips">
+    <view class="tip-item">· 提交订单后请在 15 分钟内完成支付，超时自动取消并释放库存</view>
+    <view class="tip-item">· 限量作品编号按下单顺序分配，付款成功后锁定</view>
+    <view class="tip-item">· 手工作品存在细微手工痕迹，属正常工艺特征</view>
+  </view>
+
+  <view class="bottom-holder"></view>
+
+  <!-- 底部支付栏 -->
+  <view class="pay-bar">
+    <view class="pay-total">
+      <text class="pay-label">实付</text>
+      <text class="pay-price"><text class="price-symbol">¥</text>{{payAmountText}}</text>
+    </view>
+    <view
+      class="pay-btn {{submitting ? 'pay-btn--disabled' : ''}}"
+      bindtap="onSubmit"
+      hover-class="pay-btn--hover"
+    >
+      {{submitting ? '处理中…' : '提交并支付'}}
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,76 @@
+<!-- pages/about/about.wxml -->
+<view class="page">
+
+  <!-- 头图 -->
+  <view class="hero">
+    <image class="hero-img" src="/images/demo/demo-6.jpg" mode="aspectFill" />
+    <view class="hero-mask"></view>
+    <view class="hero-content">
+      <view class="hero-title">一个人，一间工作室</view>
+      <view class="hero-sub">从建模到涂装，每件作品都由同一个人完成</view>
+    </view>
+  </view>
+
+  <!-- 数字 -->
+  <view class="stats">
+    <view wx:for="{{stats}}" wx:key="label" class="stat">
+      <view class="stat-num">{{item.num}}<text class="stat-unit">{{item.unit}}</text></view>
+      <view class="stat-label">{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 正文 -->
+  <view class="block">
+    <view class="block-title">为什么做这个</view>
+    <view class="para">
+      最开始只是想要一个货架上买不到的模型，后来发现「做出来」这件事本身比「拥有」更有意思。
+      现在做的每一件，都是我自己也想摆在桌上的东西。
+    </view>
+  </view>
+
+  <view class="block">
+    <view class="block-title">怎么做</view>
+    <view class="para">
+      建模用 Blender，打印后翻模，再用树脂灌注。上色是纯手工的，一层一层叠加，
+      有些作品要涂到第七层才出效果。所以每件的表面质感和官方量产款不一样，有手工的痕迹。
+    </view>
+    <view class="para">
+      一件作品从建模到完工，平均要四十个小时。限量款的编号就是完工顺序，
+      编号越小，做得越早，也越舍不得卖。
+    </view>
+  </view>
+
+  <view class="block">
+    <view class="block-title">怎么买</view>
+    <view class="para">
+      目前不走线上下单，看完作品觉得喜欢，直接通过客服找我聊。
+      可以问尺寸、问细节、问工期，也可以说说你想要什么，看看能不能做。
+    </view>
+    <view class="para">
+      定制需要先确认需求和报价，双方都清楚之后再开始。定金是总价的三成，
+      开始制作后不退——因为你的那件已经开工了，别人也不会要。
+    </view>
+  </view>
+
+  <view class="block block--tip">
+    <view class="para para--muted">
+      作品都是手工制作，有细微手工痕迹属正常工艺特征，不视为瑕疵。
+      照片受光线影响可能与实物有轻微色差，介意的话可以先聊清楚再决定。
+    </view>
+  </view>
+
+  <button class="contact-btn" open-type="contact">联系手作人</button>
+
+  <view class="legal">
+    <text class="legal-link" bindtap="goPrivacy">隐私政策</text>
+    <text class="legal-sep">·</text>
+    <text class="legal-link" bindtap="goTerms">用户协议</text>
+  </view>
+
+  <view class="footer">
+    <view class="footer-brand">拾光手办</view>
+    <view class="footer-sub">SHIGUANG FIGURE</view>
+  </view>
+
+  <view class="bottom-space"></view>
+</view>

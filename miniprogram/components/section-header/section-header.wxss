@@ -1,0 +1,61 @@
+/* components/section-header/section-header.wxss */
+
+.sec-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8rpx 0 20rpx;
+}
+
+.sec-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 0;
+}
+
+.sec-bar {
+  width: 6rpx;
+  height: 32rpx;
+  border-radius: 4rpx;
+  background-color: #FF5C39;
+  margin-right: 14rpx;
+  flex-shrink: 0;
+}
+
+.sec-titles {
+  min-width: 0;
+}
+
+.sec-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  letter-spacing: 1rpx;
+}
+
+.sec-sub {
+  margin-top: 2rpx;
+  font-size: 22rpx;
+  color: #8A8A9E;
+}
+
+.sec-more {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 24rpx;
+  color: #8A8A9E;
+  padding-left: 20rpx;
+  flex-shrink: 0;
+}
+
+.sec-more--hover {
+  opacity: 0.6;
+}
+
+.sec-arrow {
+  margin-left: 4rpx;
+  font-size: 26rpx;
+}

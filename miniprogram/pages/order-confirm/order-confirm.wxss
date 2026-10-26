@@ -1,0 +1,293 @@
+/* pages/order-confirm/order-confirm.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+  padding: 20rpx 24rpx 0;
+}
+
+/* ---------- 地址 ---------- */
+
+.address-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 32rpx 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.address-card--hover {
+  background-color: #FAFAFC;
+}
+
+.addr-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.addr-person {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.addr-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A24;
+}
+
+.addr-phone {
+  margin-left: 20rpx;
+  font-size: 25rpx;
+  color: #8A8A9E;
+}
+
+.addr-detail {
+  margin-top: 10rpx;
+  font-size: 25rpx;
+  color: #4A4A5A;
+  line-height: 1.55;
+}
+
+.addr-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 28rpx;
+  color: #1A1A24;
+}
+
+.addr-empty-icon {
+  margin-right: 14rpx;
+  font-size: 34rpx;
+  color: #FF5C39;
+}
+
+.addr-arrow {
+  font-size: 34rpx;
+  color: #C4C4D0;
+  margin-left: 16rpx;
+}
+
+/* ---------- 卡片 ---------- */
+
+.card {
+  padding: 28rpx 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  margin-bottom: 20rpx;
+}
+
+/* ---------- 商品行 ---------- */
+
+.goods-row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20rpx;
+}
+
+.goods-row:last-child {
+  margin-bottom: 0;
+}
+
+.goods-cover {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 14rpx;
+  background-color: #F0F0F4;
+  flex-shrink: 0;
+}
+
+.goods-info {
+  flex: 1;
+  min-width: 0;
+  padding-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.goods-name {
+  font-size: 26rpx;
+  color: #1A1A24;
+  line-height: 1.45;
+}
+
+.goods-spec {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  color: #8A8A9E;
+}
+
+.goods-bottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.goods-price {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1A1A24;
+}
+
+.goods-count {
+  font-size: 24rpx;
+  color: #8A8A9E;
+}
+
+.price-symbol {
+  font-size: 22rpx;
+}
+
+/* ---------- 备注 ---------- */
+
+.remark-input {
+  width: 100%;
+  min-height: 90rpx;
+  font-size: 26rpx;
+  color: #1A1A24;
+  line-height: 1.6;
+}
+
+.remark-placeholder {
+  color: #B0B0BE;
+}
+
+.remark-count {
+  margin-top: 8rpx;
+  text-align: right;
+  font-size: 21rpx;
+  color: #C4C4D0;
+}
+
+/* ---------- 金额 ---------- */
+
+.amount-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.amount-label {
+  font-size: 26rpx;
+  color: #4A4A5A;
+}
+
+.amount-value {
+  font-size: 26rpx;
+  color: #1A1A24;
+}
+
+.amount-free {
+  color: #00897B;
+}
+
+.freight-tip {
+  padding-bottom: 10rpx;
+  font-size: 21rpx;
+  color: #C9A227;
+}
+
+.divider {
+  height: 1rpx;
+  background-color: #F0F0F4;
+  margin: 12rpx 0;
+}
+
+.amount-row--total {
+  padding-top: 16rpx;
+}
+
+.amount-total {
+  font-size: 42rpx;
+  font-weight: 600;
+  color: #FF5C39;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+/* ---------- 说明 ---------- */
+
+.tips {
+  padding: 8rpx 8rpx 0;
+}
+
+.tip-item {
+  font-size: 21rpx;
+  color: #9C9CAC;
+  line-height: 1.8;
+}
+
+/* ---------- 底部支付栏 ---------- */
+
+.bottom-holder {
+  height: calc(140rpx + env(safe-area-inset-bottom));
+}
+
+.pay-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 14rpx 24rpx calc(14rpx + env(safe-area-inset-bottom));
+  background-color: #FFFFFF;
+  box-shadow: 0 -2rpx 16rpx rgba(26, 26, 36, 0.06);
+}
+
+.pay-total {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.pay-label {
+  font-size: 24rpx;
+  color: #8A8A9E;
+  margin-right: 8rpx;
+}
+
+.pay-price {
+  font-size: 44rpx;
+  font-weight: 600;
+  color: #FF5C39;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.pay-btn {
+  width: 300rpx;
+  height: 84rpx;
+  border-radius: 42rpx;
+  background-color: #FF5C39;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pay-btn--disabled {
+  background-color: #D9D9E0;
+}
+
+.pay-btn--hover {
+  opacity: 0.84;
+}

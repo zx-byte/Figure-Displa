@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "商品管理",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-view": "/components/loading-view/loading-view"
+  }
+}

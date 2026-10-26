@@ -1,0 +1,76 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/category/category",
+    "pages/detail/detail",
+    "pages/panorama/panorama",
+    "pages/poster/poster",
+    "pages/cart/cart",
+    "pages/order-confirm/order-confirm",
+    "pages/order-list/order-list",
+    "pages/order-detail/order-detail",
+    "pages/custom-apply/custom-apply",
+    "pages/custom-list/custom-list",
+    "pages/custom-detail/custom-detail",
+    "pages/address/address",
+    "pages/address-edit/address-edit",
+    "pages/user/user",
+    "pages/favorite/favorite",
+    "pages/history/history",
+    "pages/about/about",
+    "pages/privacy/privacy",
+    "pages/verify/verify",
+    "pages/admin/login/login",
+    "pages/admin/product/product",
+    "pages/admin/product-edit/product-edit",
+    "pages/admin/order/order",
+    "pages/admin/custom/custom",
+    "pages/admin/dashboard/dashboard"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "拾光手办",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F5F5F7",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "color": "#8A8A9E",
+    "selectedColor": "#FF5C39",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/category/category",
+        "text": "全部作品",
+        "iconPath": "images/tabbar/category.png",
+        "selectedIconPath": "images/tabbar/category-active.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "images/tabbar/user.png",
+        "selectedIconPath": "images/tabbar/user-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {
+    "privacy-modal": "/components/privacy-modal/privacy-modal"
+  },
+  "__usePrivacyCheck__": true,
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于填写收货地址时定位所在地区"
+    }
+  }
+}

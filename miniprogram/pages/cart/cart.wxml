@@ -1,0 +1,88 @@
+<!-- pages/cart/cart.wxml -->
+<view class="page">
+
+  <view wx:if="{{list.length > 0}}" class="head-row">
+    <view class="head-count">共 {{list.length}} 件作品</view>
+    <view class="head-edit" bindtap="onToggleEdit">{{editing ? '完成' : '管理'}}</view>
+  </view>
+
+  <loading-view wx:if="{{loading}}" type="list" count="3" />
+
+  <empty-state
+    wx:elif="{{list.length === 0}}"
+    icon="box"
+    text="购物车还是空的"
+    subText="挑一件喜欢的手作带回家吧"
+    actionText="去逛逛"
+    bind:action="goShopping"
+  />
+
+  <block wx:else>
+    <view class="list">
+      <view wx:for="{{list}}" wx:key="productId" class="cart-item {{item.invalid ? 'cart-item--invalid' : ''}}">
+        <view
+          class="check {{item.checked ? 'check--on' : ''}}"
+          data-index="{{index}}"
+          bindtap="onToggleCheck"
+        >
+          <text wx:if="{{item.checked}}" class="check-mark">✓</text>
+        </view>
+
+        <image
+          class="item-cover"
+          src="{{item.cover}}"
+          mode="aspectFill"
+          data-id="{{item.productId}}"
+          bindtap="goDetail"
+        />
+
+        <view class="item-body">
+          <view class="item-name ellipsis-2" data-id="{{item.productId}}" bindtap="goDetail">{{item.name}}</view>
+          <view wx:if="{{item.spec}}" class="item-spec">规格：{{item.spec}}</view>
+          <view wx:if="{{item.invalid}}" class="item-invalid">{{item.invalidReason}}</view>
+
+          <view class="item-bottom">
+            <view class="item-price">
+              <text class="price-symbol">¥</text>{{item.priceText}}
+            </view>
+            <view wx:if="{{!item.invalid}}" class="stepper">
+              <view class="stepper-btn" data-index="{{index}}" data-delta="-1" bindtap="onCountChange">−</view>
+              <view class="stepper-value">{{item.count}}</view>
+              <view class="stepper-btn" data-index="{{index}}" data-delta="1" bindtap="onCountChange">+</view>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{editing}}" class="item-remove" data-index="{{index}}" bindtap="onRemove">删除</view>
+      </view>
+    </view>
+
+    <view wx:if="{{list.length > 0}}" class="clear-invalid" bindtap="onClearInvalid">清理失效作品</view>
+
+    <view class="bottom-holder"></view>
+
+    <!-- 结算栏 -->
+    <view class="settle-bar">
+      <view class="settle-all" bindtap="onToggleAll">
+        <view class="check {{allChecked ? 'check--on' : ''}}">
+          <text wx:if="{{allChecked}}" class="check-mark">✓</text>
+        </view>
+        <text class="settle-all-text">全选</text>
+      </view>
+
+      <view class="settle-total">
+        <text class="settle-label">合计</text>
+        <text class="settle-price"><text class="price-symbol">¥</text>{{totalText}}</text>
+      </view>
+
+      <view
+        class="settle-btn {{checkedCount === 0 ? 'settle-btn--disabled' : ''}}"
+        bindtap="onCheckout"
+        hover-class="settle-btn--hover"
+      >
+        结算({{checkedCount}})
+      </view>
+    </view>
+  </block>
+
+</view>

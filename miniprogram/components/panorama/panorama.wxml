@@ -1,0 +1,19 @@
+<!-- components/panorama/panorama.wxml -->
+<view
+  class="panorama"
+  bindtouchstart="onTouchStart"
+  bindtouchmove="onTouchMove"
+  bindtouchend="onTouchEnd"
+  bindtouchcancel="onTouchEnd"
+>
+  <image class="pano-image" src="{{frames[current]}}" mode="aspectFill" />
+
+  <!-- 首次进入提示，拖动一次后消失 -->
+  <view wx:if="{{showHint}}" class="pano-hint">
+    <text class="hint-arrow">⇆</text>
+    <text class="hint-text">左右拖动旋转</text>
+  </view>
+
+  <!-- 帧指示 -->
+  <view class="pano-counter">{{current + 1}} / {{total}}</view>
+</view>

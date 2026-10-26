@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "分享海报",
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view"
+  }
+}

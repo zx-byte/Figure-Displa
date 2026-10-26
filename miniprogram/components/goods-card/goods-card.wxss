@@ -1,0 +1,168 @@
+/* components/goods-card/goods-card.wxss */
+
+.goods-card {
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
+  transition: transform 0.15s ease;
+}
+
+.goods-card--hover {
+  transform: scale(0.985);
+}
+
+.thumb-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background-color: #F0F0F4;
+  overflow: hidden;
+}
+
+.thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 封面加载失败时的占位，避免留白块 */
+.thumb--broken {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #F0F0F4;
+}
+
+.thumb-broken-mark {
+  font-size: 44rpx;
+  color: #C4C4D0;
+  line-height: 1;
+}
+
+.thumb-broken-text {
+  margin-top: 10rpx;
+  font-size: 20rpx;
+  color: #A8A8B8;
+}
+
+.badge {
+  position: absolute;
+  top: 16rpx;
+  left: 16rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  line-height: 30rpx;
+  background-color: rgba(26, 26, 36, 0.78);
+  color: #FFFFFF;
+  letter-spacing: 1rpx;
+}
+
+.badge--limit {
+  background-color: #C9A227;
+}
+
+.sold-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sold-text {
+  padding: 8rpx 24rpx;
+  border-radius: 40rpx;
+  background-color: rgba(26, 26, 36, 0.72);
+  color: #FFFFFF;
+  font-size: 22rpx;
+}
+
+.info {
+  padding: 18rpx 20rpx 22rpx;
+}
+
+.name {
+  font-size: 27rpx;
+  font-weight: 500;
+  color: #1A1A24;
+  line-height: 1.45;
+  min-height: 78rpx;
+}
+
+.subtitle {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #8A8A9E;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  margin-top: 12rpx;
+}
+
+.price {
+  color: #FF5C39;
+  font-weight: 600;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.price-symbol {
+  font-size: 22rpx;
+}
+
+.price-value {
+  font-size: 34rpx;
+}
+
+.price-origin {
+  margin-left: 10rpx;
+  font-size: 20rpx;
+  color: #B0B0BE;
+  text-decoration: line-through;
+}
+
+.sold-line {
+  margin-top: 6rpx;
+  font-size: 20rpx;
+  color: #8A8A9E;
+}
+
+/* 横向单列形态，用于收藏夹等场景 */
+.goods-card--list {
+  display: flex;
+  flex-direction: row;
+  padding: 16rpx;
+}
+
+.goods-card--list .thumb-wrap {
+  width: 200rpx;
+  height: 200rpx;
+  padding-top: 0;
+  flex-shrink: 0;
+  border-radius: 16rpx;
+}
+
+.goods-card--list .thumb {
+  position: static;
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.goods-card--list .info {
+  flex: 1;
+  padding: 4rpx 0 0 20rpx;
+  min-width: 0;
+}
+
+.goods-card--list .name {
+  min-height: auto;
+}

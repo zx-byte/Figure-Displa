@@ -1,0 +1,50 @@
+<!-- components/loading-view/loading-view.wxml -->
+<view class="skeleton-wrap">
+  <!-- 首页：轮播 + 快捷入口 + 两列网格，结构与真实内容一致 -->
+  <block wx:if="{{type === 'home'}}">
+    <view class="skeleton block-banner"></view>
+    <view class="entry-row-skeleton">
+      <view wx:for="{{entryItems}}" wx:key="*this" class="entry-col-skeleton">
+        <view class="skeleton block-dot"></view>
+        <view class="skeleton block-line block-line--tiny"></view>
+      </view>
+    </view>
+    <view class="grid">
+      <view wx:for="{{items}}" wx:key="*this" class="grid-item">
+        <view class="skeleton block-thumb"></view>
+        <view class="skeleton block-line block-line--long"></view>
+        <view class="skeleton block-line block-line--short"></view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{type === 'grid'}}">
+    <view class="grid">
+      <view wx:for="{{items}}" wx:key="*this" class="grid-item">
+        <view class="skeleton block-thumb"></view>
+        <view class="skeleton block-line block-line--long"></view>
+        <view class="skeleton block-line block-line--short"></view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:elif="{{type === 'detail'}}">
+    <view class="skeleton block-hero"></view>
+    <view class="detail-body">
+      <view class="skeleton block-line block-line--long"></view>
+      <view class="skeleton block-line block-line--mid"></view>
+      <view class="skeleton block-line block-line--short"></view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view wx:for="{{items}}" wx:key="*this" class="row">
+      <view class="skeleton block-cover"></view>
+      <view class="row-body">
+        <view class="skeleton block-line block-line--long"></view>
+        <view class="skeleton block-line block-line--mid"></view>
+        <view class="skeleton block-line block-line--short"></view>
+      </view>
+    </view>
+  </block>
+</view>

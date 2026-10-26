@@ -1,0 +1,132 @@
+/* pages/privacy/privacy.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+/* ---------- 顶部文档切换 ---------- */
+
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  background-color: var(--color-card);
+  border-bottom: 1rpx solid var(--color-line);
+}
+
+.tab {
+  flex: 1;
+  padding: 30rpx 0 26rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--color-sub);
+  position: relative;
+}
+
+.tab--on {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.tab--on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 64rpx;
+  height: 6rpx;
+  margin-left: -32rpx;
+  border-radius: 3rpx;
+  background-color: var(--color-brand);
+}
+
+/* ---------- 正文 ---------- */
+
+.body {
+  padding: 32rpx 32rpx 60rpx;
+}
+
+.intro {
+  padding: 28rpx 32rpx;
+  margin-bottom: 28rpx;
+  background-color: var(--color-brand-soft);
+  border-radius: var(--radius-lg);
+  font-size: 26rpx;
+  line-height: 1.75;
+  color: var(--color-ink-2);
+}
+
+.sec {
+  padding: 32rpx;
+  margin-bottom: 20rpx;
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+}
+
+.sec-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 20rpx;
+}
+
+.para {
+  font-size: 27rpx;
+  line-height: 1.85;
+  color: var(--color-ink-2);
+  margin-bottom: 16rpx;
+}
+
+.para:last-child {
+  margin-bottom: 0;
+}
+
+.list {
+  margin-top: 8rpx;
+}
+
+.list-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.list-row:last-child {
+  margin-bottom: 0;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 8rpx;
+  height: 8rpx;
+  margin: 16rpx 16rpx 0 4rpx;
+  border-radius: 50%;
+  background-color: var(--color-brand);
+}
+
+.list-text {
+  flex: 1;
+  font-size: 27rpx;
+  line-height: 1.85;
+  color: var(--color-ink-2);
+}
+
+/* ---------- 页脚 ---------- */
+
+.foot {
+  padding: 32rpx 8rpx 20rpx;
+  text-align: center;
+}
+
+.foot-line {
+  font-size: 24rpx;
+  color: var(--color-sub);
+  line-height: 1.9;
+}
+
+.foot-line--muted {
+  margin-top: 12rpx;
+  color: #A8A8B8;
+}

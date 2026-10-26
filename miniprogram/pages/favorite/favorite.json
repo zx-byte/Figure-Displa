@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "我的收藏",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "goods-card": "/components/goods-card/goods-card",
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-view": "/components/loading-view/loading-view"
+  }
+}

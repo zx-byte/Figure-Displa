@@ -1,0 +1,106 @@
+/* pages/address/address.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+}
+
+.list {
+  padding: 20rpx 24rpx 0;
+}
+
+.addr-card {
+  margin-bottom: 20rpx;
+  padding: 28rpx 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+}
+
+.addr-card--hover {
+  background-color: #FAFAFC;
+}
+
+.addr-person {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.addr-name {
+  font-size: 29rpx;
+  font-weight: 600;
+  color: #1A1A24;
+}
+
+.addr-phone {
+  margin-left: 18rpx;
+  font-size: 25rpx;
+  color: #8A8A9E;
+}
+
+.addr-default {
+  margin-left: 14rpx;
+  padding: 2rpx 12rpx;
+  border-radius: 6rpx;
+  background-color: #FFF0EC;
+  color: #FF5C39;
+  font-size: 19rpx;
+}
+
+.addr-detail {
+  margin-top: 12rpx;
+  font-size: 25rpx;
+  color: #4A4A5A;
+  line-height: 1.55;
+}
+
+.addr-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 20rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid #F5F5F7;
+}
+
+.addr-action {
+  margin-left: 32rpx;
+  font-size: 23rpx;
+  color: #8A8A9E;
+}
+
+.addr-action--danger {
+  color: #FF5C39;
+}
+
+/* ---------- 底部按钮 ---------- */
+
+.bottom-holder {
+  height: calc(140rpx + env(safe-area-inset-bottom));
+}
+
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16rpx 24rpx calc(16rpx + env(safe-area-inset-bottom));
+  background-color: #FFFFFF;
+  box-shadow: 0 -2rpx 16rpx rgba(26, 26, 36, 0.06);
+}
+
+.add-btn {
+  height: 88rpx;
+  border-radius: 44rpx;
+  background-color: #FF5C39;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-btn--hover {
+  opacity: 0.84;
+}

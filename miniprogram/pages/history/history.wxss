@@ -1,0 +1,125 @@
+/* pages/history/history.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F7F7F9;
+}
+
+/* ---------- 头部 ---------- */
+
+.head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx 16rpx;
+}
+
+.count {
+  font-size: 22rpx;
+  color: #8A8A9E;
+}
+
+.clear {
+  font-size: 22rpx;
+  color: #FF5C39;
+  padding: 6rpx 12rpx;
+}
+
+/* ---------- 列表 ---------- */
+
+.list {
+  margin: 0 24rpx;
+  border-radius: 20rpx;
+  background-color: #FFFFFF;
+  overflow: hidden;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 24rpx;
+}
+
+.item + .item {
+  border-top: 1rpx solid #F5F5F8;
+}
+
+.item--hover {
+  background-color: #FAFAFC;
+}
+
+.item-img {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 12rpx;
+  background-color: #F0F0F4;
+  flex-shrink: 0;
+}
+
+.item-body {
+  flex: 1;
+  min-width: 0;
+  padding: 0 20rpx;
+}
+
+.item-name {
+  font-size: 26rpx;
+  color: #1A1A24;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.item-price {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #FF5C39;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.item-time {
+  font-size: 20rpx;
+  color: #B0B0BE;
+  flex-shrink: 0;
+}
+
+/* ---------- 空态 ---------- */
+
+.empty {
+  padding-top: 200rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-icon {
+  font-size: 88rpx;
+  color: #D8D8E2;
+  line-height: 1;
+}
+
+.empty-text {
+  margin-top: 32rpx;
+  font-size: 27rpx;
+  color: #6A6A7C;
+}
+
+.empty-sub {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: #A8A8B8;
+}
+
+.empty-btn {
+  margin-top: 48rpx;
+  padding: 18rpx 64rpx;
+  border-radius: 40rpx;
+  background-color: #FF5C39;
+  color: #FFFFFF;
+  font-size: 26rpx;
+}

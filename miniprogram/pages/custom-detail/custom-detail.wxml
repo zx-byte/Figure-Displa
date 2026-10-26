@@ -1,0 +1,131 @@
+<!-- pages/custom-detail/custom-detail.wxml -->
+<view class="page">
+
+  <loading-view wx:if="{{loading}}" type="detail" />
+
+  <empty-state
+    wx:elif="{{loadError}}"
+    icon="error"
+    text="定制单加载失败"
+    subText="订单可能已关闭，或网络出现波动"
+    actionText="重新加载"
+    bind:action="onRetry"
+  />
+
+  <block wx:else>
+    <!-- 状态头 -->
+    <view class="status-head">
+      <view class="status-title">{{statusText}}</view>
+      <view class="status-desc">{{statusDesc}}</view>
+      <view class="status-no">单号 {{item.orderNo}}</view>
+    </view>
+
+    <!-- 金额 -->
+    <view class="card">
+      <view class="amount-grid">
+        <view class="amount-cell">
+          <text class="cell-label">最终报价</text>
+          <text class="cell-value">¥{{quoteText}}</text>
+        </view>
+        <view class="amount-cell">
+          <text class="cell-label">定金 30%</text>
+          <text class="cell-value cell-value--gold">¥{{depositText}}</text>
+        </view>
+        <view class="amount-cell">
+          <text class="cell-label">待付尾款</text>
+          <text class="cell-value">¥{{restText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 需求信息 -->
+    <view class="card">
+      <view class="card-title">定制需求</view>
+      <view class="info-row">
+        <text class="info-label">角色题材</text>
+        <text class="info-value">{{requirement.character}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">比例</text>
+        <text class="info-value">{{requirement.scale}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">风格</text>
+        <text class="info-value">{{requirement.style}}</text>
+      </view>
+      <view wx:if="{{requirement.extra}}" class="info-row">
+        <text class="info-label">特殊要求</text>
+        <text class="info-value">{{requirement.extra}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">联系电话</text>
+        <text class="info-value">{{requirement.contact}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">提交时间</text>
+        <text class="info-value">{{createTimeText}}</text>
+      </view>
+    </view>
+
+    <!-- 参考图 -->
+    <view wx:if="{{refImages.length > 0}}" class="card">
+      <view class="card-title">参考图</view>
+      <view class="ref-grid">
+        <image
+          wx:for="{{refImages}}"
+          wx:key="*this"
+          class="ref-image"
+          src="{{item}}"
+          mode="aspectFill"
+          data-src="{{item}}"
+          data-list="{{refImages}}"
+          bindtap="onPreview"
+        />
+      </view>
+    </view>
+
+    <!-- 进度时间轴 -->
+    <view class="card">
+      <view class="card-title">制作进度</view>
+      <view class="timeline">
+        <view wx:for="{{schedule}}" wx:key="index" class="tl-item">
+          <view class="tl-axis">
+            <view class="tl-dot {{item.isLatest ? 'tl-dot--active' : ''}}"></view>
+            <view wx:if="{{index !== schedule.length - 1}}" class="tl-line"></view>
+          </view>
+          <view class="tl-content">
+            <view class="tl-stage {{item.isLatest ? 'tl-stage--active' : ''}}">{{item.stage}}</view>
+            <view wx:if="{{item.desc}}" class="tl-desc">{{item.desc}}</view>
+            <view wx:if="{{item.images.length > 0}}" class="tl-images">
+              <image
+                wx:for="{{item.images}}"
+                wx:for-item="img"
+                wx:key="*this"
+                class="tl-image"
+                src="{{img}}"
+                mode="aspectFill"
+                data-src="{{img}}"
+                data-list="{{item.images}}"
+                bindtap="onPreview"
+              />
+            </view>
+            <view class="tl-time">{{item.timeText}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="tips">进度由手作人手动更新，如有疑问可通过客服会话直接沟通</view>
+
+    <view class="bottom-holder"></view>
+
+    <!-- 操作栏 -->
+    <view class="action-bar">
+      <button class="action-plain" open-type="contact">联系客服</button>
+      <view wx:if="{{canCancel}}" class="btn btn-line" bindtap="onCancel">取消定制</view>
+      <view wx:if="{{canPayDeposit}}" class="btn btn-fill" bindtap="onPayDeposit">支付定金 ¥{{depositText}}</view>
+      <view wx:if="{{canPayRest}}" class="btn btn-fill" bindtap="onPayRest">支付尾款 ¥{{restText}}</view>
+    </view>
+  </block>
+
+</view>

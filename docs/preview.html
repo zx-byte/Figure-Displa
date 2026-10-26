@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拾光手办 · 视觉预览</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+  :root {
+    --ink: #1A1A24;
+    --ink2: #4A4A5A;
+    --sub: #8A8A9E;
+    --line: #EDEDF2;
+    --bg: #F5F5F7;
+    --brand: #FF5C39;
+    --brand-soft: #FFF0EC;
+    --gold: #C9A227;
+    --gold-soft: #FBF6E6;
+    --white: #FFFFFF;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #101014;
+    color: #E8E8F0;
+    min-height: 100vh;
+    padding: 40px 24px 64px;
+  }
+
+  .head {
+    max-width: 1240px;
+    margin: 0 auto 36px;
+    text-align: center;
+  }
+  .head h1 {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+  .head p {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #7C7C92;
+    letter-spacing: 1px;
+  }
+
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 36px;
+  }
+  .tab {
+    padding: 9px 20px;
+    border-radius: 20px;
+    border: 1px solid #2A2A34;
+    background: #17171C;
+    color: #9A9AB0;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .18s ease;
+  }
+  .tab:hover { border-color: #3A3A48; color: #D0D0E0; }
+  .tab.on {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .stage {
+    display: flex;
+    gap: 48px;
+    max-width: 1240px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  /* ---------- 手机外框 ---------- */
+  .device {
+    width: 390px;
+    flex-shrink: 0;
+    background: #000;
+    border-radius: 44px;
+    padding: 10px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px #2A2A34;
+    position: relative;
+  }
+  .device::after {
+    content: '';
+    position: absolute;
+    top: 18px; left: 50%;
+    transform: translateX(-50%);
+    width: 108px; height: 26px;
+    background: #000;
+    border-radius: 0 0 16px 16px;
+    z-index: 30;
+  }
+  .viewport {
+    width: 370px;
+    height: 780px;
+    background: var(--bg);
+    border-radius: 36px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 状态栏 */
+  .statusbar {
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    background: #fff;
+    z-index: 20;
+  }
+  .statusbar.light { background: transparent; color: #fff; position: absolute; left: 0; right: 0; top: 0; }
+  .statusbar .dots { display: flex; gap: 3px; align-items: center; }
+  .statusbar .dot { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
+
+  /* 导航栏 */
+  .navbar {
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    position: relative;
+    z-index: 15;
+  }
+  .navbar .back {
+    position: absolute;
+    left: 16px;
+    font-size: 20px;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .scroll::-webkit-scrollbar { width: 0; }
+
+  /* ---------- 通用 ---------- */
+  .card { background: #fff; border-radius: 16px; }
+  .pad { padding: 12px; }
+
+  .art {
+    position: relative;
+    overflow: hidden;
+    background: #EFEFF4;
+  }
+  .art::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 22%;
+    transform: translateX(-50%);
+    width: 34%; height: 26%;
+    border-radius: 50%;
+    background: rgba(255,255,255,.5);
+  }
+  .art::after {
+    content: '';
+    position: absolute;
+    left: 50%; bottom: 16%;
+    transform: translateX(-50%);
+    width: 46%; height: 34%;
+    background: rgba(255,255,255,.4);
+    clip-path: polygon(22% 0, 78% 0, 100% 100%, 0 100%);
+  }
+  .art-1 { background: linear-gradient(150deg, #FFC4A3, #FF5C39); }
+  .art-2 { background: linear-gradient(150deg, #A8B8FF, #3F2B96); }
+  .art-3 { background: linear-gradient(150deg, #E4C96B, #8A6D1F); }
+  .art-4 { background: linear-gradient(150deg, #9BE0DA, #1A4A5A); }
+  .art-5 { background: linear-gradient(150deg, #E0B4B4, #7A3B3B); }
+  .art-6 { background: linear-gradient(150deg, #C8C8D8, #4A4A5A); }
+  .art-7 { background: linear-gradient(150deg, #B7A8F0, #4B2E83); }
+  .art-8 { background: linear-gradient(150deg, #F0C4A0, #8A4B1F); }
+
+  .price { color: var(--brand); font-weight: 600; font-family: "DIN Alternate", "Helvetica Neue", sans-serif; }
+  .price .sym { font-size: 11px; }
+  .price .num { font-size: 17px; }
+
+  /* ---------- 首页 ---------- */
+  .search { padding: 8px 12px 4px; }
+  .search-box {
+    height: 36px; border-radius: 18px; background: #fff;
+    display: flex; align-items: center; padding: 0 12px;
+    font-size: 12px; color: #A8A8B8;
+  }
+  .search-box span:first-child { font-size: 15px; margin-right: 6px; color: var(--sub); }
+
+  .banner {
+    margin: 6px 12px 0;
+    height: 200px;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(120deg, #2B2340 0%, #6B3A8F 55%, #A8456B 100%);
+  }
+  .banner .art-sil {
+    position: absolute; right: 24px; top: 30px;
+    width: 120px; height: 150px;
+    background: rgba(255,255,255,.13);
+    clip-path: polygon(50% 0, 78% 18%, 70% 100%, 30% 100%, 22% 18%);
+  }
+  .banner .txt {
+    position: absolute; left: 18px; bottom: 18px;
+  }
+  .banner .t1 { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: 1px; }
+  .banner .t2 { margin-top: 4px; font-size: 11px; color: rgba(255,255,255,.7); }
+  .banner .pager {
+    position: absolute; bottom: 12px; right: 16px;
+    display: flex; gap: 4px;
+  }
+  .banner .pager i { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.35); }
+  .banner .pager i.on { width: 14px; border-radius: 3px; background: #fff; }
+
+  .entries { display: flex; padding: 16px 8px 0; }
+  .entry { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  .entry .dot {
+    width: 46px; height: 46px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; color: #fff;
+    box-shadow: 0 4px 10px rgba(26,26,36,.14);
+  }
+  .entry .lb { margin-top: 7px; font-size: 11px; color: var(--ink2); }
+
+  .sec-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 22px 12px 10px;
+  }
+  .sec-left { display: flex; align-items: center; }
+  .sec-bar { width: 3px; height: 16px; border-radius: 2px; background: var(--brand); margin-right: 7px; }
+  .sec-t { font-size: 16px; font-weight: 600; color: var(--ink); }
+  .sec-s { margin-left: 8px; font-size: 10px; color: var(--sub); }
+  .sec-more { font-size: 11px; color: var(--sub); }
+
+  .hscroll { display: flex; gap: 10px; padding: 0 12px; overflow-x: auto; }
+  .hscroll::-webkit-scrollbar { height: 0; }
+  .hcard {
+    width: 148px; flex-shrink: 0; background: #fff;
+    border-radius: 12px; overflow: hidden;
+  }
+  .hcard .art { width: 148px; height: 148px; position: relative; }
+  .hcard .badge {
+    position: absolute; top: 7px; left: 7px;
+    padding: 2px 7px; border-radius: 4px;
+    background: var(--gold); color: #fff; font-size: 9px; font-weight: 500;
+  }
+  .hcard .nm { padding: 8px 9px 0; font-size: 12px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hcard .pr { padding: 4px 9px 9px; }
+
+  .custom-banner {
+    margin: 22px 12px 0;
+    padding: 18px 16px;
+    border-radius: 14px;
+    background: linear-gradient(120deg, #1A1A24 0%, #33334A 100%);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .custom-banner .l .t { font-size: 14px; font-weight: 600; color: #fff; }
+  .custom-banner .l .s { margin-top: 4px; font-size: 10px; color: rgba(255,255,255,.6); }
+  .custom-banner .btn {
+    padding: 7px 16px; border-radius: 18px;
+    background: var(--brand); color: #fff; font-size: 11px; font-weight: 500;
+  }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; padding: 0 12px; }
+  .gcard { background: #fff; border-radius: 12px; overflow: hidden; }
+  .gcard .art { width: 100%; height: 170px; }
+  .gcard .body { padding: 8px 9px 11px; }
+  .gcard .nm { font-size: 12px; color: var(--ink); line-height: 1.45; height: 34px; overflow: hidden; }
+  .gcard .sb { margin-top: 3px; font-size: 10px; color: var(--sub); }
+  .gcard .pr { margin-top: 6px; display: flex; align-items: baseline; }
+  .gcard .org { margin-left: 5px; font-size: 10px; color: #B0B0BE; text-decoration: line-through; }
+
+  .footer-tip { padding: 26px 0 18px; text-align: center; font-size: 10px; color: #B0B0BE; letter-spacing: 2px; }
+
+  /* ---------- 底部 tabbar ---------- */
+  .tabbar {
+    height: 58px; flex-shrink: 0;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    display: flex;
+    padding-bottom: 6px;
+  }
+  .tb { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+  .tb .ic { font-size: 17px; color: var(--sub); line-height: 1; }
+  .tb .lb { font-size: 9px; color: var(--sub); }
+  .tb.on .ic, .tb.on .lb { color: var(--ink); font-weight: 600; }
+
+  /* ---------- 详情 ---------- */
+  .detail-hero { height: 370px; position: relative; }
+  .detail-hero .counter {
+    position: absolute; right: 12px; bottom: 12px;
+    padding: 3px 9px; border-radius: 12px;
+    background: rgba(26,26,36,.55); color: #fff; font-size: 10px;
+  }
+  .detail-hero .hint {
+    position: absolute; left: 12px; bottom: 12px;
+    padding: 3px 9px; border-radius: 12px;
+    background: rgba(255,255,255,.86); color: var(--ink2); font-size: 9px;
+  }
+  .d-info { background: #fff; padding: 16px 12px 14px; margin-top: 8px; }
+  .d-price { display: flex; align-items: baseline; }
+  .d-price .big { font-size: 26px; font-weight: 600; color: var(--brand); font-family: "DIN Alternate", sans-serif; }
+  .d-price .big .s { font-size: 14px; }
+  .d-price .org { margin-left: 8px; font-size: 12px; color: #B0B0BE; text-decoration: line-through; }
+  .d-price .limit {
+    margin-left: 8px; padding: 2px 8px; border-radius: 4px;
+    background: var(--gold-soft); color: var(--gold); font-size: 10px; font-weight: 500;
+  }
+  .d-title { margin-top: 10px; font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1.5; }
+  .d-sub { margin-top: 4px; font-size: 12px; color: var(--sub); }
+  .d-meta { margin-top: 10px; display: flex; gap: 14px; font-size: 11px; color: var(--ink2); }
+  .d-meta .out { color: var(--brand); }
+
+  .d-block { background: #fff; margin-top: 8px; padding: 14px 12px; }
+  .d-block .bt { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .specs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .spec {
+    padding: 7px 16px; border-radius: 6px;
+    border: 1px solid var(--line); background: #FAFAFC;
+    font-size: 12px; color: var(--ink2);
+  }
+  .spec.on { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); font-weight: 500; }
+  .stepper { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .stepper span {
+    width: 32px; height: 28px; line-height: 28px; text-align: center;
+    background: #FAFAFC; font-size: 14px; color: var(--ink);
+  }
+  .stepper b { width: 40px; height: 28px; line-height: 28px; text-align: center; font-size: 13px; font-weight: 400; }
+  .row-between { display: flex; align-items: center; justify-content: space-between; }
+
+  .rules { margin-top: 10px; }
+  .rules div { font-size: 11px; color: var(--sub); line-height: 1.8; }
+
+  .detail-bar {
+    height: 60px; flex-shrink: 0; background: #fff;
+    display: flex; align-items: center; padding: 0 10px;
+    box-shadow: 0 -1px 8px rgba(26,26,36,.06);
+  }
+  .bar-icon { width: 44px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .bar-icon .s { font-size: 16px; color: var(--ink2); }
+  .bar-icon .l { font-size: 9px; color: var(--sub); }
+  .bar-ghost {
+    flex: 1; height: 42px; margin-left: 8px; border-radius: 21px;
+    border: 1px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--ink);
+  }
+  .bar-primary {
+    flex: 1; height: 42px; margin-left: 8px; border-radius: 21px;
+    background: var(--brand); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500;
+  }
+
+  /* ---------- 购物车 ---------- */
+  .cart-head { display: flex; justify-content: space-between; padding: 12px 12px 4px; font-size: 11px; color: var(--sub); }
+  .cart-head .m { color: var(--ink); }
+  .cart-item {
+    display: flex; align-items: center; gap: 9px;
+    background: #fff; border-radius: 12px; padding: 11px 10px;
+    margin: 0 10px 8px;
+  }
+  .check {
+    width: 19px; height: 19px; border-radius: 50%;
+    border: 1px solid #D9D9E0; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: #fff;
+  }
+  .check.on { background: var(--brand); border-color: var(--brand); }
+  .cart-item .art { width: 78px; height: 78px; border-radius: 8px; flex-shrink: 0; }
+  .cart-item .body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; height: 78px; }
+  .cart-item .nm { font-size: 12px; color: var(--ink); font-weight: 500; line-height: 1.4; }
+  .cart-item .sp { font-size: 10px; color: var(--sub); }
+  .cart-item .foot { display: flex; align-items: center; justify-content: space-between; }
+
+  .settle {
+    height: 62px; flex-shrink: 0; background: #fff;
+    display: flex; align-items: center; padding: 0 12px;
+    box-shadow: 0 -1px 8px rgba(26,26,36,.06);
+  }
+  .settle .all { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--ink2); }
+  .settle .sum { flex: 1; text-align: right; padding-right: 10px; }
+  .settle .sum .l { font-size: 10px; color: var(--sub); margin-right: 4px; }
+  .settle .sum .v { font-size: 19px; font-weight: 600; color: var(--brand); font-family: "DIN Alternate", sans-serif; }
+  .settle .go {
+    width: 110px; height: 40px; border-radius: 20px;
+    background: var(--brand); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500;
+  }
+
+  /* ---------- 订单确认 ---------- */
+  .addr {
+    margin: 10px 12px 0; background: #fff; border-radius: 12px;
+    padding: 14px 12px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .addr .n { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .addr .p { margin-left: 10px; font-size: 12px; color: var(--sub); }
+  .addr .d { margin-top: 6px; font-size: 12px; color: var(--ink2); line-height: 1.5; }
+  .addr .arrow { font-size: 16px; color: #C4C4D0; }
+
+  .oc-card { margin: 10px 12px 0; background: #fff; border-radius: 12px; padding: 14px 12px; }
+  .oc-card .ct { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  .oc-goods { display: flex; gap: 10px; }
+  .oc-goods .art { width: 72px; height: 72px; border-radius: 7px; flex-shrink: 0; }
+  .oc-goods .body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; height: 72px; }
+  .oc-goods .nm { font-size: 12px; color: var(--ink); }
+  .oc-goods .sp { font-size: 10px; color: var(--sub); }
+  .oc-goods .ft { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink); }
+
+  .amount-line { display: flex; justify-content: space-between; padding: 7px 0; font-size: 12px; color: var(--ink2); }
+  .amount-line.free { color: #00897B; }
+  .amount-line.total { border-top: 1px solid #F5F5F7; margin-top: 6px; padding-top: 11px; }
+  .amount-line.total .v { font-size: 20px; font-weight: 600; color: var(--brand); font-family: "DIN Alternate", sans-serif; }
+  .amount-line.total .k { font-size: 12px; color: var(--ink2); }
+
+  .freight-tip { font-size: 10px; color: var(--gold); padding: 2px 0 6px; }
+
+  .paybar {
+    height: 64px; flex-shrink: 0; background: #fff;
+    display: flex; align-items: center; padding: 0 12px;
+    box-shadow: 0 -1px 8px rgba(26,26,36,.06);
+  }
+  .paybar .l { font-size: 10px; color: var(--sub); margin-right: 4px; }
+  .paybar .v { font-size: 21px; font-weight: 600; color: var(--brand); font-family: "DIN Alternate", sans-serif; }
+  .paybar .btn {
+    margin-left: auto; width: 140px; height: 42px; border-radius: 21px;
+    background: var(--brand); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 500;
+  }
+
+  /* ---------- 个人中心 ---------- */
+  .profile {
+    padding: 26px 16px 30px;
+    background: linear-gradient(135deg, #1A1A24 0%, #33334A 100%);
+    display: flex; align-items: center;
+  }
+  .avatar {
+    width: 58px; height: 58px; border-radius: 20px;
+    background: rgba(255,255,255,.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: rgba(255,255,255,.7); flex-shrink: 0;
+  }
+  .profile .info { flex: 1; padding-left: 12px; }
+  .profile .nn { font-size: 16px; font-weight: 600; color: #fff; }
+  .profile .ss { margin-top: 4px; font-size: 11px; color: rgba(255,255,255,.55); }
+  .profile .edit {
+    padding: 4px 12px; border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.28);
+    font-size: 10px; color: rgba(255,255,255,.82);
+  }
+
+  .p-card { margin: -14px 12px 0; background: #fff; border-radius: 12px; padding: 14px 12px; position: relative; }
+  .p-card + .p-card { margin-top: 10px; }
+  .p-head { display: flex; justify-content: space-between; align-items: center; }
+  .p-head .t { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .p-head .m { font-size: 11px; color: var(--sub); }
+  .order-entries { display: flex; margin-top: 14px; }
+  .oe { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .oe .s { font-size: 18px; color: var(--ink); line-height: 1; }
+  .oe .l { font-size: 10px; color: var(--ink2); }
+
+  .custom-tip { margin-top: 7px; font-size: 10px; color: var(--sub); line-height: 1.6; }
+  .custom-btn {
+    margin-top: 11px; height: 38px; border-radius: 19px;
+    background: var(--ink); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+
+  .menu { margin: 10px 12px 0; background: #fff; border-radius: 12px; overflow: hidden; }
+  .menu-item {
+    display: flex; align-items: center; padding: 0 12px;
+    height: 50px; border-bottom: 1px solid #F5F5F7;
+    font-size: 13px; color: var(--ink);
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item .tag {
+    margin-left: auto; padding: 1px 6px; border-radius: 3px;
+    background: var(--brand-soft); color: var(--brand); font-size: 9px;
+    margin-right: 8px;
+  }
+  .menu-item .ar { margin-left: auto; font-size: 15px; color: #C4C4D0; }
+
+  /* ---------- 管理概览 ---------- */
+  .adm-head { padding: 16px 16px 14px; background: linear-gradient(135deg, #1A1A24 0%, #33334A 100%); }
+  .adm-head .t { font-size: 17px; font-weight: 600; color: #fff; }
+  .adm-head .s { margin-top: 4px; font-size: 10px; color: rgba(255,255,255,.5); }
+
+  .metric { margin: -8px 12px 0; background: #fff; border-radius: 12px; padding: 16px 14px 14px; position: relative; }
+  .metric .lb { font-size: 11px; color: var(--sub); }
+  .metric .v { margin-top: 5px; font-size: 30px; font-weight: 600; color: var(--ink); font-family: "DIN Alternate", sans-serif; line-height: 1.2; }
+  .metric .v .s { font-size: 15px; margin-right: 2px; }
+  .metric .subs { display: flex; align-items: center; margin-top: 14px; padding-top: 13px; border-top: 1px solid #F5F5F7; }
+  .metric .sc { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .metric .sc .n { font-size: 16px; font-weight: 600; color: var(--ink); font-family: "DIN Alternate", sans-serif; }
+  .metric .sc .l { font-size: 10px; color: var(--sub); }
+  .metric .dv { width: 1px; height: 24px; background: #F0F0F4; }
+
+  .todo { display: flex; gap: 7px; margin-top: 12px; }
+  .todo-item {
+    flex: 1; padding: 8px 0; border-radius: 8px; background: #FAFAFC;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .todo-item .n { font-size: 19px; font-weight: 600; color: var(--ink); font-family: "DIN Alternate", sans-serif; }
+  .todo-item .n.warn { color: var(--brand); }
+  .todo-item .l { font-size: 10px; color: var(--sub); }
+
+  .adm-menu { margin: 10px 12px 0; background: #fff; border-radius: 12px; overflow: hidden; }
+  .adm-row { display: flex; align-items: center; height: 56px; padding: 0 12px; border-bottom: 1px solid #F5F5F7; }
+  .adm-row:last-child { border-bottom: none; }
+  .adm-ic {
+    width: 32px; height: 32px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #fff; margin-right: 10px;
+  }
+  .adm-row .l { font-size: 13px; color: var(--ink); }
+  .adm-row .ar { margin-left: auto; font-size: 15px; color: #C4C4D0; }
+  .logout {
+    margin: 18px 12px 0; height: 42px; border-radius: 21px;
+    border: 1px solid var(--line); background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--sub);
+  }
+
+  /* ---------- 右侧说明 ---------- */
+  .notes {
+    width: 420px;
+    flex-shrink: 0;
+    padding-top: 20px;
+  }
+  .notes h2 {
+    font-size: 19px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .notes .sub {
+    font-size: 12px;
+    color: #6E6E86;
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+  .note-item {
+    padding: 14px 0;
+    border-top: 1px solid #22222A;
+  }
+  .note-item .k {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--brand);
+    letter-spacing: .5px;
+  }
+  .note-item .v {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: #9A9AB0;
+    line-height: 1.8;
+  }
+  .note-item .v code {
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #1E1E26;
+    color: #C4C4D8;
+    font-size: 11px;
+    font-family: Consolas, monospace;
+  }
+
+  @media (max-width: 1100px) {
+    .stage { flex-direction: column; align-items: center; }
+    .notes { width: 390px; padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>拾光手办 · 视觉预览 <span style="font-size:13px;color:#FF5C39;font-weight:500;vertical-align:middle;">纯展示模式</span></h1>
+  <p>按小程序实际 WXSS 还原 · 1rpx ≈ 0.5px · 设备宽 750rpx / 375px · 更新于 10-26 11:24</p>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab on" data-page="home">首页</div>
+  <div class="tab" data-page="detail">商品详情</div>
+  <div class="tab" data-page="user">个人中心</div>
+  <div class="tab" data-page="cart">购物车 · 已隐藏</div>
+  <div class="tab" data-page="confirm">确认订单 · 已隐藏</div>
+  <div class="tab" data-page="admin">经营概览</div>
+</div>
+
+<div class="stage">
+  <div class="device">
+    <div class="viewport" id="screen"></div>
+  </div>
+  <div class="notes" id="notes"></div>
+</div>
+
+<script>
+/* ---------- 渲染工具 ---------- */
+const h = (html) => html;
+
+function tabbar(active) {
+  const items = [
+    { k: 'home', ic: '⌂', lb: '首页' },
+    { k: 'cat', ic: '▤', lb: '全部作品' },
+    { k: 'user', ic: '☺', lb: '我的' }
+  ]
+  return `<div class="tabbar">${items.map(i => `
+    <div class="tb ${i.k === active ? 'on' : ''}">
+      <span class="ic">${i.ic}</span><span class="lb">${i.lb}</span>
+    </div>`).join('')}</div>`
+}
+
+function statusbar() {
+  return `<div class="statusbar">
+    <span>9:41</span>
+    <span class="dots">
+      <span>􀙇</span><span>􀛨</span><span>􀛪</span>
+    </span>
+  </div>`
+}
+
+/* ---------- 首页 ---------- */
+function pageHome() {
+  const hcards = [
+    { art: 'art-3', nm: '机械螳螂 1/6', pr: '598.00', bg: '限量 30 体' },
+    { art: 'art-7', nm: '星海观测者 1/7', pr: '428.00', bg: '限量 20 体' },
+    { art: 'art-4', nm: '深海档案馆 1/8', pr: '368.00', bg: '限量 15 体' }
+  ]
+  const gcards = [
+    { art: 'art-1', nm: '原创 · 雾都游侠 1/7 手办', sb: '原创角色系列，树脂涂装', pr: '268.00', org: '328.00' },
+    { art: 'art-2', nm: '苍穹骑士 1/6 收藏级', sb: '联名系列，金属骨架', pr: '688.00', org: '' },
+    { art: 'art-5', nm: '和风 · 樱守 1/7', sb: '手工上色，附赠地台', pr: '398.00', org: '458.00' },
+    { art: 'art-6', nm: '机械蜂鸟 Q版', sb: '桌面摆件，可动关节', pr: '168.00', org: '' }
+  ]
+
+  return `
+  ${statusbar()}
+  <div class="scroll">
+    <div class="search">
+      <div class="search-box"><span>⌕</span><span>搜索作品名称、题材或系列</span></div>
+    </div>
+
+    <div class="banner">
+      <div class="art-sil"></div>
+      <div class="txt">
+        <div class="t1">限量复刻 · 雾都系列</div>
+        <div class="t2">编号唯一，售罄即止</div>
+      </div>
+      <div class="pager"><i class="on"></i><i></i><i></i></div>
+    </div>
+
+    <div class="entries">
+      <div class="entry"><div class="dot" style="background:#FF5C39">◆</div><span class="lb">原创系列</span></div>
+      <div class="entry"><div class="dot" style="background:#1A1A24">▲</div><span class="lb">机械机甲</span></div>
+      <div class="entry"><div class="dot" style="background:#C9A227">●</div><span class="lb">幻想生物</span></div>
+      <div class="entry"><div class="dot" style="background:#6C5CE7">✦</div><span class="lb">全部作品</span></div>
+    </div>
+
+    <div class="sec-head">
+      <div class="sec-left"><div class="sec-bar"></div><span class="sec-t">限量发售</span><span class="sec-s">编号唯一，售罄即止</span></div>
+      <span class="sec-more">全部 ›</span>
+    </div>
+    <div class="hscroll">
+      ${hcards.map(c => `
+        <div class="hcard">
+          <div class="art ${c.art}"><span class="badge">${c.bg}</span></div>
+          <div class="nm">${c.nm}</div>
+          <div class="pr"><span class="price"><span class="sym">¥</span><span class="num">${c.pr}</span></span></div>
+        </div>`).join('')}
+    </div>
+
+    <div class="custom-banner">
+      <div class="l">
+        <div class="t">想要独一份的作品？</div>
+        <div class="s">把你的想法告诉我们，从角色设定到配色细节</div>
+      </div>
+      <div class="btn">微信咨询</div>
+    </div>
+
+    <div class="sec-head">
+      <div class="sec-left"><div class="sec-bar"></div><span class="sec-t">新品上架</span><span class="sec-s">最新完成的手作作品</span></div>
+      <span class="sec-more">查看全部 ›</span>
+    </div>
+    <div class="grid2">
+      ${gcards.map(c => `
+        <div class="gcard">
+          <div class="art ${c.art}"></div>
+          <div class="body">
+            <div class="nm">${c.nm}</div>
+            <div class="sb">${c.sb}</div>
+            <div class="pr">
+              <span class="price"><span class="sym">¥</span><span class="num">${c.pr}</span></span>
+              ${c.org ? `<span class="org">¥${c.org}</span>` : ''}
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="footer-tip">手作有温度，每一件都只做一次</div>
+  </div>
+  ${tabbar('home')}`
+}
+
+/* ---------- 详情 ---------- */
+function pageDetail() {
+  return `
+  ${statusbar()}
+  <div class="navbar"><span class="back">‹</span>商品详情</div>
+  <div class="scroll">
+    <div class="art art-2 detail-hero">
+      <div class="counter">1 / 5</div>
+      <div class="hint">轻触查看大图细节</div>
+    </div>
+
+    <div class="d-info">
+      <div class="d-price">
+        <span class="big"><span class="s">¥</span>598.00</span>
+        <span class="org">¥728.00</span>
+        <span class="limit">限量 30 体</span>
+      </div>
+      <div class="d-title">机械螳螂 1/6 收藏级手办</div>
+      <div class="d-sub">多层装甲结构，关节可动，附赠编号卡</div>
+      <div class="d-meta">
+        <span class="out">剩余 28 体 / 限量 30 体</span>
+        <span>已售 2</span>
+      </div>
+    </div>
+
+    <div class="d-block">
+      <div class="bt">选择规格</div>
+      <div class="specs">
+        <span class="spec on">原色</span>
+        <span class="spec">异色</span>
+      </div>
+    </div>
+
+    <div class="d-block">
+      <div class="bt">作品详情</div>
+      <div class="rules">
+        <div>机械螳螂 1/6 比例，多层装甲结构，关节可动，附带专用支架。</div>
+        <div>全球限量 30 体，编号唯一，按下单顺序分配。</div>
+      </div>
+    </div>
+
+    <div class="d-block">
+      <div class="bt">作品说明</div>
+      <div class="rules">
+        <div>· 全部作品由手作人单独完成，不是批量生产的工业品</div>
+        <div>· 手工作品存在细微手工痕迹，同款之间也会有细节差异</div>
+        <div>· 限量作品编号唯一，具体编号以实际沟通为准</div>
+        <div>· 价格与库存为参考信息，实际以微信沟通确认为准</div>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+  </div>
+
+  <div class="detail-bar">
+    <div class="bar-icon"><span class="s">♡</span><span class="l">收藏</span></div>
+    <div class="bar-icon"><span class="s">✉</span><span class="l">客服</span></div>
+    <div class="bar-primary" style="flex:1">微信咨询定制</div>
+  </div>`
+}
+
+/* ---------- 购物车 ---------- */
+function pageCart() {
+  const items = [
+    { art: 'art-1', nm: '原创 · 雾都游侠 1/7 手办', sp: '规格：原色', pr: '268.00', cn: 1, on: true },
+    { art: 'art-3', nm: '机械螳螂 1/6（限量）', sp: '规格：异色', pr: '598.00', cn: 1, on: true },
+    { art: 'art-6', nm: '机械蜂鸟 Q版摆件', sp: '', pr: '168.00', cn: 2, on: false }
+  ]
+  const total = 268 + 598
+
+  return `
+  ${statusbar()}
+  <div class="navbar">购物车</div>
+  <div class="scroll">
+    <div class="cart-head"><span>共 3 件作品</span><span class="m">管理</span></div>
+    ${items.map(i => `
+      <div class="cart-item">
+        <div class="check ${i.on ? 'on' : ''}">${i.on ? '✓' : ''}</div>
+        <div class="art ${i.art}"></div>
+        <div class="body">
+          <div>
+            <div class="nm">${i.nm}</div>
+            ${i.sp ? `<div class="sp">${i.sp}</div>` : ''}
+          </div>
+          <div class="foot">
+            <span class="price"><span class="sym">¥</span><span class="num">${i.pr}</span></span>
+            <div class="stepper"><span>−</span><b>${i.cn}</b><span>+</span></div>
+          </div>
+        </div>
+      </div>`).join('')}
+    <div style="height:70px"></div>
+  </div>
+
+  <div class="settle">
+    <div class="all"><div class="check on">✓</div><span>全选</span></div>
+    <div class="sum"><span class="l">合计</span><span class="v">¥${total}.00</span></div>
+    <div class="go">结算(2)</div>
+  </div>`
+}
+
+/* ---------- 确认订单 ---------- */
+function pageConfirm() {
+  return `
+  ${statusbar()}
+  <div class="navbar"><span class="back">‹</span>确认订单</div>
+  <div class="scroll">
+    <div class="addr">
+      <div>
+        <div><span class="n">李青</span><span class="p">138****8000</span></div>
+        <div class="d">安徽省 合肥市 蜀山区 长江西路 669 号 3 栋 1201</div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+    <div class="oc-card">
+      <div class="ct">作品明细</div>
+      <div class="oc-goods">
+        <div class="art art-1"></div>
+        <div class="body">
+          <div>
+            <div class="nm">原创 · 雾都游侠 1/7 手办</div>
+            <div class="sp">规格：原色</div>
+          </div>
+          <div class="ft"><span>¥268.00</span><span style="color:#8A8A9E">×1</span></div>
+        </div>
+      </div>
+      <div class="oc-goods" style="margin-top:12px">
+        <div class="art art-3"></div>
+        <div class="body">
+          <div>
+            <div class="nm">机械螳螂 1/6（限量）</div>
+            <div class="sp">规格：异色</div>
+          </div>
+          <div class="ft"><span>¥598.00</span><span style="color:#8A8A9E">×1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="oc-card">
+      <div class="ct">金额明细</div>
+      <div class="amount-line"><span>商品合计</span><span>¥866.00</span></div>
+      <div class="amount-line free"><span>运费</span><span>免运费</span></div>
+      <div class="amount-line total"><span class="k">应付金额</span><span class="v">¥866.00</span></div>
+    </div>
+
+    <div style="padding:12px 16px 0;font-size:10px;color:#9C9CAC;line-height:1.8">
+      <div>· 提交订单后请在 15 分钟内完成支付，超时自动取消并释放库存</div>
+      <div>· 限量作品编号按下单顺序分配，付款成功后锁定</div>
+    </div>
+    <div style="height:72px"></div>
+  </div>
+
+  <div class="paybar">
+    <span class="l">实付</span><span class="v">¥866.00</span>
+    <div class="btn">提交并支付</div>
+  </div>`
+}
+
+/* ---------- 个人中心 ---------- */
+function pageUser() {
+  return `
+  ${statusbar()}
+  <div class="navbar">我的</div>
+  <div class="scroll">
+    <div class="profile">
+      <div class="avatar">手</div>
+      <div class="info">
+        <div class="nn">青野手作</div>
+        <div class="ss">手作收藏从这里开始</div>
+      </div>
+      <div class="edit">编辑</div>
+    </div>
+
+    <div class="p-card">
+      <div class="p-head"><span class="t">专属定制</span></div>
+      <div class="custom-tip">想要独一份的作品？把你的想法告诉我们——角色设定、比例、配色、底座样式都可以聊。</div>
+      <div class="custom-btn">微信咨询定制</div>
+    </div>
+
+    <div class="menu">
+      <div class="menu-item">我的收藏<span class="ar">›</span></div>
+      <div class="menu-item">联系手作人<span class="ar">›</span></div>
+      <div class="menu-item">商家管理后台<span class="tag">管理员</span><span class="ar">›</span></div>
+    </div>
+
+    <div class="footer-tip">手作不易，每一件都值得被认真对待</div>
+  </div>
+  ${tabbar('user')}`
+}
+
+/* ---------- 管理概览 ---------- */
+function pageAdmin() {
+  return `
+  ${statusbar()}
+  <div class="navbar">经营概览</div>
+  <div class="scroll">
+    <div class="adm-head">
+      <div class="t">经营概览</div>
+      <div class="s">更新于 09:41</div>
+    </div>
+
+    <div class="metric">
+      <div class="lb">今日销售额</div>
+      <div class="v"><span class="s">¥</span>2,486.00</div>
+      <div class="subs">
+        <div class="sc"><span class="n">8</span><span class="l">今日订单</span></div>
+        <div class="dv"></div>
+        <div class="sc"><span class="n">26</span><span class="l">在架作品</span></div>
+        <div class="dv"></div>
+        <div class="sc"><span class="n">142</span><span class="l">累计用户</span></div>
+      </div>
+    </div>
+
+    <div class="oc-card" style="margin-top:10px">
+      <div class="ct">待处理事项</div>
+      <div class="todo" style="margin-top:0">
+        <div class="todo-item"><span class="n warn">3</span><span class="l">待发货</span></div>
+        <div class="todo-item"><span class="n warn">2</span><span class="l">进行中定制</span></div>
+        <div class="todo-item"><span class="n">1</span><span class="l">待付款</span></div>
+      </div>
+    </div>
+
+    <div class="adm-menu">
+      <div class="adm-row">
+        <div class="adm-ic" style="background:#FF5C39">◧</div><span class="l">商品管理</span><span class="ar">›</span>
+      </div>
+      <div class="adm-row">
+        <div class="adm-ic" style="background:#1565C0">☰</div><span class="l">订单管理</span><span class="ar">›</span>
+      </div>
+      <div class="adm-row">
+        <div class="adm-ic" style="background:#C9A227">✎</div><span class="l">定制管理</span><span class="ar">›</span>
+      </div>
+    </div>
+
+    <div class="logout">退出登录</div>
+    <div style="padding:20px 40px;text-align:center;font-size:9px;color:#B0B0BE;line-height:1.7">
+      数据来源为云数据库实时统计，访客数需接入埋点后启用
+    </div>
+  </div>`
+}
+
+/* ---------- 说明文案 ---------- */
+const NOTES = {
+  home: {
+    title: '首页',
+    sub: '三段式结构：搜索 → 稀缺性 → 新品。轮播承担氛围，限量专区承担转化，新品承担浏览深度。',
+    items: [
+      ['视觉层级', '轮播 200px 高、圆角 16px，底部渐变遮罩压字，保证标题在任何底图上都能读。'],
+      ['分类入口', '四个色块 + 几何符号，不用图标字体。色块用品牌橙、墨黑、金、紫，形成潮玩调性。'],
+      ['限量表达', '金色徽标只出现在限量商品上，全站唯一使用金色的地方，形成稀缺性视觉锚点。'],
+      ['定制入口', '深色卡片置于新品之前，是唯一的深色块，在浅灰底上形成视觉停顿。'],
+      ['数据来源', '三类列表由 <code>product.home</code> 一次调用返回，避免三次往返。']
+    ]
+  },
+  detail: {
+    title: '商品详情',
+    sub: '主图占据首屏近一半高度，让作品本身成为主角。价格与限量信息紧随其后，操作栏常驻底部。',
+    items: [
+      ['主图区', '370px 方形满宽，计数器与「轻触查看大图」提示分居左右下角，不遮挡作品。'],
+      ['价格排布', '售价 26px 品牌橙，划线价置灰，限量徽标用金色，三者同一基线对齐。'],
+      ['规格选择', '胶囊按钮，选中态换边框与浅底，不做纯色填充，避免与主按钮争夺注意力。'],
+      ['底部操作栏', '纯展示模式下只有一个实心的「微信咨询定制」，点开是微信客服会话。收藏与客服保留为图标位。'],
+      ['文案调整', '须知标题从「购买须知」改为「作品说明」，删掉了发货时效、定金不退这类交易承诺，避免与展示定位冲突。']
+    ]
+  },
+  cart: {
+    title: '购物车（当前模式已隐藏）',
+    sub: '代码完整保留，只是纯展示模式去掉了 tabBar 入口。切回电商模式后即可启用，无需重写。',
+    items: [
+      ['核对机制', '每次进入调 <code>product.batch</code> 拉取最新库存与价格，已下架商品标灰并置灰勾选框。'],
+      ['价格展示', '仅作预览，真正的金额由 <code>order.create</code> 在服务端按库内现值重算。'],
+      ['结算栏', '合计金额用 19px 数字字体，与商品单价形成明确层级差。'],
+      ['零调用设计', '增删改数量全部走本地存储，不触发云函数，是本项目最主要的成本优化点。']
+    ]
+  },
+  confirm: {
+    title: '确认订单（当前模式已隐藏）',
+    sub: '同上，页面与支付链路代码均保留，等开通云开发与商户号后可直接启用。',
+    items: [
+      ['地址快照', '下单时把地址复制进订单，后续用户改地址不影响历史订单。'],
+      ['运费规则', '满 299 元免运费，未满时显示差额提示，引导凑单。'],
+      ['防重复提交', '提交中按钮置灰并锁定，回调未返回前不再响应点击。'],
+      ['支付异常', '取消支付时弹窗询问是否继续，不直接丢弃订单；失败则引导到订单详情重试。']
+    ]
+  },
+  user: {
+    title: '个人中心',
+    sub: '深色头部压住第一张白色卡片，形成层叠关系。纯展示模式下只保留收藏、定制咨询与联系入口。',
+    items: [
+      ['身份展示', '头像用 <code>chooseAvatar</code>，昵称用 <code>type="nickname"</code>，符合平台当前规范。'],
+      ['隐藏项', '订单四状态入口、收货地址管理在纯展示模式下全部隐藏——没有线上交易，这些入口只会造成困惑。'],
+      ['定制入口', '原来的「我的定制 + 提交表单」改成一张「专属定制」卡片，按钮直接唤起微信客服。'],
+      ['管理入口', '仅 <code>isAdmin</code> 为真时渲染，但真正的鉴权在云函数内，前端隐藏不作为安全边界。']
+    ]
+  },
+  admin: {
+    title: '经营概览',
+    sub: '销售额是唯一的大数字，其余指标降为次级。待处理项用品牌橙标出，形成行动牵引。',
+    items: [
+      ['令牌机制', '口令校验通过后签发 HMAC 令牌（2 小时），后续请求带令牌，口令不再传输。'],
+      ['缓存策略', '概览数据在云函数实例内缓存 30 秒，反复刷新不会反复聚合查询。'],
+      ['统计口径', '今日数据以服务器零点为界，云函数地域选广州可避免时区偏差。'],
+      ['访客数', '需页面埋点支撑，首版以累计用户数替代，README 已标注。']
+    ]
+  }
+}
+
+/* ---------- 切换 ---------- */
+const PAGES = {
+  home: pageHome,
+  detail: pageDetail,
+  cart: pageCart,
+  confirm: pageConfirm,
+  user: pageUser,
+  admin: pageAdmin
+}
+
+function render(page) {
+  const screen = document.getElementById('screen')
+  screen.innerHTML = PAGES[page]()
+  screen.scrollTop = 0
+
+  const note = NOTES[page]
+  document.getElementById('notes').innerHTML = `
+    <h2>${note.title}</h2>
+    <p class="sub">${note.sub}</p>
+    ${note.items.map(([k, v]) => `
+      <div class="note-item">
+        <div class="k">${k}</div>
+        <div class="v">${v}</div>
+      </div>`).join('')}
+  `
+}
+
+document.getElementById('tabs').addEventListener('click', (e) => {
+  const tab = e.target.closest('.tab')
+  if (!tab) return
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'))
+  tab.classList.add('on')
+  render(tab.dataset.page)
+})
+
+render('home')
+</script>
+</body>
+</html>

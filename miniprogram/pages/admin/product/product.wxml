@@ -1,0 +1,126 @@
+<!-- pages/admin/product/product.wxml -->
+<view class="page">
+
+  <!-- 搜索与筛选 -->
+  <view class="head">
+    <view class="search-row">
+      <view class="search-box">
+        <text class="search-icon">⌕</text>
+        <input
+          class="search-input"
+          value="{{keyword}}"
+          placeholder="搜索商品名称"
+          placeholder-class="ph"
+          confirm-type="search"
+          bindinput="onKeywordInput"
+          bindconfirm="onSearch"
+        />
+      </view>
+      <view class="search-btn" bindtap="onSearch">搜索</view>
+    </view>
+
+    <view class="tabs">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="label"
+        class="tab {{activeStatus === item.status ? 'tab--active' : ''}}"
+        data-status="{{item.status}}"
+        bindtap="onTabTap"
+      >
+        {{item.label}}
+      </view>
+      <text class="total-text">共 {{total}} 件</text>
+      <view class="multi-toggle" bindtap="onToggleMulti">{{multiMode ? '取消' : '批量'}}</view>
+    </view>
+  </view>
+
+  <view class="list-wrap">
+    <loading-view wx:if="{{loading}}" type="list" count="3" />
+
+    <empty-state
+      wx:elif="{{loadError}}"
+      icon="error"
+      text="商品加载失败"
+      subText="请检查网络后重试"
+      actionText="重新加载"
+      bind:action="onRetry"
+    />
+
+    <empty-state
+      wx:elif="{{list.length === 0}}"
+      icon="box"
+      text="还没有商品"
+      subText="添加第一件手作作品，开始营业"
+      actionText="新增商品"
+      bind:action="onAdd"
+    />
+
+    <block wx:else>
+      <view wx:for="{{list}}" wx:key="_id" class="product-card {{multiMode ? 'product-card--multi' : ''}}">
+        <view class="card-main">
+          <view
+            wx:if="{{multiMode}}"
+            class="check {{selectedIds.indexOf(item._id) > -1 ? 'check--on' : ''}}"
+            data-id="{{item._id}}"
+            bindtap="onSelectItem"
+          >{{selectedIds.indexOf(item._id) > -1 ? '✓' : ''}}</view>
+          <image class="cover" src="{{item.cover}}" mode="aspectFill" />
+          <view class="info">
+            <view class="name ellipsis-2">{{item.name}}</view>
+            <view class="meta-row">
+              <text class="tag {{item.status === 1 ? 'tag--on' : 'tag--off'}}">{{item.statusText}}</text>
+              <text class="type-text">{{item.typeText}}</text>
+            </view>
+            <view class="price-row">
+              <text class="price">¥{{item.priceText}}</text>
+              <text class="stock">库存 {{item.stock}}</text>
+              <text class="sold">已售 {{item.soldCount}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{!multiMode}}" class="card-actions">
+          <view class="act" data-id="{{item._id}}" bindtap="onEdit">编辑</view>
+          <view
+            class="act"
+            data-id="{{item._id}}"
+            data-stock="{{item.stock}}"
+            data-name="{{item.name}}"
+            bindtap="onEditStock"
+          >改库存</view>
+          <view
+            class="act {{item.status === 1 ? 'act--danger' : 'act--primary'}}"
+            data-id="{{item._id}}"
+            data-status="{{item.status}}"
+            bindtap="onToggleStatus"
+          >{{item.status === 1 ? '下架' : '上架'}}</view>
+        </view>
+      </view>
+
+      <view wx:if="{{loadingMore}}" class="load-more">加载中…</view>
+      <view wx:elif="{{!hasMore}}" class="load-more">没有更多了</view>
+    </block>
+  </view>
+
+  <view class="bottom-holder"></view>
+
+  <!-- 多选模式：批量操作栏 -->
+  <view wx:if="{{multiMode}}" class="batch-bar">
+    <view class="batch-left" bindtap="onSelectAll">
+      <view class="check {{selectedIds.length === list.length && list.length > 0 ? 'check--on' : ''}}">
+        {{selectedIds.length === list.length && list.length > 0 ? '✓' : ''}}
+      </view>
+      <text class="batch-count">已选 {{selectedIds.length}}</text>
+    </view>
+    <view class="batch-actions">
+      <view class="batch-btn" data-status="0" bindtap="onBatchToggle">批量下架</view>
+      <view class="batch-btn" data-status="1" bindtap="onBatchToggle">批量上架</view>
+      <view class="batch-btn batch-btn--primary" bindtap="onBatchPrice">批量改价</view>
+    </view>
+  </view>
+
+  <view wx:if="{{!multiMode}}" class="bottom-bar">
+    <view class="add-btn" bindtap="onAdd" hover-class="add-btn--hover">＋ 新增商品</view>
+  </view>
+
+</view>

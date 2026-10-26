@@ -1,0 +1,52 @@
+<!-- pages/address/address.wxml -->
+<view class="page">
+
+  <loading-view wx:if="{{loading}}" type="list" count="2" />
+
+  <empty-state
+    wx:elif="{{list.length === 0}}"
+    icon="box"
+    text="还没有收货地址"
+    subText="添加地址后，下单时可直接选择"
+    actionText="添加地址"
+    bind:action="onAdd"
+  />
+
+  <view wx:else class="list">
+    <view
+      wx:for="{{list}}"
+      wx:key="id"
+      class="addr-card"
+      data-index="{{index}}"
+      bindtap="onItemTap"
+      hover-class="addr-card--hover"
+    >
+      <view class="addr-body">
+        <view class="addr-person">
+          <text class="addr-name">{{item.name}}</text>
+          <text class="addr-phone">{{item.phone}}</text>
+          <text wx:if="{{item.isDefault}}" class="addr-default">默认</text>
+        </view>
+        <view class="addr-detail">{{item.regionText}} {{item.detail}}</view>
+      </view>
+
+      <view wx:if="{{!selectMode}}" class="addr-actions">
+        <view class="addr-action" data-id="{{item.id}}" catchtap="onEdit">编辑</view>
+        <view
+          wx:if="{{!item.isDefault}}"
+          class="addr-action"
+          data-id="{{item.id}}"
+          catchtap="onSetDefault"
+        >设为默认</view>
+        <view class="addr-action addr-action--danger" data-id="{{item.id}}" catchtap="onDelete">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-holder"></view>
+
+  <view class="bottom-bar">
+    <view class="add-btn" bindtap="onAdd" hover-class="add-btn--hover">＋ 新增收货地址</view>
+  </view>
+
+</view>

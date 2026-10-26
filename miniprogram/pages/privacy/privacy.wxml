@@ -1,0 +1,38 @@
+<view class="page">
+  <!-- 顶部文档切换 -->
+  <view class="tabs">
+    <view
+      class="tab {{tab === 'privacy' ? 'tab--on' : ''}}"
+      data-tab="privacy"
+      bindtap="onSwitchTab"
+    >隐私政策</view>
+    <view
+      class="tab {{tab === 'terms' ? 'tab--on' : ''}}"
+      data-tab="terms"
+      bindtap="onSwitchTab"
+    >用户协议</view>
+  </view>
+
+  <view class="body">
+    <view class="intro">{{intro}}</view>
+
+    <view wx:for="{{sections}}" wx:key="title" class="sec">
+      <view class="sec-title">{{item.title}}</view>
+
+      <view wx:for="{{item.paras}}" wx:for-item="para" wx:key="*this" class="para">{{para}}</view>
+
+      <view wx:if="{{item.items.length}}" class="list">
+        <view wx:for="{{item.items}}" wx:for-item="line" wx:key="*this" class="list-row">
+          <view class="dot"></view>
+          <view class="list-text">{{line}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="foot">
+      <view class="foot-line">生效日期：{{updatedAt}}</view>
+      <view class="foot-line">拾光手办 · 个人手作工作室</view>
+      <view class="foot-line foot-line--muted">对本政策有疑问，可在「我的」页面联系手作人</view>
+    </view>
+  </view>
+</view>

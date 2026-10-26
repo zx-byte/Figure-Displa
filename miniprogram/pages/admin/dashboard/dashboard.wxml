@@ -1,0 +1,111 @@
+<!-- pages/admin/dashboard/dashboard.wxml -->
+<view class="page">
+
+  <view class="head">
+    <view class="head-title">经营概览</view>
+    <view class="head-sub">{{updatedAtText ? '更新于 ' + updatedAtText : '数据每次进入自动刷新'}}</view>
+  </view>
+
+  <!-- 核心指标 -->
+  <view class="metric-card">
+    <view class="metric-main">
+      <view class="metric-label">今日销售额</view>
+      <view class="metric-value"><text class="metric-symbol">¥</text>{{todaySalesText}}</view>
+    </view>
+    <view class="metric-sub">
+      <view class="sub-cell">
+        <text class="sub-value">{{overview.todayOrderCount}}</text>
+        <text class="sub-label">今日订单</text>
+      </view>
+      <view class="sub-divider"></view>
+      <view class="sub-cell">
+        <text class="sub-value">{{overview.productCount}}</text>
+        <text class="sub-label">在架作品</text>
+      </view>
+      <view class="sub-divider"></view>
+      <view class="sub-cell">
+        <text class="sub-value">{{overview.userCount}}</text>
+        <text class="sub-label">累计用户</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 待处理 -->
+  <view class="card">
+    <view class="card-title">待处理事项</view>
+    <view class="todo-row">
+      <view class="todo-item" data-status="1" bindtap="goOrder">
+        <text class="todo-num {{overview.pendingDeliver > 0 ? 'todo-num--warn' : ''}}">{{overview.pendingDeliver}}</text>
+        <text class="todo-label">待发货</text>
+      </view>
+      <view class="todo-item" bindtap="goCustom">
+        <text class="todo-num {{overview.pendingCustom > 0 ? 'todo-num--warn' : ''}}">{{overview.pendingCustom}}</text>
+        <text class="todo-label">进行中定制</text>
+      </view>
+      <view class="todo-item" data-status="0" bindtap="goOrder">
+        <text class="todo-num">{{overview.unpaidCount}}</text>
+        <text class="todo-label">待付款</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 近 7 日销售趋势 -->
+  <view wx:if="{{trendBars.length}}" class="card">
+    <view class="card-title">近 7 日销售趋势</view>
+    <view class="trend-chart">
+      <view wx:for="{{trendBars}}" wx:key="fullDate" class="trend-col">
+        <view class="trend-value">{{item.salesText}}</view>
+        <view class="trend-bar-box">
+          <view class="trend-bar" style="height: {{item.height}}%"></view>
+        </view>
+        <view class="trend-date">{{item.date}}</view>
+      </view>
+    </view>
+    <view class="trend-legend">柱高代表当日成交额（元），今日实时累计</view>
+  </view>
+
+  <!-- 热销榜 -->
+  <view wx:if="{{hotListText.length}}" class="card">
+    <view class="card-title">热销作品榜</view>
+    <view wx:for="{{hotListText}}" wx:key="productId" class="hot-row">
+      <view class="hot-rank {{item.rank <= 3 ? 'hot-rank--top' : ''}}">{{item.rank}}</view>
+      <image wx:if="{{item.image}}" class="hot-cover" src="{{item.image}}" mode="aspectFill" />
+      <view wx:else class="hot-cover hot-cover--empty"></view>
+      <view class="hot-info">
+        <view class="hot-name ellipsis">{{item.name}}</view>
+        <view class="hot-meta">售出 {{item.count}} 件</view>
+      </view>
+      <text class="hot-sales">¥{{item.salesText}}</text>
+    </view>
+  </view>
+
+  <!-- 管理入口 -->
+  <view class="menu">
+    <view class="menu-item" bindtap="goProduct">
+      <view class="menu-left">
+        <view class="menu-icon menu-icon--product">◧</view>
+        <text class="menu-label">商品管理</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" data-status="{{null}}" bindtap="goOrder">
+      <view class="menu-left">
+        <view class="menu-icon menu-icon--order">☰</view>
+        <text class="menu-label">订单管理</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goCustom">
+      <view class="menu-left">
+        <view class="menu-icon menu-icon--custom">✎</view>
+        <text class="menu-label">定制管理</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="logout" bindtap="onLogout">退出登录</view>
+
+  <view class="footer">数据来源为云数据库实时统计，访客数需接入埋点后启用</view>
+
+</view>

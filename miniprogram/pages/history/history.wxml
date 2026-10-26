@@ -1,0 +1,36 @@
+<!-- pages/history/history.wxml -->
+<view class="page">
+
+  <block wx:if="{{list.length > 0}}">
+    <view class="head">
+      <text class="count">共 {{list.length}} 件</text>
+      <text class="clear" bindtap="onClear">清空</text>
+    </view>
+
+    <view class="list">
+      <view
+        wx:for="{{list}}"
+        wx:key="_id"
+        class="item"
+        data-id="{{item._id}}"
+        bindtap="onTap"
+        hover-class="item--hover"
+      >
+        <image class="item-img" src="{{item.cover}}" mode="aspectFill" lazy-load="{{true}}" />
+        <view class="item-body">
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-price">¥{{item.priceText}}</view>
+        </view>
+        <text class="item-time">{{item.timeText}}</text>
+      </view>
+    </view>
+  </block>
+
+  <view wx:else class="empty">
+    <view class="empty-icon">◷</view>
+    <view class="empty-text">还没有浏览记录</view>
+    <view class="empty-sub">看过的作品会出现在这里</view>
+    <view class="empty-btn" bindtap="goHome">去逛逛</view>
+  </view>
+
+</view>

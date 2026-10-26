@@ -1,0 +1,214 @@
+<!-- pages/admin/order/order.wxml -->
+<view class="page">
+
+  <view class="head">
+    <view class="search-row">
+      <view class="search-box">
+        <text class="search-icon">⌕</text>
+        <input
+          class="search-input"
+          value="{{keyword}}"
+          placeholder="搜索订单号"
+          placeholder-class="ph"
+          confirm-type="search"
+          bindinput="onKeywordInput"
+          bindconfirm="onSearch"
+        />
+      </view>
+      <view class="search-btn" bindtap="onSearch">搜索</view>
+    </view>
+
+    <scroll-view class="tabs-scroll" scroll-x="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+      <view class="tabs">
+        <view
+          wx:for="{{tabs}}"
+          wx:key="label"
+          class="tab {{activeStatus === item.status ? 'tab--active' : ''}}"
+          data-status="{{item.status}}"
+          bindtap="onTabTap"
+        >
+          {{item.label}}
+        </view>
+        <text class="total-text">共 {{total}} 单</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="list-wrap">
+    <loading-view wx:if="{{loading}}" type="list" count="3" />
+
+    <empty-state
+      wx:elif="{{loadError}}"
+      icon="error"
+      text="订单加载失败"
+      subText="请检查网络后重试"
+      actionText="重新加载"
+      bind:action="onRetry"
+    />
+
+    <empty-state
+      wx:elif="{{list.length === 0}}"
+      icon="box"
+      text="没有符合条件的订单"
+      subText="切换状态筛选看看"
+    />
+
+    <block wx:else>
+      <view wx:for="{{list}}" wx:key="_id" class="order-card">
+        <view class="card-head">
+          <view class="no-wrap" data-no="{{item.orderNo}}" bindtap="onCopyNo">
+            <text class="order-no">{{item.orderNo}}</text>
+            <text class="copy-hint">复制</text>
+          </view>
+          <text class="status status-{{item.status}}">{{item.statusText}}</text>
+        </view>
+
+        <view class="addr-row">
+          <text class="addr-text ellipsis-2">{{item.addressText}}</text>
+        </view>
+
+        <view class="goods-list">
+          <view wx:for="{{item.goods}}" wx:for-item="g" wx:key="productId" class="goods-item">
+            <image class="goods-cover" src="{{g.image}}" mode="aspectFill" />
+            <view class="goods-info">
+              <view class="goods-name ellipsis">{{g.name}}</view>
+              <view wx:if="{{g.limitNo}}" class="goods-limit">编号 No.{{g.limitNo}}</view>
+            </view>
+            <text class="goods-count">×{{g.count}}</text>
+          </view>
+        </view>
+
+        <view class="card-foot">
+          <view class="foot-meta">
+            <text class="foot-time">{{item.createTimeText}}</text>
+            <text wx:if="{{item.payTimeText}}" class="foot-pay">支付 {{item.payTimeText}}</text>
+          </view>
+          <text class="foot-amount">¥{{item.payAmountText}}</text>
+        </view>
+
+        <view wx:if="{{item.status === 1 || item.status === 0 || item.status === 2 || item.status === 4}}" class="card-actions">
+          <view
+            wx:if="{{item.status === 1}}"
+            class="act act--primary"
+            data-id="{{item._id}}"
+            data-no="{{item.orderNo}}"
+            bindtap="onOpenDeliver"
+          >录入发货</view>
+          <view wx:if="{{item.status === 0}}" class="act" data-id="{{item._id}}" bindtap="onCloseOrder">关闭订单</view>
+          <view wx:if="{{item.status === 2}}" class="act" data-id="{{item._id}}" bindtap="onForceFinish">强制完成</view>
+          <view
+            wx:if="{{item.status === 4}}"
+            class="act act--primary"
+            data-id="{{item._id}}"
+            bindtap="onOpenAfterSale"
+          >处理售后</view>
+        </view>
+      </view>
+
+      <view wx:if="{{loadingMore}}" class="load-more">加载中…</view>
+      <view wx:elif="{{!hasMore}}" class="load-more">没有更多了</view>
+    </block>
+  </view>
+
+  <!-- 发货弹层 -->
+  <view wx:if="{{deliverVisible}}" class="mask" bindtap="onCloseDeliver">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">录入发货信息</view>
+      <view class="sheet-no">订单 {{deliverOrderNo}}</view>
+
+      <view class="sheet-label">快递公司</view>
+      <view class="company-list">
+        <view
+          wx:for="{{expressCompanies}}"
+          wx:key="*this"
+          class="company {{expressCompany === item ? 'company--active' : ''}}"
+          data-name="{{item}}"
+          bindtap="onSelectCompany"
+        >
+          {{item}}
+        </view>
+      </view>
+
+      <view class="sheet-label">快递单号</view>
+      <input
+        class="sheet-input"
+        value="{{expressNo}}"
+        placeholder="请输入快递单号"
+        placeholder-class="ph"
+        bindinput="onExpressNoInput"
+      />
+
+      <view class="sheet-actions">
+        <view class="sheet-btn sheet-btn--ghost" bindtap="onCloseDeliver">取消</view>
+        <view class="sheet-btn sheet-btn--primary" bindtap="onSubmitDeliver">
+          {{delivering ? '提交中…' : '确认发货'}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 售后处理弹层 -->
+  <view wx:if="{{afterSaleVisible}}" class="mask" bindtap="onCloseAfterSale">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">处理售后申请</view>
+      <view class="sheet-no">订单 {{afterSaleOrder.orderNo}}</view>
+
+      <view wx:if="{{afterSaleOrder.afterSale}}" class="as-block">
+        <view class="as-line">
+          <text class="as-k">售后类型</text>
+          <text class="as-v">{{afterSaleOrder.afterSaleTypeText}}</text>
+        </view>
+        <view class="as-line">
+          <text class="as-k">售后原因</text>
+          <text class="as-v">{{afterSaleOrder.afterSaleReasonText}}</text>
+        </view>
+        <view class="as-line as-line--top">
+          <text class="as-k">问题描述</text>
+          <text class="as-v as-v--multi">{{afterSaleOrder.afterSale.description}}</text>
+        </view>
+        <view wx:if="{{afterSaleOrder.afterSale.images && afterSaleOrder.afterSale.images.length}}" class="as-imgs">
+          <image
+            wx:for="{{afterSaleOrder.afterSale.images}}"
+            wx:key="*this"
+            class="as-img"
+            src="{{item}}"
+            mode="aspectFill"
+          />
+        </view>
+      </view>
+
+      <view class="sheet-label">退款金额（元）</view>
+      <input
+        class="sheet-input"
+        type="digit"
+        value="{{afterSaleRefundText}}"
+        placeholder="同意退款时原路返回的金额"
+        placeholder-class="ph"
+        bindinput="onAfterSaleRefundInput"
+      />
+
+      <view class="sheet-label">处理备注（买家可见）</view>
+      <input
+        class="sheet-input"
+        value="{{afterSaleNote}}"
+        placeholder="如拒绝原因、退款说明等"
+        placeholder-class="ph"
+        bindinput="onAfterSaleNoteInput"
+      />
+
+      <view class="sheet-actions">
+        <view
+          class="sheet-btn sheet-btn--danger"
+          data-action="reject"
+          bindtap="onSubmitAfterSale"
+        >{{afterSaleSubmitting ? '处理中…' : '拒绝申请'}}</view>
+        <view
+          class="sheet-btn sheet-btn--primary"
+          data-action="agreeRefund"
+          bindtap="onSubmitAfterSale"
+        >{{afterSaleSubmitting ? '处理中…' : '同意退款'}}</view>
+      </view>
+    </view>
+  </view>
+
+</view>

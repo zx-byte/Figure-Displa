@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "openapi": []
+  },
+  "triggers": [
+    {
+      "name": "closeExpiredOrders",
+      "type": "timer",
+      "config": "0 */5 * * * * *"
+    }
+  ]
+}

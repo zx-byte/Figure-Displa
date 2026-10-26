@@ -1,0 +1,34 @@
+<!-- pages/poster/poster.wxml -->
+<view class="page">
+
+  <loading-view wx:if="{{loading}}" type="detail" />
+
+  <block wx:else>
+    <!-- 预览区：直接展示导出的图片，比 canvas 更省性能 -->
+    <view class="preview-wrap">
+      <image
+        wx:if="{{posterPath}}"
+        class="preview-img"
+        src="{{posterPath}}"
+        mode="widthFix"
+        bindtap="onPreview"
+      />
+      <view wx:else class="preview-loading">海报生成中…</view>
+    </view>
+
+    <view class="tip">长按图片或点「保存到相册」，可直接发朋友圈</view>
+
+    <view class="bottom-holder"></view>
+
+    <view class="bottom-bar">
+      <view class="btn-ghost" bindtap="onClose">返回</view>
+      <view class="btn-primary {{saving ? 'btn-primary--disabled' : ''}}" bindtap="onSave">
+        {{saving ? '保存中…' : '保存到相册'}}
+      </view>
+    </view>
+  </block>
+
+  <!-- 离屏 canvas：只用于绘制，不参与布局 -->
+  <canvas type="2d" id="poster" class="offscreen-canvas"></canvas>
+
+</view>

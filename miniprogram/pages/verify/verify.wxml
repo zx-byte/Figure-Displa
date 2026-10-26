@@ -1,0 +1,101 @@
+<!-- pages/verify/verify.wxml -->
+<view class="page">
+
+  <view class="head">
+    <view class="head-title">作品编号查询</view>
+    <view class="head-sub">输入底座背面的编号，确认作品出处与序号</view>
+  </view>
+
+  <!-- 输入 -->
+  <view class="panel">
+    <view class="input-row">
+      <input
+        class="input"
+        value="{{code}}"
+        bindinput="onInput"
+        bindconfirm="onQuery"
+        confirm-type="search"
+        placeholder="SG-2026-0128"
+        placeholder-class="ph"
+        maxlength="16"
+      />
+      <view class="btn {{code ? '' : 'btn--disabled'}}" bindtap="onQuery">查询</view>
+    </view>
+    <view class="hint">格式为 SG 加年份加四位序号，例如 SG-2026-0128</view>
+  </view>
+
+  <!-- 结果 -->
+  <view wx:if="{{checked}}" class="result {{result.ok ? (result.matched === false ? 'result--warn' : 'result--ok') : 'result--fail'}}">
+    <view class="res-badge">{{result.ok ? (result.matched === false ? '?' : '✓') : '!'}}</view>
+    <view class="res-title">{{result.ok ? (result.matched === false ? '格式正确 · 未登记' : (verifying ? '核对中…' : '编号有效')) : '未通过验证'}}</view>
+    <view class="res-sub">{{result.msg}}</view>
+
+    <view wx:if="{{result.ok && result.info}}" class="res-detail">
+      <view class="res-row">
+        <text class="res-k">作品名称</text>
+        <text class="res-v">{{result.info.name}}</text>
+      </view>
+      <view class="res-row">
+        <text class="res-k">出品年份</text>
+        <text class="res-v">{{result.info.year}} 年</text>
+      </view>
+      <view class="res-row">
+        <text class="res-k">作品序位</text>
+        <text class="res-v">第 {{result.info.seq}} 件</text>
+      </view>
+      <view wx:if="{{result.info.madeTime}}" class="res-row">
+        <text class="res-k">出品时间</text>
+        <text class="res-v">{{result.info.madeTime}}</text>
+      </view>
+      <view wx:if="{{result.info.ownerMasked}}" class="res-row">
+        <text class="res-k">登记持有人</text>
+        <text class="res-v">{{result.info.ownerMasked}}</text>
+      </view>
+      <view wx:if="{{result.info.note}}" class="res-row">
+        <text class="res-k">备注</text>
+        <text class="res-v">{{result.info.note}}</text>
+      </view>
+      <view class="res-row">
+        <text class="res-k">完整编号</text>
+        <text class="res-v res-v--mono">{{result.normalized}}</text>
+      </view>
+    </view>
+
+    <!-- 格式对但未登记时，只展示编号不冒充真品 -->
+    <view wx:if="{{result.ok && result.matched === false}}" class="res-detail">
+      <view class="res-row">
+        <text class="res-k">出品年份</text>
+        <text class="res-v">{{result.year}} 年</text>
+      </view>
+      <view class="res-row">
+        <text class="res-k">作品序位</text>
+        <text class="res-v">第 {{result.seq}} 件</text>
+      </view>
+      <view class="res-row">
+        <text class="res-k">完整编号</text>
+        <text class="res-v res-v--mono">{{result.normalized}}</text>
+      </view>
+      <view class="res-row">
+        <text class="res-k">登记状态</text>
+        <text class="res-v res-v--warn">未在登记库中</text>
+      </view>
+    </view>
+
+    <view class="res-actions">
+      <view class="res-btn" bindtap="onReset">重新输入</view>
+    </view>
+  </view>
+
+  <!-- 说明 -->
+  <view class="tips">
+    <view class="tips-title">关于编号</view>
+    <view class="tip">· 编号刻在每件作品底座的背面</view>
+    <view class="tip">· 序号即完工顺序，数字越小做得越早</view>
+    <view class="tip">· 同一编号不会重复，可作为流通时的出处凭证</view>
+    <view class="tip">· 查询会到登记库核对是否真实出品，确保可追溯</view>
+  </view>
+
+  <button class="contact-btn" open-type="contact">编号有疑问？联系手作人</button>
+
+  <view class="bottom-space"></view>
+</view>

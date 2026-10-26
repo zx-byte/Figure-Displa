@@ -1,0 +1,134 @@
+<!-- pages/category/category.wxml -->
+<view class="page">
+
+  <!-- 搜索区（吸顶） -->
+  <view class="sticky-head">
+    <view class="search-row">
+      <view class="search-box">
+        <text class="search-icon">⌕</text>
+        <input
+          class="search-input"
+          value="{{keyword}}"
+          placeholder="搜索名称、题材或系列"
+          placeholder-class="placeholder"
+          confirm-type="search"
+          bindinput="onKeywordInput"
+          bindconfirm="onSearchConfirm"
+          bindfocus="onSearchFocus"
+          bindblur="onSearchBlur"
+        />
+        <text wx:if="{{keyword}}" class="search-clear" bindtap="clearKeyword">×</text>
+      </view>
+      <view class="search-btn" bindtap="onSearchConfirm" hover-class="search-btn--hover">搜索</view>
+    </view>
+
+    <!-- 最近搜索：聚焦时浮出，避免长期占位 -->
+    <view wx:if="{{searchFocused && searchHistory.length > 0}}" class="search-panel">
+      <view class="panel-head">
+        <text class="panel-title">最近搜索</text>
+        <text class="panel-clear" bindtap="onClearHistory">清空</text>
+      </view>
+      <view class="panel-tags">
+        <view
+          wx:for="{{searchHistory}}"
+          wx:key="*this"
+          class="panel-tag"
+          data-kw="{{item}}"
+          bindtap="onHistoryTap"
+          hover-class="panel-tag--hover"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 维度切换 -->
+    <view class="dim-row">
+      <view
+        wx:for="{{dimensions}}"
+        wx:key="key"
+        class="dim-item {{activeDim === item.key ? 'dim-item--active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="toggleDim"
+      >
+        {{item.label}}
+        <text class="dim-arrow">{{activeDim === item.key ? '▴' : '▾'}}</text>
+      </view>
+      <view wx:if="{{filterSummary}}" class="dim-clear" bindtap="clearFilter">重置</view>
+    </view>
+
+    <!-- 选项面板 -->
+    <view wx:if="{{activeDim}}" class="option-panel">
+      <block wx:for="{{dimensions}}" wx:key="key">
+        <view wx:if="{{item.key === activeDim}}" class="option-list">
+          <view
+            wx:for="{{item.options}}"
+            wx:for-item="opt"
+            wx:key="*this"
+            class="option {{filterValues[activeDim] === opt ? 'option--active' : ''}}"
+            data-key="{{item.key}}"
+            data-value="{{opt}}"
+            bindtap="selectValue"
+          >
+            {{opt}}
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 排序 -->
+    <view class="sort-row">
+      <view
+        wx:for="{{sortOptions}}"
+        wx:key="key"
+        class="sort-item {{sort === item.key ? 'sort-item--active' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="selectSort"
+      >
+        {{item.label}}
+      </view>
+    </view>
+
+    <!-- 结果概览：总数 + 当前生效的全部条件 -->
+    <view wx:if="{{!loading && !loadError}}" class="result-bar">
+      <text class="result-total">共 {{total}} 件</text>
+      <block wx:if="{{filterSummary}}">
+        <text class="result-filter ellipsis">{{filterSummary}}</text>
+        <text class="result-clear" bindtap="clearFilter">清空</text>
+      </block>
+    </view>
+  </view>
+
+  <!-- 列表 -->
+  <view class="list-wrap">
+    <loading-view wx:if="{{loading}}" type="grid" count="6" />
+
+    <empty-state
+      wx:elif="{{loadError}}"
+      icon="error"
+      text="加载失败"
+      subText="请检查网络后重试"
+      actionText="重新加载"
+      bind:action="onRetry"
+    />
+
+    <empty-state
+      wx:elif="{{list.length === 0}}"
+      icon="search"
+      text="没有找到符合条件的作品"
+      subText="换个关键词或重置筛选条件试试"
+      actionText="重置筛选"
+      bind:action="clearFilter"
+    />
+
+    <block wx:else>
+      <view class="grid">
+        <view wx:for="{{list}}" wx:key="_id" class="grid-cell">
+          <goods-card item="{{item}}" layout="grid" showSold="{{true}}" />
+        </view>
+      </view>
+
+      <view wx:if="{{loadingMore}}" class="load-more">加载中…</view>
+      <view wx:elif="{{!hasMore}}" class="load-more">已经到底了</view>
+    </block>
+  </view>
+
+</view>

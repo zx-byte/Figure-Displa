@@ -1,0 +1,33 @@
+# 依赖
+node_modules/
+miniprogram_npm/
+npm-debug.log*
+
+# 文档产线中间产物与流水线日志（可重新生成，不入库）
+output/
+logs/
+
+# 本地调试日志
+debug.log
+*.log
+
+# 微信开发者工具本地私有配置（每位成员不同，不共享）
+project.private.config.json
+
+# 云函数本地依赖与部署产物
+cloudfunctions/**/node_modules/
+cloudfunctions/**/.env
+cloudfunctions/**/.env.*
+cloudfunctions/**/config.local.json
+
+# 编辑器与系统文件
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# 临时文件
+*.tmp
+*.bak
+*~

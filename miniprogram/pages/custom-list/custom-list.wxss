@@ -1,0 +1,183 @@
+/* pages/custom-list/custom-list.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+}
+
+.tabs {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  background-color: #FFFFFF;
+  padding: 0 12rpx;
+  box-shadow: 0 2rpx 12rpx rgba(26, 26, 36, 0.04);
+}
+
+.tab {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 25rpx;
+  color: #8A8A9E;
+  position: relative;
+}
+
+.tab--active {
+  color: #1A1A24;
+  font-weight: 600;
+}
+
+.tab--active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 8rpx;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 5rpx;
+  border-radius: 3rpx;
+  background-color: #FF5C39;
+}
+
+.list-wrap {
+  padding: 20rpx 24rpx 40rpx;
+}
+
+.custom-card {
+  margin-bottom: 20rpx;
+  padding: 26rpx 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+}
+
+.custom-card--hover {
+  background-color: #FAFAFC;
+}
+
+.card-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #F5F5F7;
+}
+
+.card-no {
+  font-size: 22rpx;
+  color: #9C9CAC;
+}
+
+.card-status {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #FF5C39;
+}
+
+.status-0 {
+  color: #8A8A9E;
+}
+
+.status-2 {
+  color: #1565C0;
+}
+
+.status-4 {
+  color: #00897B;
+}
+
+.status--1 {
+  color: #9C9CAC;
+}
+
+.card-body {
+  padding: 18rpx 0 6rpx;
+}
+
+.req-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6rpx 0;
+}
+
+.req-label {
+  width: 90rpx;
+  flex-shrink: 0;
+  font-size: 23rpx;
+  color: #8A8A9E;
+}
+
+.req-value {
+  flex: 1;
+  font-size: 25rpx;
+  color: #1A1A24;
+}
+
+.card-foot {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F5F5F7;
+}
+
+.foot-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.foot-time {
+  font-size: 21rpx;
+  color: #9C9CAC;
+}
+
+.foot-progress {
+  margin-top: 4rpx;
+  font-size: 20rpx;
+  color: #C9A227;
+}
+
+.foot-amount {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.foot-label {
+  font-size: 21rpx;
+  color: #8A8A9E;
+  margin-right: 6rpx;
+}
+
+.foot-price {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.card-action {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F5F5F7;
+  text-align: right;
+}
+
+.action-text {
+  font-size: 24rpx;
+  color: #FF5C39;
+  font-weight: 500;
+}
+
+.load-more {
+  padding: 28rpx 0 40rpx;
+  text-align: center;
+  font-size: 23rpx;
+  color: #B0B0BE;
+}

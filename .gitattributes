@@ -1,0 +1,25 @@
+# 行尾策略：仓库内统一存 LF，检出时按需转换。
+# 背景：全局 core.autocrlf=true 会把 .sh 转成 CRLF，导致 bash 脚本报
+#       `bash: ./xxx.sh: /bin/bash^M: bad interpreter`，故 .sh 强制 LF。
+
+* text=auto eol=lf
+
+*.sh text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.wxml text eol=lf
+*.wxss text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# 二进制资源，不做行尾转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.docx binary
+*.pdf binary

@@ -1,0 +1,357 @@
+/* pages/admin/dashboard/dashboard.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+  padding-bottom: 60rpx;
+}
+
+.head {
+  padding: 32rpx 32rpx 28rpx;
+  background: linear-gradient(135deg, #1A1A24 0%, #33334A 100%);
+}
+
+.head-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: 1rpx;
+}
+
+.head-sub {
+  margin-top: 8rpx;
+  font-size: 21rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- 核心指标 ---------- */
+
+.metric-card {
+  margin: -16rpx 24rpx 0;
+  padding: 36rpx 28rpx 28rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  position: relative;
+}
+
+.metric-main {
+  padding-bottom: 28rpx;
+  border-bottom: 1rpx solid #F5F5F7;
+}
+
+.metric-label {
+  font-size: 23rpx;
+  color: #8A8A9E;
+}
+
+.metric-value {
+  margin-top: 10rpx;
+  font-size: 64rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+  line-height: 1.2;
+}
+
+.metric-symbol {
+  font-size: 32rpx;
+  margin-right: 4rpx;
+}
+
+.metric-sub {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: 26rpx;
+}
+
+.sub-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sub-value {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.sub-label {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  color: #8A8A9E;
+}
+
+.sub-divider {
+  width: 1rpx;
+  height: 48rpx;
+  background-color: #F0F0F4;
+}
+
+/* ---------- 待处理 ---------- */
+
+.card {
+  margin: 20rpx 24rpx 0;
+  padding: 28rpx 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+}
+
+.card-title {
+  font-size: 27rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  margin-bottom: 20rpx;
+}
+
+.todo-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.todo-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 0;
+  border-radius: 16rpx;
+  background-color: #FAFAFC;
+  margin-right: 14rpx;
+}
+
+.todo-item:last-child {
+  margin-right: 0;
+}
+
+.todo-num {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.todo-num--warn {
+  color: #FF5C39;
+}
+
+.todo-label {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  color: #8A8A9E;
+}
+
+/* ---------- 管理入口 ---------- */
+
+.menu {
+  margin: 20rpx 24rpx 0;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 112rpx;
+  padding: 0 24rpx;
+  border-bottom: 1rpx solid #F5F5F7;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.menu-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #FFFFFF;
+  margin-right: 20rpx;
+}
+
+.menu-icon--product {
+  background-color: #FF5C39;
+}
+
+.menu-icon--order {
+  background-color: #1565C0;
+}
+
+.menu-icon--custom {
+  background-color: #C9A227;
+}
+
+.menu-label {
+  font-size: 27rpx;
+  color: #1A1A24;
+}
+
+.menu-arrow {
+  font-size: 30rpx;
+  color: #C4C4D0;
+}
+
+/* ---------- 退出 ---------- */
+
+.logout {
+  margin: 40rpx 24rpx 0;
+  height: 88rpx;
+  border-radius: 44rpx;
+  border: 1rpx solid #EDEDF2;
+  background-color: #FFFFFF;
+  color: #8A8A9E;
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer {
+  margin-top: 32rpx;
+  text-align: center;
+  font-size: 20rpx;
+  color: #B0B0BE;
+  line-height: 1.7;
+  padding: 0 48rpx;
+}
+
+/* ---------- 近 7 日趋势 ---------- */
+
+.trend-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 300rpx;
+  padding-top: 12rpx;
+}
+
+.trend-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.trend-value {
+  font-size: 18rpx;
+  color: #8A8A9E;
+  margin-bottom: 8rpx;
+  transform: scale(0.9);
+}
+
+.trend-bar-box {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.trend-bar {
+  width: 28rpx;
+  border-radius: 12rpx 12rpx 4rpx 4rpx;
+  background: linear-gradient(180deg, #FF8A6E 0%, #FF5C39 100%);
+  min-height: 8rpx;
+}
+
+.trend-date {
+  margin-top: 12rpx;
+  font-size: 20rpx;
+  color: #B0B0BE;
+}
+
+.trend-legend {
+  margin-top: 18rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F0F0F3;
+  font-size: 20rpx;
+  color: #B0B0BE;
+  text-align: center;
+}
+
+/* ---------- 热销榜 ---------- */
+
+.hot-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F5F5F7;
+}
+
+.hot-row:last-child {
+  border-bottom: none;
+}
+
+.hot-rank {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 12rpx;
+  background-color: #F0F0F3;
+  color: #8A8A9E;
+  font-size: 22rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hot-rank--top {
+  background-color: rgba(255, 92, 57, 0.12);
+  color: #FF5C39;
+}
+
+.hot-cover {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 12rpx;
+  margin-left: 16rpx;
+  background-color: #F0F0F3;
+  flex-shrink: 0;
+}
+
+.hot-cover--empty {
+  background-color: #F5F5F7;
+}
+
+.hot-info {
+  flex: 1;
+  margin-left: 16rpx;
+  min-width: 0;
+}
+
+.hot-name {
+  font-size: 25rpx;
+  color: #1A1A24;
+  font-weight: 500;
+}
+
+.hot-meta {
+  margin-top: 6rpx;
+  font-size: 21rpx;
+  color: #B0B0BE;
+}
+
+.hot-sales {
+  font-size: 25rpx;
+  color: #FF5C39;
+  font-weight: 600;
+  margin-left: 12rpx;
+}

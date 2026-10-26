@@ -1,0 +1,142 @@
+<!-- pages/custom-apply/custom-apply.wxml -->
+<view class="page">
+
+  <!-- 说明头 -->
+  <view class="hero">
+    <view class="hero-title">定制你的独一份</view>
+    <view class="hero-sub">提交需求 → 支付 30% 定金 → 锁定排期 → 分阶段同步制作进度</view>
+  </view>
+
+  <!-- 需求表单 -->
+  <view class="form-card">
+    <view class="form-row form-row--stack">
+      <text class="form-label">想要的角色 / 题材</text>
+      <input
+        class="form-input"
+        value="{{character}}"
+        placeholder="例如：原创机甲少女、幻想系龙骑士"
+        placeholder-class="ph"
+        maxlength="50"
+        bindinput="onCharacterInput"
+      />
+    </view>
+
+    <picker range="{{scales}}" value="{{scaleIndex}}" bindchange="onScaleChange">
+      <view class="form-row">
+        <text class="form-label">作品比例</text>
+        <view class="form-picker">
+          <text wx:if="{{scaleIndex >= 0}}">{{scales[scaleIndex]}}</text>
+          <text wx:else class="ph">请选择</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </view>
+    </picker>
+
+    <picker range="{{styles}}" value="{{styleIndex}}" bindchange="onStyleChange">
+      <view class="form-row">
+        <text class="form-label">风格取向</text>
+        <view class="form-picker">
+          <text wx:if="{{styleIndex >= 0}}">{{styles[styleIndex]}}</text>
+          <text wx:else class="ph">请选择</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </view>
+    </picker>
+
+    <view class="form-row form-row--stack">
+      <text class="form-label">特殊要求</text>
+      <textarea
+        class="form-textarea"
+        value="{{extra}}"
+        placeholder="配色、姿势、底座、包装等具体要求，越具体越接近预期"
+        placeholder-class="ph"
+        maxlength="500"
+        bindinput="onExtraInput"
+        auto-height="{{true}}"
+      />
+      <view class="count-hint">{{extra.length}}/500</view>
+    </view>
+  </view>
+
+  <!-- 参考图 -->
+  <view class="form-card">
+    <view class="form-label form-label--block">参考图（选填，最多 6 张）</view>
+    <view class="image-grid">
+      <view wx:for="{{images}}" wx:key="*this" class="image-item">
+        <image
+          class="image-thumb"
+          src="{{item}}"
+          mode="aspectFill"
+          data-src="{{item}}"
+          bindtap="onPreviewImage"
+        />
+        <view class="image-remove" data-index="{{index}}" catchtap="onRemoveImage">×</view>
+      </view>
+      <view wx:if="{{images.length < maxImages}}" class="image-add" bindtap="onChooseImage">
+        <text class="add-icon">＋</text>
+        <text class="add-text">上传</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系与预算 -->
+  <view class="form-card">
+    <view class="form-row">
+      <text class="form-label">联系电话</text>
+      <input
+        class="form-input"
+        value="{{contact}}"
+        type="number"
+        placeholder="便于沟通细节"
+        placeholder-class="ph"
+        maxlength="11"
+        bindinput="onContactInput"
+      />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">预期预算</text>
+      <input
+        class="form-input"
+        value="{{budget}}"
+        type="digit"
+        placeholder="单位：元，最低 100"
+        placeholder-class="ph"
+        bindinput="onBudgetInput"
+      />
+    </view>
+  </view>
+
+  <!-- 定金说明 -->
+  <view class="deposit-card">
+    <view class="deposit-row">
+      <text class="deposit-label">定金（预算 30%）</text>
+      <text class="deposit-value">¥{{depositText}}</text>
+    </view>
+    <view class="deposit-note">定金用于锁定制作排期，制作启动后不予退还；尾款在作品完工后支付。</view>
+  </view>
+
+  <!-- 协议声明：本页会收集联系电话与参考图，需明确告知 -->
+  <view class="agree-tip">
+    提交需求即表示你已阅读并同意
+    <text class="agree-link" bindtap="goPrivacy">《隐私政策》</text>
+    与
+    <text class="agree-link" bindtap="goTerms">《用户协议》</text>
+  </view>
+
+  <view class="bottom-holder"></view>
+
+  <view class="bottom-bar">
+    <view class="submit-btn {{submitting ? 'submit-btn--disabled' : ''}}" bindtap="onSubmit" hover-class="submit-btn--hover">
+      {{submitting ? '提交中…' : '提交需求'}}
+    </view>
+  </view>
+
+  <!-- 未同意协议时的确认弹窗 -->
+  <privacy-modal
+    show="{{privacyShow}}"
+    bind:agree="onPrivacyAgree"
+    bind:disagree="onPrivacyDisagree"
+  />
+
+</view>

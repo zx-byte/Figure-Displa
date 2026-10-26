@@ -1,0 +1,271 @@
+/* pages/custom-detail/custom-detail.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+}
+
+/* ---------- 状态头 ---------- */
+
+.status-head {
+  padding: 44rpx 32rpx 52rpx;
+  background: linear-gradient(135deg, #1A1A24 0%, #33334A 100%);
+}
+
+.status-title {
+  font-size: 42rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.status-desc {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.66);
+  line-height: 1.6;
+}
+
+.status-no {
+  margin-top: 18rpx;
+  font-size: 21rpx;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* ---------- 卡片 ---------- */
+
+.card {
+  margin: 20rpx 24rpx 0;
+  padding: 28rpx 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+}
+
+.card:first-of-type {
+  margin-top: -24rpx;
+}
+
+.card-title {
+  font-size: 27rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  margin-bottom: 18rpx;
+}
+
+/* ---------- 金额 ---------- */
+
+.amount-grid {
+  display: flex;
+  flex-direction: row;
+}
+
+.amount-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cell-label {
+  font-size: 21rpx;
+  color: #8A8A9E;
+}
+
+.cell-value {
+  margin-top: 10rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.cell-value--gold {
+  color: #C9A227;
+}
+
+/* ---------- 信息行 ---------- */
+
+.info-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10rpx 0;
+}
+
+.info-label {
+  width: 150rpx;
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: #8A8A9E;
+}
+
+.info-value {
+  flex: 1;
+  font-size: 25rpx;
+  color: #1A1A24;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+/* ---------- 参考图 ---------- */
+
+.ref-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.ref-image {
+  width: 150rpx;
+  height: 150rpx;
+  margin: 0 14rpx 14rpx 0;
+  border-radius: 14rpx;
+  background-color: #F0F0F4;
+}
+
+/* ---------- 时间轴 ---------- */
+
+.timeline {
+  padding-top: 6rpx;
+}
+
+.tl-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.tl-axis {
+  width: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.tl-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: #D9D9E0;
+  margin-top: 8rpx;
+}
+
+.tl-dot--active {
+  width: 20rpx;
+  height: 20rpx;
+  background-color: #FF5C39;
+  box-shadow: 0 0 0 6rpx rgba(255, 92, 57, 0.14);
+}
+
+.tl-line {
+  flex: 1;
+  width: 2rpx;
+  min-height: 60rpx;
+  background-color: #EDEDF2;
+  margin-top: 6rpx;
+}
+
+.tl-content {
+  flex: 1;
+  min-width: 0;
+  padding: 0 0 36rpx 12rpx;
+}
+
+.tl-stage {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #4A4A5A;
+}
+
+.tl-stage--active {
+  color: #1A1A24;
+  font-weight: 600;
+}
+
+.tl-desc {
+  margin-top: 8rpx;
+  font-size: 23rpx;
+  color: #8A8A9E;
+  line-height: 1.65;
+}
+
+.tl-images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 12rpx;
+}
+
+.tl-image {
+  width: 130rpx;
+  height: 130rpx;
+  margin: 0 12rpx 12rpx 0;
+  border-radius: 12rpx;
+  background-color: #F0F0F4;
+}
+
+.tl-time {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #B0B0BE;
+}
+
+/* ---------- 说明 ---------- */
+
+.tips {
+  padding: 20rpx 32rpx 0;
+  font-size: 21rpx;
+  color: #9C9CAC;
+  line-height: 1.7;
+}
+
+/* ---------- 操作栏 ---------- */
+
+.bottom-holder {
+  height: calc(140rpx + env(safe-area-inset-bottom));
+}
+
+.action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 14rpx 24rpx calc(14rpx + env(safe-area-inset-bottom));
+  background-color: #FFFFFF;
+  box-shadow: 0 -2rpx 16rpx rgba(26, 26, 36, 0.06);
+}
+
+.action-plain {
+  margin: 0;
+  margin-right: auto;
+  padding: 0;
+  background-color: transparent;
+  font-size: 24rpx;
+  color: #8A8A9E;
+  line-height: 1.4;
+}
+
+.action-plain::after {
+  border: none;
+}
+
+.btn {
+  margin-left: 16rpx;
+  padding: 16rpx 32rpx;
+  border-radius: 36rpx;
+  font-size: 25rpx;
+}
+
+.btn-line {
+  border: 1rpx solid #D9D9E0;
+  color: #4A4A5A;
+}
+
+.btn-fill {
+  background-color: #FF5C39;
+  color: #FFFFFF;
+  font-weight: 500;
+}

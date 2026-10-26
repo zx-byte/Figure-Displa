@@ -1,0 +1,31 @@
+<!-- pages/favorite/favorite.wxml -->
+<view class="page">
+
+  <loading-view wx:if="{{loading}}" type="list" count="3" />
+
+  <empty-state
+    wx:elif="{{loadError}}"
+    icon="error"
+    text="收藏加载失败"
+    subText="请检查网络后重试"
+    actionText="重新加载"
+    bind:action="onRetry"
+  />
+
+  <empty-state
+    wx:elif="{{list.length === 0}}"
+    icon="box"
+    text="还没有收藏的作品"
+    subText="遇到心动的作品，点一下收藏就不会错过"
+    actionText="去逛逛"
+    bind:action="goShopping"
+  />
+
+  <view wx:else class="list">
+    <view wx:for="{{list}}" wx:key="_id" class="item-wrap">
+      <goods-card item="{{item}}" layout="list" />
+      <view class="remove-btn" data-id="{{item._id}}" bindtap="onRemove">取消收藏</view>
+    </view>
+  </view>
+
+</view>

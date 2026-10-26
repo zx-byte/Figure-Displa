@@ -1,0 +1,53 @@
+/* components/empty-state/empty-state.wxss */
+
+.empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 48rpx;
+}
+
+.icon {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+  background-color: #EFEFF4;
+  color: #C4C4D0;
+  font-size: 56rpx;
+  line-height: 128rpx;
+  text-align: center;
+  margin-bottom: 28rpx;
+}
+
+.icon--error {
+  background-color: #FFF0EC;
+  color: #FF5C39;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #4A4A5A;
+}
+
+.empty-sub {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #8A8A9E;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.empty-action {
+  margin-top: 32rpx;
+  padding: 16rpx 48rpx;
+  border-radius: 40rpx;
+  border: 1rpx solid #1A1A24;
+  font-size: 26rpx;
+  color: #1A1A24;
+}
+
+.empty-action--hover {
+  background-color: #1A1A24;
+  color: #FFFFFF;
+}

@@ -1,0 +1,294 @@
+<!-- pages/admin/product-edit/product-edit.wxml -->
+<view class="page">
+
+  <loading-view wx:if="{{loading}}" type="list" count="3" />
+
+  <block wx:else>
+    <!-- 基本信息 -->
+    <view class="card">
+      <view class="card-title">基本信息</view>
+
+      <view class="row">
+        <text class="label">商品名称</text>
+        <input
+          class="input"
+          value="{{name}}"
+          placeholder="2 至 40 个字"
+          placeholder-class="ph"
+          maxlength="40"
+          bindinput="onNameInput"
+        />
+      </view>
+
+      <view class="row">
+        <text class="label">副标题</text>
+        <input
+          class="input"
+          value="{{subtitle}}"
+          placeholder="一句话描述，显示在卡片上"
+          placeholder-class="ph"
+          maxlength="40"
+          bindinput="onSubtitleInput"
+        />
+      </view>
+
+      <view class="row">
+        <text class="label">售价（元）</text>
+        <input
+          class="input"
+          value="{{priceYuan}}"
+          type="digit"
+          placeholder="如 268.00"
+          placeholder-class="ph"
+          bindinput="onPriceInput"
+        />
+      </view>
+
+      <view class="row">
+        <text class="label">划线价（元）</text>
+        <input
+          class="input"
+          value="{{originPriceYuan}}"
+          type="digit"
+          placeholder="选填，用于展示原价"
+          placeholder-class="ph"
+          bindinput="onOriginPriceInput"
+        />
+      </view>
+
+      <view class="row">
+        <text class="label">库存</text>
+        <input
+          class="input"
+          value="{{stock}}"
+          type="number"
+          placeholder="填写剩余数量"
+          placeholder-class="ph"
+          bindinput="onStockInput"
+        />
+      </view>
+
+      <view class="row">
+        <text class="label">排序权重</text>
+        <input
+          class="input"
+          value="{{sort}}"
+          type="number"
+          placeholder="数值越大越靠前，选填"
+          placeholder-class="ph"
+          bindinput="onSortInput"
+        />
+      </view>
+    </view>
+
+    <!-- 商品类型 -->
+    <view class="card">
+      <view class="card-title">商品类型</view>
+      <view class="type-row">
+        <view
+          wx:for="{{typeOptions}}"
+          wx:key="value"
+          class="type-item {{type === item.value ? 'type-item--active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onTypeChange"
+        >
+          {{item.label}}
+        </view>
+      </view>
+
+      <block wx:if="{{showLimit}}">
+        <view class="row">
+          <text class="label">限量数量</text>
+          <input
+            class="input"
+            value="{{limitNum}}"
+            type="number"
+            placeholder="本次限量多少体"
+            placeholder-class="ph"
+            bindinput="onLimitNumInput"
+          />
+        </view>
+        <view class="row">
+          <text class="label">预计发货</text>
+          <picker mode="date" value="{{presaleDate}}" bindchange="onPresaleDateChange">
+            <view class="picker">
+              <text wx:if="{{presaleDate}}">{{presaleDate}}</text>
+              <text wx:else class="ph">请选择日期</text>
+              <text class="arrow">›</text>
+            </view>
+          </picker>
+        </view>
+        <view class="tip">限量商品每单限购 1 体，编号按下单顺序自动分配</view>
+      </block>
+    </view>
+
+    <!-- 分类 -->
+    <view class="card">
+      <view class="card-title">分类属性</view>
+
+      <picker
+        range="{{categoryOptions.series}}"
+        value="{{categoryIndex.series}}"
+        data-key="series"
+        bindchange="onCategoryChange"
+      >
+        <view class="row">
+          <text class="label">系列</text>
+          <view class="picker">
+            <text>{{categoryLabel.series}}</text>
+            <text class="arrow">›</text>
+          </view>
+        </view>
+      </picker>
+
+      <picker
+        range="{{categoryOptions.ip}}"
+        value="{{categoryIndex.ip}}"
+        data-key="ip"
+        bindchange="onCategoryChange"
+      >
+        <view class="row">
+          <text class="label">题材</text>
+          <view class="picker">
+            <text>{{categoryLabel.ip}}</text>
+            <text class="arrow">›</text>
+          </view>
+        </view>
+      </picker>
+
+      <picker
+        range="{{categoryOptions.scale}}"
+        value="{{categoryIndex.scale}}"
+        data-key="scale"
+        bindchange="onCategoryChange"
+      >
+        <view class="row">
+          <text class="label">比例</text>
+          <view class="picker">
+            <text>{{categoryLabel.scale}}</text>
+            <text class="arrow">›</text>
+          </view>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 主图 -->
+    <view class="card">
+      <view class="card-title">商品主图（最多 {{maxImages}} 张，首张为封面）</view>
+      <view class="image-grid">
+        <view wx:for="{{images}}" wx:key="*this" class="image-item">
+          <image
+            class="image-thumb"
+            src="{{item}}"
+            mode="aspectFill"
+            data-src="{{item}}"
+            data-list="{{images}}"
+            bindtap="onPreviewImage"
+          />
+          <view wx:if="{{index === 0}}" class="cover-badge">封面</view>
+          <view class="image-remove" data-index="{{index}}" catchtap="onRemoveImage">×</view>
+        </view>
+        <view wx:if="{{images.length < maxImages}}" class="image-add" bindtap="onChooseImage">
+          <text class="add-icon">＋</text>
+          <text class="add-text">上传</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 详情图文 -->
+    <view class="card">
+      <view class="card-title">详情图文</view>
+
+      <textarea
+        class="detail-textarea"
+        value="{{detailText}}"
+        placeholder="作品说明、制作工艺、材质与尺寸等"
+        placeholder-class="ph"
+        maxlength="1000"
+        bindinput="onDetailTextInput"
+        auto-height="{{true}}"
+      />
+
+      <view class="sub-title">详情图（最多 {{maxDetailImages}} 张）</view>
+      <view class="image-grid">
+        <view wx:for="{{detailImages}}" wx:key="*this" class="image-item">
+          <image
+            class="image-thumb"
+            src="{{item}}"
+            mode="aspectFill"
+            data-src="{{item}}"
+            data-list="{{detailImages}}"
+            bindtap="onPreviewImage"
+          />
+          <view class="image-remove" data-index="{{index}}" catchtap="onRemoveDetailImage">×</view>
+        </view>
+        <view wx:if="{{detailImages.length < maxDetailImages}}" class="image-add" bindtap="onChooseDetailImage">
+          <text class="add-icon">＋</text>
+          <text class="add-text">上传</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 规格 -->
+    <view class="card">
+      <view class="card-title">规格设置（选填，最多两组）</view>
+
+      <view class="spec-block">
+        <view class="row">
+          <text class="label">规格名 1</text>
+          <input
+            class="input"
+            value="{{specName1}}"
+            placeholder="如 配色"
+            placeholder-class="ph"
+            maxlength="10"
+            bindinput="onSpecName1Input"
+          />
+        </view>
+        <view class="row">
+          <text class="label">可选项</text>
+          <input
+            class="input"
+            value="{{specOptions1}}"
+            placeholder="用逗号分隔，如 原色,异色"
+            placeholder-class="ph"
+            bindinput="onSpecOptions1Input"
+          />
+        </view>
+      </view>
+
+      <view class="spec-block">
+        <view class="row">
+          <text class="label">规格名 2</text>
+          <input
+            class="input"
+            value="{{specName2}}"
+            placeholder="如 底座"
+            placeholder-class="ph"
+            maxlength="10"
+            bindinput="onSpecName2Input"
+          />
+        </view>
+        <view class="row">
+          <text class="label">可选项</text>
+          <input
+            class="input"
+            value="{{specOptions2}}"
+            placeholder="用逗号分隔，如 常规,加高"
+            placeholder-class="ph"
+            bindinput="onSpecOptions2Input"
+          />
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-holder"></view>
+
+    <view class="bottom-bar">
+      <view class="save-btn {{saving ? 'save-btn--disabled' : ''}}" bindtap="onSave" hover-class="save-btn--hover">
+        {{saving ? '保存中…' : (isEdit ? '保存修改' : '创建商品')}}
+      </view>
+    </view>
+  </block>
+
+</view>

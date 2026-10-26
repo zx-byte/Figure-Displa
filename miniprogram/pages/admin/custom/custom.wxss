@@ -1,0 +1,395 @@
+/* pages/admin/custom/custom.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+}
+
+.tabs-scroll {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+  background-color: #FFFFFF;
+  box-shadow: 0 2rpx 12rpx rgba(26, 26, 36, 0.04);
+}
+
+.tabs {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 24rpx;
+}
+
+.tab {
+  margin-right: 36rpx;
+  padding: 26rpx 0;
+  font-size: 25rpx;
+  color: #8A8A9E;
+  position: relative;
+}
+
+.tab--active {
+  color: #1A1A24;
+  font-weight: 600;
+}
+
+.tab--active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 12rpx;
+  transform: translateX(-50%);
+  width: 36rpx;
+  height: 5rpx;
+  border-radius: 3rpx;
+  background-color: #FF5C39;
+}
+
+.total-text {
+  margin-left: 12rpx;
+  font-size: 21rpx;
+  color: #9C9CAC;
+}
+
+/* ---------- 卡片 ---------- */
+
+.list-wrap {
+  padding: 20rpx 24rpx 40rpx;
+}
+
+.custom-card {
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+}
+
+.card-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14rpx;
+  border-bottom: 1rpx solid #F5F5F7;
+}
+
+.card-no {
+  font-size: 22rpx;
+  color: #9C9CAC;
+}
+
+.status {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #FF5C39;
+}
+
+.status-0 {
+  color: #8A8A9E;
+}
+
+.status-2 {
+  color: #1565C0;
+}
+
+.status-4 {
+  color: #00897B;
+}
+
+.status--1 {
+  color: #9C9CAC;
+}
+
+.req-summary {
+  padding: 16rpx 0 8rpx;
+}
+
+.req-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5rpx 0;
+}
+
+.req-label {
+  width: 90rpx;
+  flex-shrink: 0;
+  font-size: 23rpx;
+  color: #8A8A9E;
+}
+
+.req-value {
+  flex: 1;
+  font-size: 25rpx;
+  color: #1A1A24;
+}
+
+.expand-hint {
+  margin-top: 8rpx;
+  text-align: right;
+  font-size: 21rpx;
+  color: #FF5C39;
+}
+
+.req-detail {
+  padding: 16rpx;
+  margin-bottom: 8rpx;
+  background-color: #FAFAFC;
+  border-radius: 16rpx;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 8rpx 0;
+}
+
+.detail-label {
+  width: 130rpx;
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: #8A8A9E;
+}
+
+.detail-value {
+  flex: 1;
+  font-size: 23rpx;
+  color: #1A1A24;
+  line-height: 1.6;
+}
+
+.ref-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.ref-image {
+  width: 110rpx;
+  height: 110rpx;
+  margin: 0 10rpx 10rpx 0;
+  border-radius: 10rpx;
+  background-color: #F0F0F4;
+}
+
+/* ---------- 金额 ---------- */
+
+.amount-row {
+  display: flex;
+  flex-direction: row;
+  padding: 16rpx 0;
+  border-top: 1rpx solid #F5F5F7;
+}
+
+.amount-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cell-label {
+  font-size: 20rpx;
+  color: #8A8A9E;
+}
+
+.cell-value {
+  margin-top: 6rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.cell-value--gold {
+  color: #C9A227;
+}
+
+/* ---------- 操作 ---------- */
+
+.card-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-top: 14rpx;
+  border-top: 1rpx solid #F5F5F7;
+}
+
+.act {
+  margin-left: 16rpx;
+  padding: 10rpx 28rpx;
+  border-radius: 28rpx;
+  border: 1rpx solid #EDEDF2;
+  font-size: 23rpx;
+  color: #4A4A5A;
+}
+
+.act--primary {
+  border-color: #FF5C39;
+  color: #FF5C39;
+  background-color: #FFF0EC;
+}
+
+.load-more {
+  padding: 24rpx 0 40rpx;
+  text-align: center;
+  font-size: 23rpx;
+  color: #B0B0BE;
+}
+
+/* ---------- 弹层 ---------- */
+
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheet {
+  width: 100%;
+  padding: 36rpx 32rpx calc(32rpx + env(safe-area-inset-bottom));
+  background-color: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  max-height: 86vh;
+  overflow-y: auto;
+}
+
+.sheet-title {
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A24;
+}
+
+.sheet-no {
+  margin-top: 8rpx;
+  text-align: center;
+  font-size: 21rpx;
+  color: #9C9CAC;
+}
+
+.sheet-label {
+  margin-top: 24rpx;
+  margin-bottom: 12rpx;
+  font-size: 24rpx;
+  color: #4A4A5A;
+}
+
+.sheet-input {
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-radius: 16rpx;
+  background-color: #F5F5F7;
+  font-size: 27rpx;
+  color: #1A1A24;
+}
+
+.sheet-textarea {
+  width: 100%;
+  min-height: 120rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background-color: #F5F5F7;
+  font-size: 26rpx;
+  color: #1A1A24;
+  line-height: 1.6;
+}
+
+.sheet-tip {
+  margin-top: 12rpx;
+  font-size: 21rpx;
+  color: #9C9CAC;
+  line-height: 1.6;
+}
+
+.ph {
+  color: #B0B0BE;
+}
+
+.image-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.image-item {
+  position: relative;
+  width: 130rpx;
+  height: 130rpx;
+  margin: 0 14rpx 14rpx 0;
+  border-radius: 14rpx;
+  overflow: hidden;
+  background-color: #F0F0F4;
+}
+
+.image-thumb {
+  width: 130rpx;
+  height: 130rpx;
+}
+
+.image-remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36rpx;
+  height: 36rpx;
+  line-height: 32rpx;
+  text-align: center;
+  border-radius: 0 0 0 14rpx;
+  background-color: rgba(26, 26, 36, 0.6);
+  color: #FFFFFF;
+  font-size: 24rpx;
+}
+
+.image-add {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 14rpx;
+  border: 1rpx dashed #D9D9E0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FAFAFC;
+}
+
+.add-icon {
+  font-size: 34rpx;
+  color: #B0B0BE;
+}
+
+.sheet-actions {
+  display: flex;
+  flex-direction: row;
+  margin-top: 32rpx;
+}
+
+.sheet-btn {
+  flex: 1;
+  height: 84rpx;
+  border-radius: 42rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 27rpx;
+  font-weight: 500;
+}
+
+.sheet-btn--ghost {
+  background-color: #F5F5F7;
+  color: #4A4A5A;
+  margin-right: 20rpx;
+}
+
+.sheet-btn--primary {
+  background-color: #FF5C39;
+  color: #FFFFFF;
+}

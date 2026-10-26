@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "收货地址",
+  "usingComponents": {
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-view": "/components/loading-view/loading-view"
+  }
+}

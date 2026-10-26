@@ -1,0 +1,83 @@
+<!-- pages/custom-list/custom-list.wxml -->
+<view class="page">
+
+  <view class="tabs">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="label"
+      class="tab {{activeStatus === item.status ? 'tab--active' : ''}}"
+      data-status="{{item.status}}"
+      bindtap="onTabTap"
+    >
+      {{item.label}}
+    </view>
+  </view>
+
+  <view class="list-wrap">
+    <loading-view wx:if="{{loading}}" type="list" count="3" />
+
+    <empty-state
+      wx:elif="{{loadError}}"
+      icon="error"
+      text="定制单加载失败"
+      subText="请检查网络后重试"
+      actionText="重新加载"
+      bind:action="onRetry"
+    />
+
+    <empty-state
+      wx:elif="{{list.length === 0}}"
+      icon="box"
+      text="还没有定制单"
+      subText="想要独一份的作品？提交需求试试"
+      actionText="去定制"
+      bind:action="goApply"
+    />
+
+    <block wx:else>
+      <view
+        wx:for="{{list}}"
+        wx:key="_id"
+        class="custom-card"
+        data-id="{{item._id}}"
+        bindtap="goDetail"
+        hover-class="custom-card--hover"
+      >
+        <view class="card-head">
+          <text class="card-no">{{item.orderNo}}</text>
+          <text class="card-status status-{{item.status}}">{{item.statusText}}</text>
+        </view>
+
+        <view class="card-body">
+          <view class="req-row">
+            <text class="req-label">题材</text>
+            <text class="req-value ellipsis">{{item.characterText}}</text>
+          </view>
+          <view class="req-row">
+            <text class="req-label">规格</text>
+            <text class="req-value">{{item.scaleText}} · {{item.styleText}}</text>
+          </view>
+        </view>
+
+        <view class="card-foot">
+          <view class="foot-left">
+            <text class="foot-time">{{item.createTimeText}}</text>
+            <text wx:if="{{item.scheduleCount > 1}}" class="foot-progress">进度已更新 {{item.scheduleCount}} 次</text>
+          </view>
+          <view class="foot-amount">
+            <text class="foot-label">报价</text>
+            <text class="foot-price">¥{{item.quoteText}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{item.status === 1 || item.status === 3}}" class="card-action">
+          <text class="action-text">{{item.status === 1 ? '去支付定金' : '去支付尾款'}} ›</text>
+        </view>
+      </view>
+
+      <view wx:if="{{loadingMore}}" class="load-more">加载中…</view>
+      <view wx:elif="{{!hasMore}}" class="load-more">没有更多了</view>
+    </block>
+  </view>
+
+</view>

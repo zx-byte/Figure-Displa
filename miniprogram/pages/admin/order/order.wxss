@@ -1,0 +1,436 @@
+/* pages/admin/order/order.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+}
+
+.head {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #FFFFFF;
+  padding: 20rpx 24rpx 0;
+  box-shadow: 0 2rpx 12rpx rgba(26, 26, 36, 0.04);
+}
+
+.search-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.search-box {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 72rpx;
+  padding: 0 20rpx;
+  border-radius: 36rpx;
+  background-color: #F5F5F7;
+}
+
+.search-icon {
+  font-size: 30rpx;
+  color: #8A8A9E;
+  margin-right: 10rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 26rpx;
+  color: #1A1A24;
+}
+
+.search-btn {
+  margin-left: 16rpx;
+  font-size: 26rpx;
+  color: #FF5C39;
+}
+
+.ph {
+  color: #B0B0BE;
+}
+
+.tabs-scroll {
+  white-space: nowrap;
+  margin-top: 12rpx;
+}
+
+.tabs {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  padding-bottom: 4rpx;
+}
+
+.tab {
+  margin-right: 36rpx;
+  padding-bottom: 14rpx;
+  font-size: 25rpx;
+  color: #8A8A9E;
+  position: relative;
+}
+
+.tab--active {
+  color: #1A1A24;
+  font-weight: 600;
+}
+
+.tab--active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 4rpx;
+  transform: translateX(-50%);
+  width: 36rpx;
+  height: 5rpx;
+  border-radius: 3rpx;
+  background-color: #FF5C39;
+}
+
+.total-text {
+  margin-left: 12rpx;
+  font-size: 21rpx;
+  color: #9C9CAC;
+  padding-bottom: 14rpx;
+}
+
+/* ---------- 订单卡 ---------- */
+
+.list-wrap {
+  padding: 20rpx 24rpx 40rpx;
+}
+
+.order-card {
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+}
+
+.card-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14rpx;
+  border-bottom: 1rpx solid #F5F5F7;
+}
+
+.no-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.order-no {
+  font-size: 22rpx;
+  color: #9C9CAC;
+}
+
+.copy-hint {
+  margin-left: 10rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+  border: 1rpx solid #EDEDF2;
+  font-size: 18rpx;
+  color: #B0B0BE;
+}
+
+.status {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #FF5C39;
+}
+
+.status-1,
+.status-2 {
+  color: #1565C0;
+}
+
+.status-3 {
+  color: #4A4A5A;
+}
+
+.status--1 {
+  color: #9C9CAC;
+}
+
+.addr-row {
+  padding: 14rpx 0 10rpx;
+}
+
+.addr-text {
+  font-size: 22rpx;
+  color: #8A8A9E;
+  line-height: 1.55;
+}
+
+.goods-list {
+  padding: 8rpx 0;
+}
+
+.goods-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.goods-item:last-child {
+  margin-bottom: 0;
+}
+
+.goods-cover {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 12rpx;
+  background-color: #F0F0F4;
+  flex-shrink: 0;
+}
+
+.goods-info {
+  flex: 1;
+  min-width: 0;
+  padding: 0 16rpx;
+}
+
+.goods-name {
+  font-size: 25rpx;
+  color: #1A1A24;
+}
+
+.goods-limit {
+  margin-top: 4rpx;
+  font-size: 19rpx;
+  color: #C9A227;
+}
+
+.goods-count {
+  font-size: 22rpx;
+  color: #8A8A9E;
+}
+
+.card-foot {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-top: 14rpx;
+  border-top: 1rpx solid #F5F5F7;
+}
+
+.foot-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.foot-time {
+  font-size: 21rpx;
+  color: #9C9CAC;
+}
+
+.foot-pay {
+  margin-top: 4rpx;
+  font-size: 20rpx;
+  color: #B0B0BE;
+}
+
+.foot-amount {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.card-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 16rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid #F5F5F7;
+}
+
+.act {
+  margin-left: 16rpx;
+  padding: 10rpx 28rpx;
+  border-radius: 28rpx;
+  border: 1rpx solid #EDEDF2;
+  font-size: 23rpx;
+  color: #4A4A5A;
+}
+
+.act--primary {
+  border-color: #FF5C39;
+  color: #FF5C39;
+  background-color: #FFF0EC;
+}
+
+.load-more {
+  padding: 24rpx 0 40rpx;
+  text-align: center;
+  font-size: 23rpx;
+  color: #B0B0BE;
+}
+
+/* ---------- 发货弹层 ---------- */
+
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheet {
+  width: 100%;
+  padding: 36rpx 32rpx calc(32rpx + env(safe-area-inset-bottom));
+  background-color: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+}
+
+.sheet-title {
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A24;
+}
+
+.sheet-no {
+  margin-top: 8rpx;
+  text-align: center;
+  font-size: 21rpx;
+  color: #9C9CAC;
+}
+
+.sheet-label {
+  margin-top: 28rpx;
+  margin-bottom: 14rpx;
+  font-size: 24rpx;
+  color: #4A4A5A;
+}
+
+.company-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.company {
+  margin: 0 14rpx 14rpx 0;
+  padding: 12rpx 26rpx;
+  border-radius: 32rpx;
+  border: 1rpx solid #EDEDF2;
+  background-color: #FAFAFC;
+  font-size: 24rpx;
+  color: #4A4A5A;
+}
+
+.company--active {
+  border-color: #FF5C39;
+  background-color: #FFF0EC;
+  color: #FF5C39;
+  font-weight: 500;
+}
+
+.sheet-input {
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-radius: 16rpx;
+  background-color: #F5F5F7;
+  font-size: 27rpx;
+  color: #1A1A24;
+}
+
+.sheet-actions {
+  display: flex;
+  flex-direction: row;
+  margin-top: 36rpx;
+}
+
+.sheet-btn {
+  flex: 1;
+  height: 84rpx;
+  border-radius: 42rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 27rpx;
+  font-weight: 500;
+}
+
+.sheet-btn--ghost {
+  background-color: #F5F5F7;
+  color: #4A4A5A;
+  margin-right: 20rpx;
+}
+
+.sheet-btn--primary {
+  background-color: #FF5C39;
+  color: #FFFFFF;
+}
+
+.sheet-btn--danger {
+  background-color: #F5F5F7;
+  color: #E0533A;
+  border: 1rpx solid #F0C4BA;
+  margin-right: 20rpx;
+}
+
+/* ---------- 售后处理弹层 ---------- */
+
+.as-block {
+  margin-top: 24rpx;
+  padding: 20rpx;
+  background-color: #FAFAFC;
+  border-radius: 16rpx;
+}
+
+.as-line {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 0;
+  font-size: 25rpx;
+}
+
+.as-line--top {
+  align-items: flex-start;
+}
+
+.as-k {
+  width: 140rpx;
+  flex-shrink: 0;
+  color: #8A8A9E;
+}
+
+.as-v {
+  flex: 1;
+  color: #4A4A5A;
+  word-break: break-all;
+}
+
+.as-v--multi {
+  line-height: 1.55;
+}
+
+.as-imgs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  padding-top: 12rpx;
+}
+
+.as-img {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  background-color: #F0F0F3;
+}

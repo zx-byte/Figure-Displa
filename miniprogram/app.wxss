@@ -1,0 +1,295 @@
+/* app.wxss
+ * 全局样式与设计令牌。所有尺寸以 rpx 计，基准宽度 750rpx。
+ * 视觉基调：潮玩质感 —— 中性灰底衬托作品，品牌橙作强调，金色仅用于稀缺性标识。
+ */
+
+page {
+  --color-ink: #1A1A24;          /* 主文字 */
+  --color-ink-2: #4A4A5A;        /* 次级文字 */
+  --color-sub: #8A8A9E;          /* 辅助文字 */
+  --color-line: #EDEDF2;         /* 分隔线 */
+  --color-bg: #F5F5F7;           /* 页面底色 */
+  --color-card: #FFFFFF;         /* 卡片底色 */
+  --color-brand: #FF5C39;        /* 品牌橙 */
+  --color-brand-dark: #E8451F;   /* 品牌橙深色（按下态） */
+  --color-brand-soft: #FFF0EC;   /* 品牌橙浅底 */
+  --color-gold: #C9A227;         /* 限量/稀缺 */
+  --color-gold-soft: #FBF6E6;
+  --color-dark: #1A1A24;
+
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-size: 28rpx;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+view,
+text,
+scroll-view,
+swiper,
+image,
+input,
+textarea,
+button {
+  box-sizing: border-box;
+}
+
+/* ---------- 布局 ---------- */
+
+.page-container {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.page-pad {
+  padding: 24rpx;
+}
+
+.safe-bottom {
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+}
+
+/* 底部固定操作栏占位，避免内容被遮挡 */
+.bottom-holder {
+  height: calc(120rpx + env(safe-area-inset-bottom));
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- 卡片 ---------- */
+
+.card {
+  background-color: var(--color-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.card-pad {
+  padding: 24rpx;
+}
+
+.section {
+  margin-top: 24rpx;
+}
+
+/* ---------- 文字 ---------- */
+
+.text-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.text-body {
+  font-size: 28rpx;
+  color: var(--color-ink-2);
+}
+
+.text-sub {
+  font-size: 24rpx;
+  color: var(--color-sub);
+}
+
+.text-xs {
+  font-size: 22rpx;
+  color: var(--color-sub);
+}
+
+.text-strong {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* ---------- 价格 ---------- */
+
+.price {
+  color: var(--color-brand);
+  font-weight: 600;
+  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+}
+
+.price-symbol {
+  font-size: 24rpx;
+  margin-right: 2rpx;
+}
+
+.price-value {
+  font-size: 36rpx;
+}
+
+.price-origin {
+  margin-left: 12rpx;
+  font-size: 22rpx;
+  color: var(--color-sub);
+  text-decoration: line-through;
+}
+
+/* ---------- 标签 ---------- */
+
+.tag {
+  display: inline-block;
+  padding: 2rpx 12rpx;
+  border-radius: var(--radius-sm);
+  font-size: 20rpx;
+  line-height: 32rpx;
+  background-color: var(--color-brand-soft);
+  color: var(--color-brand);
+}
+
+.tag-gold {
+  background-color: var(--color-gold-soft);
+  color: var(--color-gold);
+}
+
+.tag-plain {
+  background-color: var(--color-line);
+  color: var(--color-ink-2);
+}
+
+.tag-dark {
+  background-color: var(--color-dark);
+  color: #FFFFFF;
+}
+
+/* ---------- 按钮 ---------- */
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  transition: opacity 0.15s ease;
+}
+
+.btn-primary {
+  background-color: var(--color-brand);
+  color: #FFFFFF;
+}
+
+.btn-dark {
+  background-color: var(--color-dark);
+  color: #FFFFFF;
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-ink);
+  border: 1rpx solid var(--color-line);
+}
+
+.btn-disabled {
+  background-color: #D9D9E0;
+  color: #FFFFFF;
+}
+
+.btn-hover {
+  opacity: 0.82;
+  transform: scale(0.99);
+}
+
+/* 重置原生 button 默认样式，统一由 class 控制 */
+button::after {
+  border: none;
+}
+
+.btn-reset {
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+  background-color: transparent;
+}
+
+/* ---------- 分隔与占位 ---------- */
+
+.divider {
+  height: 1rpx;
+  background-color: var(--color-line);
+}
+
+.row-gap {
+  height: 24rpx;
+}
+
+/* ---------- 列表项 ---------- */
+
+.cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 96rpx;
+  padding: 0 24rpx;
+  background-color: var(--color-card);
+}
+
+.cell-label {
+  font-size: 28rpx;
+  color: var(--color-ink);
+}
+
+.cell-value {
+  font-size: 28rpx;
+  color: var(--color-sub);
+}
+
+.cell-arrow {
+  margin-left: 8rpx;
+  font-size: 24rpx;
+  color: #C4C4D0;
+}
+
+/* ---------- 骨架屏 ---------- */
+
+.skeleton {
+  background: linear-gradient(90deg, #EDEDF2 25%, #F7F7FA 37%, #EDEDF2 63%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

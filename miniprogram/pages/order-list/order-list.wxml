@@ -1,0 +1,86 @@
+<!-- pages/order-list/order-list.wxml -->
+<view class="page">
+
+  <!-- 状态筛选 -->
+  <view class="tabs">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="label"
+      class="tab {{activeStatus === item.status ? 'tab--active' : ''}}"
+      data-status="{{item.status}}"
+      bindtap="onTabTap"
+    >
+      {{item.label}}
+    </view>
+  </view>
+
+  <view class="list-wrap">
+    <loading-view wx:if="{{loading}}" type="list" count="3" />
+
+    <empty-state
+      wx:elif="{{loadError}}"
+      icon="error"
+      text="订单加载失败"
+      subText="请检查网络后重试"
+      actionText="重新加载"
+      bind:action="onRetry"
+    />
+
+    <empty-state
+      wx:elif="{{list.length === 0}}"
+      icon="box"
+      text="还没有相关订单"
+      subText="挑选心仪的手作，让它成为你的收藏"
+      actionText="去逛逛"
+      bind:action="goShopping"
+    />
+
+    <block wx:else>
+      <view wx:for="{{list}}" wx:key="_id" class="order-card" data-id="{{item._id}}" bindtap="goDetail">
+        <view class="order-head">
+          <text class="order-no">{{item.orderNo}}</text>
+          <text class="order-status status-{{item.status}}">{{item.statusText}}</text>
+        </view>
+
+        <view class="goods-list">
+          <view wx:for="{{item.displayGoods}}" wx:for-item="goods" wx:key="productId" class="goods-item">
+            <image class="goods-cover" src="{{goods.image}}" mode="aspectFill" />
+            <view class="goods-info">
+              <view class="goods-name ellipsis-2">{{goods.name}}</view>
+              <view wx:if="{{goods.spec}}" class="goods-spec">{{goods.spec}}</view>
+              <view wx:if="{{goods.limitNo}}" class="goods-limit">限量编号 No.{{goods.limitNo}}</view>
+            </view>
+            <view class="goods-price-col">
+              <text class="goods-price">¥{{goods.priceText}}</text>
+              <text class="goods-count">×{{goods.count}}</text>
+            </view>
+          </view>
+          <view wx:if="{{item.moreCount > 0}}" class="more-tip">另有 {{item.moreCount}} 件作品</view>
+        </view>
+
+        <view class="order-foot">
+          <view class="foot-left">
+            <text class="foot-count">共 {{item.totalCount}} 件</text>
+            <text wx:if="{{item.countdown}}" class="foot-countdown">剩余 {{item.countdown}}</text>
+          </view>
+          <view class="foot-amount">
+            <text class="foot-label">实付</text>
+            <text class="foot-price"><text class="price-symbol">¥</text>{{item.payAmountText}}</text>
+          </view>
+        </view>
+
+        <view class="actions" catchtap="noop">
+          <view wx:if="{{item.status === 0}}" class="btn btn-line" data-id="{{item._id}}" catchtap="onCancel">取消订单</view>
+          <view wx:if="{{item.status === 0}}" class="btn btn-fill" data-id="{{item._id}}" catchtap="onPay">去支付</view>
+          <view wx:if="{{item.status === 2}}" class="btn btn-fill" data-id="{{item._id}}" catchtap="onConfirm">确认收货</view>
+          <view wx:if="{{item.status === 1}}" class="btn btn-line" data-id="{{item._id}}" catchtap="goDetail">查看详情</view>
+          <view wx:if="{{item.status === 3}}" class="btn btn-line" data-id="{{item._id}}" catchtap="goDetail">再次购买</view>
+        </view>
+      </view>
+
+      <view wx:if="{{loadingMore}}" class="load-more">加载中…</view>
+      <view wx:elif="{{!hasMore}}" class="load-more">没有更多了</view>
+    </block>
+  </view>
+
+</view>

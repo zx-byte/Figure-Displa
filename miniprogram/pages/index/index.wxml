@@ -1,0 +1,172 @@
+<!-- pages/index/index.wxml -->
+<view class="page">
+
+  <!--
+    自定义导航栏
+    首页改用 navigationStyle: custom，把原生标题栏这一层让给内容。
+    高度按状态栏 + 胶囊位置实测算出，避免不同机型顶部错位。
+  -->
+  <view class="nav">
+    <view style="height: {{statusBarHeight}}px;"></view>
+    <view class="nav-bar" style="height: {{navBarHeight}}px;">
+      <text class="nav-brand">拾光手办</text>
+      <text class="nav-slogan">手作模型 · 只做一次</text>
+    </view>
+
+    <!-- 顶部搜索栏 -->
+    <view class="search-bar">
+      <view class="search-input" bindtap="goSearch" hover-class="search-input--hover">
+        <text class="search-icon">⌕</text>
+        <text class="search-placeholder">搜索作品名称、题材或系列</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 骨架屏：形态与首页真实结构一致（轮播 + 快捷入口 + 网格），避免加载完成时整页重排 -->
+  <loading-view wx:if="{{loading}}" type="home" count="4" />
+
+  <!-- 加载失败 -->
+  <empty-state
+    wx:elif="{{loadError}}"
+    icon="error"
+    text="首页加载失败"
+    subText="请检查网络后重试"
+    actionText="重新加载"
+    bind:action="onRetry"
+  />
+
+  <block wx:else>
+    <!-- 轮播 -->
+    <swiper
+      wx:if="{{banners.length > 0}}"
+      class="banner"
+      indicator-dots="{{banners.length > 1}}"
+      indicator-color="rgba(255,255,255,0.4)"
+      indicator-active-color="#FFFFFF"
+      autoplay="{{true}}"
+      interval="{{4500}}"
+      duration="{{600}}"
+      circular="{{true}}"
+    >
+      <swiper-item wx:for="{{banners}}" wx:key="_id">
+        <view class="banner-item" bindtap="onBannerTap" data-id="{{item._id}}">
+          <image
+            wx:if="{{!brokenBanners[index]}}"
+            class="banner-img"
+            src="{{item.image}}"
+            mode="aspectFill"
+            data-index="{{index}}"
+            binderror="onBannerError"
+          />
+          <view wx:else class="banner-img banner-img--broken"></view>
+          <view class="banner-mask"></view>
+          <view class="banner-text">
+            <view class="banner-title">{{item.title}}</view>
+            <view wx:if="{{item.subtitle}}" class="banner-sub">{{item.subtitle}}</view>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+
+    <!-- 分类快捷入口 -->
+    <view class="entry-row">
+      <view
+        wx:for="{{quickEntries}}"
+        wx:key="label"
+        class="entry-item"
+        data-key="{{item.key}}"
+        data-value="{{item.value}}"
+        bindtap="onEntryTap"
+        hover-class="entry-item--hover"
+      >
+        <view class="entry-dot" style="background-color: {{item.color}};">
+          <text class="entry-symbol">{{item.symbol}}</text>
+        </view>
+        <text class="entry-label">{{item.label}}</text>
+      </view>
+    </view>
+
+    <!-- 限量发售专区 -->
+    <view wx:if="{{presale.length > 0}}" class="block">
+      <section-header
+        title="限量发售"
+        subtitle="编号唯一，售罄即止"
+        moreText="全部"
+        bind:more="goPresaleList"
+      />
+      <scroll-view class="presale-scroll" scroll-x="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+        <view class="presale-track">
+          <view
+            wx:for="{{presale}}"
+            wx:key="_id"
+            class="presale-item"
+            bindtap="onBannerTap"
+            data-id="{{item._id}}"
+          >
+            <view class="presale-thumb-wrap">
+              <image class="presale-thumb" src="{{item.cover}}" mode="aspectFill" lazy-load="{{true}}" />
+              <view class="presale-badge">限量 {{item.limitNum}} 体</view>
+            </view>
+            <view class="presale-name ellipsis">{{item.name}}</view>
+            <view class="presale-price">
+              <text class="price-symbol">¥</text>{{item.priceText}}
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 定制入口：交易模式进表单，展示模式直接聊 -->
+    <view
+      wx:if="{{showTrade}}"
+      class="custom-card"
+      bindtap="goCustom"
+      hover-class="custom-card--hover"
+    >
+      <view class="custom-left">
+        <view class="custom-title">想要独一份的作品？</view>
+        <view class="custom-sub">提交定制需求，30% 定金锁定排期</view>
+      </view>
+      <view class="custom-btn">去定制</view>
+    </view>
+
+    <button
+      wx:else
+      class="custom-card custom-card--contact"
+      open-type="contact"
+      hover-class="custom-card--hover"
+    >
+      <view class="custom-left">
+        <view class="custom-title">想要独一份的作品？</view>
+        <view class="custom-sub">把你的想法告诉我们，从角色设定到配色细节</view>
+      </view>
+      <view class="custom-btn">微信咨询</view>
+    </button>
+
+    <!-- 新品推荐 -->
+    <view class="block">
+      <section-header
+        title="新品上架"
+        subtitle="最新完成的手作作品"
+        moreText="{{hasMoreNew ? '查看全部' : ''}}"
+        bind:more="goAllProducts"
+      />
+      <view wx:if="{{newArrivals.length > 0}}" class="grid">
+        <view wx:for="{{newArrivals}}" wx:key="_id" class="grid-cell">
+          <goods-card item="{{item}}" layout="grid" />
+        </view>
+      </view>
+      <empty-state wx:else text="还没有上架的作品" subText="新的手作正在制作中，敬请期待" />
+    </view>
+
+    <view class="footer-tip">手作有温度，每一件都只做一次</view>
+  </block>
+
+  <!-- 首次进入的协议确认 -->
+  <privacy-modal
+    show="{{privacyShow}}"
+    bind:agree="onPrivacyAgree"
+    bind:disagree="onPrivacyDisagree"
+  />
+
+</view>

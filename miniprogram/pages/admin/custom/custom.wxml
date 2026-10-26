@@ -1,0 +1,205 @@
+<!-- pages/admin/custom/custom.wxml -->
+<view class="page">
+
+  <scroll-view class="tabs-scroll" scroll-x="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+    <view class="tabs">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="label"
+        class="tab {{activeStatus === item.status ? 'tab--active' : ''}}"
+        data-status="{{item.status}}"
+        bindtap="onTabTap"
+      >
+        {{item.label}}
+      </view>
+      <text class="total-text">共 {{total}} 单</text>
+    </view>
+  </scroll-view>
+
+  <view class="list-wrap">
+    <loading-view wx:if="{{loading}}" type="list" count="3" />
+
+    <empty-state
+      wx:elif="{{loadError}}"
+      icon="error"
+      text="定制单加载失败"
+      subText="请检查网络后重试"
+      actionText="重新加载"
+      bind:action="onRetry"
+    />
+
+    <empty-state
+      wx:elif="{{list.length === 0}}"
+      icon="box"
+      text="没有符合条件的定制单"
+      subText="切换状态筛选看看"
+    />
+
+    <block wx:else>
+      <view wx:for="{{list}}" wx:key="_id" class="custom-card">
+        <view class="card-head">
+          <text class="card-no">{{item.orderNo}}</text>
+          <text class="status status-{{item.status}}">{{item.statusText}}</text>
+        </view>
+
+        <view class="req-summary" data-id="{{item._id}}" bindtap="onToggleExpand">
+          <view class="req-row">
+            <text class="req-label">题材</text>
+            <text class="req-value ellipsis">{{item.characterText}}</text>
+          </view>
+          <view class="req-row">
+            <text class="req-label">规格</text>
+            <text class="req-value">{{item.scaleText}} · {{item.styleText}}</text>
+          </view>
+          <view class="expand-hint">{{expandedId === item._id ? '收起详情' : '展开详情'}}</view>
+        </view>
+
+        <view wx:if="{{expandedId === item._id}}" class="req-detail">
+          <view wx:if="{{item.extraText}}" class="detail-row">
+            <text class="detail-label">特殊要求</text>
+            <text class="detail-value">{{item.extraText}}</text>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">联系电话</text>
+            <text class="detail-value">{{item.contactText}}</text>
+          </view>
+          <view wx:if="{{item.refImages.length > 0}}" class="detail-row">
+            <text class="detail-label">参考图</text>
+            <view class="ref-grid">
+              <image
+                wx:for="{{item.refImages}}"
+                wx:for-item="img"
+                wx:key="*this"
+                class="ref-image"
+                src="{{img}}"
+                mode="aspectFill"
+                data-src="{{img}}"
+                data-list="{{item.refImages}}"
+                bindtap="onPreview"
+              />
+            </view>
+          </view>
+          <view class="detail-row">
+            <text class="detail-label">最近进度</text>
+            <text class="detail-value">{{item.latestStage || '暂无'}}（共 {{item.scheduleCount}} 条）</text>
+          </view>
+        </view>
+
+        <view class="amount-row">
+          <view class="amount-cell">
+            <text class="cell-label">报价</text>
+            <text class="cell-value">¥{{item.quoteText}}</text>
+          </view>
+          <view class="amount-cell">
+            <text class="cell-label">定金</text>
+            <text class="cell-value cell-value--gold">¥{{item.depositText}}</text>
+          </view>
+          <view class="amount-cell">
+            <text class="cell-label">尾款</text>
+            <text class="cell-value">¥{{item.restText}}</text>
+          </view>
+        </view>
+
+        <view class="card-actions">
+          <view
+            wx:if="{{item.status === 0 || item.status === 1}}"
+            class="act act--primary"
+            data-id="{{item._id}}"
+            data-no="{{item.orderNo}}"
+            data-quote="{{item.totalQuote}}"
+            bindtap="onOpenQuote"
+          >{{item.status === 0 ? '确认报价' : '修改报价'}}</view>
+
+          <view
+            wx:if="{{item.status === 2}}"
+            class="act"
+            data-id="{{item._id}}"
+            data-no="{{item.orderNo}}"
+            bindtap="onOpenSchedule"
+          >更新进度</view>
+
+          <view wx:if="{{item.status === 2}}" class="act act--primary" data-id="{{item._id}}" bindtap="onFinish">标记完工</view>
+
+          <view wx:if="{{item.status === 3}}" class="act" data-id="{{item._id}}" data-no="{{item.orderNo}}" bindtap="onOpenSchedule">补充进度</view>
+        </view>
+      </view>
+
+      <view wx:if="{{loadingMore}}" class="load-more">加载中…</view>
+      <view wx:elif="{{!hasMore}}" class="load-more">没有更多了</view>
+    </block>
+  </view>
+
+  <!-- 报价弹层 -->
+  <view wx:if="{{quoteVisible}}" class="mask" bindtap="onCloseQuote">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">确认最终报价</view>
+      <view class="sheet-no">定制单 {{quoteCustomNo}}</view>
+
+      <view class="sheet-label">报价金额（元）</view>
+      <input
+        class="sheet-input"
+        value="{{quoteYuan}}"
+        type="digit"
+        placeholder="请输入最终报价"
+        placeholder-class="ph"
+        bindinput="onQuoteInput"
+      />
+      <view class="sheet-tip">定金将按最终报价的 30% 自动重算，买家据此支付定金</view>
+
+      <view class="sheet-actions">
+        <view class="sheet-btn sheet-btn--ghost" bindtap="onCloseQuote">取消</view>
+        <view class="sheet-btn sheet-btn--primary" bindtap="onSubmitQuote">
+          {{quoting ? '提交中…' : '确认报价'}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 进度弹层 -->
+  <view wx:if="{{scheduleVisible}}" class="mask" bindtap="onCloseSchedule">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">更新制作进度</view>
+      <view class="sheet-no">定制单 {{scheduleCustomNo}}</view>
+
+      <view class="sheet-label">节点名称</view>
+      <input
+        class="sheet-input"
+        value="{{scheduleStage}}"
+        placeholder="如 素体成型、上色完成、组装质检"
+        placeholder-class="ph"
+        maxlength="20"
+        bindinput="onStageInput"
+      />
+
+      <view class="sheet-label">节点说明</view>
+      <textarea
+        class="sheet-textarea"
+        value="{{scheduleDesc}}"
+        placeholder="简述本阶段的完成情况，买家端可见"
+        placeholder-class="ph"
+        maxlength="200"
+        bindinput="onScheduleDescInput"
+        auto-height="{{true}}"
+      />
+
+      <view class="sheet-label">进度图（最多 {{maxScheduleImages}} 张）</view>
+      <view class="image-grid">
+        <view wx:for="{{scheduleImages}}" wx:key="*this" class="image-item">
+          <image class="image-thumb" src="{{item}}" mode="aspectFill" />
+          <view class="image-remove" data-index="{{index}}" catchtap="onRemoveScheduleImage">×</view>
+        </view>
+        <view wx:if="{{scheduleImages.length < maxScheduleImages}}" class="image-add" bindtap="onChooseScheduleImage">
+          <text class="add-icon">＋</text>
+        </view>
+      </view>
+
+      <view class="sheet-actions">
+        <view class="sheet-btn sheet-btn--ghost" bindtap="onCloseSchedule">取消</view>
+        <view class="sheet-btn sheet-btn--primary" bindtap="onSubmitSchedule">
+          {{scheduling ? '提交中…' : '更新进度'}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,92 @@
+/* pages/poster/poster.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #14141A;
+  padding-top: 32rpx;
+}
+
+.preview-wrap {
+  margin: 0 60rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  background-color: #1E1E28;
+  min-height: 600rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-img {
+  width: 100%;
+  display: block;
+}
+
+.preview-loading {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 200rpx 0;
+}
+
+.tip {
+  margin-top: 28rpx;
+  text-align: center;
+  font-size: 21rpx;
+  color: rgba(255, 255, 255, 0.38);
+  letter-spacing: 1rpx;
+}
+
+.bottom-holder {
+  height: calc(160rpx + env(safe-area-inset-bottom));
+}
+
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  padding: 16rpx 32rpx calc(16rpx + env(safe-area-inset-bottom));
+  background-color: #14141A;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.06);
+}
+
+.btn-ghost {
+  width: 200rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 27rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.btn-primary {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  background-color: #FF5C39;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary--disabled {
+  background-color: #4A4A5A;
+}
+
+/* 离屏 canvas，移出可视区域但保留渲染能力 */
+.offscreen-canvas {
+  position: fixed;
+  left: -9999rpx;
+  top: 0;
+  width: 750px;
+  height: 1200px;
+}

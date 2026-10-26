@@ -1,0 +1,33 @@
+<view wx:if="{{show}}" class="mask" catchtouchmove="noop">
+  <view class="card" catchtap="noop">
+    <view class="title">隐私保护提示</view>
+
+    <view class="desc">
+      在使用拾光手办前，请阅读并同意
+      <text class="link" catchtap="onOpenTerms">《用户协议》</text>
+      与
+      <text class="link" catchtap="onOpenPrivacy">《隐私政策》</text>
+      。我们会严格按条款处理你的信息。
+    </view>
+
+    <view class="points">
+      <view class="point">
+        <view class="point-dot"></view>
+        <view class="point-text">只收集完成对应功能所必需的信息</view>
+      </view>
+      <view class="point">
+        <view class="point-dot"></view>
+        <view class="point-text">浏览历史与搜索记录只存你的手机本地</view>
+      </view>
+      <view class="point">
+        <view class="point-dot"></view>
+        <view class="point-text">不出售、不出租你的任何信息</view>
+      </view>
+    </view>
+
+    <view class="actions">
+      <view class="btn btn--ghost" bindtap="onDisagree" hover-class="btn--hover">暂不使用</view>
+      <view class="btn btn--primary" bindtap="onAgree" hover-class="btn--primary-hover">同意并继续</view>
+    </view>
+  </view>
+</view>

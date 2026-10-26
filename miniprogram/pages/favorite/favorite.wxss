@@ -1,0 +1,30 @@
+/* pages/favorite/favorite.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+}
+
+.list {
+  padding: 20rpx 24rpx 60rpx;
+}
+
+.item-wrap {
+  position: relative;
+  margin-bottom: 20rpx;
+  padding-bottom: 68rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.remove-btn {
+  position: absolute;
+  right: 20rpx;
+  bottom: 18rpx;
+  padding: 8rpx 24rpx;
+  border-radius: 28rpx;
+  border: 1rpx solid #EDEDF2;
+  font-size: 22rpx;
+  color: #8A8A9E;
+}

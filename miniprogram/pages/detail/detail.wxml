@@ -1,0 +1,344 @@
+<!-- pages/detail/detail.wxml -->
+<view class="page">
+
+  <loading-view wx:if="{{loading}}" type="detail" />
+
+  <empty-state
+    wx:elif="{{loadError}}"
+    icon="error"
+    text="作品信息加载失败"
+    subText="可能已下架，或网络出现波动"
+    actionText="重新加载"
+    bind:action="onRetry"
+  />
+
+  <block wx:else>
+    <!-- 主图轮播 -->
+    <view class="gallery">
+      <swiper
+        class="gallery-swiper"
+        circular="{{true}}"
+        bindchange="onSwiperChange"
+        indicator-dots="{{false}}"
+      >
+        <swiper-item wx:for="{{gallery}}" wx:key="*this">
+          <image
+            wx:if="{{!galleryBroken[index]}}"
+            class="gallery-img"
+            src="{{item}}"
+            mode="aspectFill"
+            data-src="{{item}}"
+            data-index="{{index}}"
+            bindtap="previewImage"
+            binderror="onGalleryError"
+          />
+          <view wx:else class="gallery-img gallery-img--broken">
+            <text class="gallery-broken-mark">◇</text>
+            <text class="gallery-broken-text">图片加载失败</text>
+          </view>
+        </swiper-item>
+      </swiper>
+      <view wx:if="{{gallery.length > 1}}" class="gallery-counter">
+        {{currentIndex + 1}} / {{gallery.length}}
+      </view>
+      <view wx:if="{{gallery.length > 0}}" class="gallery-hint">轻触查看大图细节</view>
+
+      <!-- 右上角操作：环视 / 海报 -->
+      <view class="gallery-actions">
+        <view
+          wx:if="{{hasPanorama}}"
+          class="pano-entry"
+          bindtap="onOpenPanorama"
+          hover-class="pano-entry--hover"
+        >
+          <text class="pano-icon">⟳</text>
+          <text class="pano-text">360°</text>
+        </view>
+        <view class="pano-entry" bindtap="onOpenPoster" hover-class="pano-entry--hover">
+          <text class="pano-icon">↗</text>
+          <text class="pano-text">海报</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="info-card">
+      <view class="price-block">
+        <text class="price-main"><text class="price-symbol">¥</text>{{priceText}}</text>
+        <text wx:if="{{detail.originPrice > detail.price}}" class="price-origin">¥{{originPriceText}}</text>
+        <view wx:if="{{isPresale}}" class="tag-gold-inline">限量 {{detail.limitNum}} 体</view>
+        <view wx:elif="{{isCustom}}" class="tag-inline">支持定制</view>
+      </view>
+
+      <view class="title">{{detail.name}}</view>
+      <view wx:if="{{detail.subtitle}}" class="subtitle">{{detail.subtitle}}</view>
+
+      <view class="meta-row">
+        <text class="meta-stock {{isSoldOut ? 'meta-stock--out' : ''}}">{{stockText}}</text>
+        <text wx:if="{{detail.soldCount > 0}}" class="meta-sold">已售 {{detail.soldCount}}</text>
+      </view>
+
+      <view wx:if="{{isPresale && detail.presaleDate}}" class="notice-row">
+        <text class="notice-label">预计发货</text>
+        <text class="notice-value">{{detail.presaleDate}}</text>
+      </view>
+      <view wx:if="{{detail.category.scale}}" class="notice-row">
+        <text class="notice-label">作品比例</text>
+        <text class="notice-value">{{detail.category.scale}}</text>
+      </view>
+    </view>
+
+    <!-- 规格 -->
+    <view wx:if="{{specs.length > 0}}" class="block-card">
+      <view class="block-title">选择规格</view>
+      <view wx:for="{{specs}}" wx:key="name" class="spec-group">
+        <view class="spec-name">{{item.name}}</view>
+        <view class="spec-options">
+          <view
+            wx:for="{{item.options}}"
+            wx:for-item="opt"
+            wx:key="*this"
+            class="spec-option {{selectedSpec[item.name] === opt ? 'spec-option--active' : ''}}"
+            data-name="{{item.name}}"
+            data-value="{{opt}}"
+            bindtap="onSelectSpec"
+          >
+            {{opt}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 尺寸对照 -->
+    <view wx:if="{{sizeItems.length > 0}}" class="block-card">
+      <view class="block-title">尺寸参考</view>
+      <view class="size-hint">按真实比例对照，方便判断实际大小</view>
+
+      <view class="size-chart">
+        <view wx:for="{{sizeItems}}" wx:key="name" class="size-col">
+          <view class="size-bar-wrap">
+            <view
+              class="size-bar {{item.self ? 'size-bar--self' : ''}}"
+              style="height: {{item.px}}rpx"
+            ></view>
+          </view>
+          <text class="size-name {{item.self ? 'size-name--self' : ''}}">{{item.name}}</text>
+          <text class="size-cm">{{item.cm}}cm</text>
+        </view>
+      </view>
+
+      <view wx:if="{{dimension.material}}" class="size-meta">
+        <text>材质 {{dimension.material}}</text>
+        <text wx:if="{{dimension.weight}}"> · 约 {{dimension.weight}}kg</text>
+        <text wx:if="{{dimension.width}}"> · 宽 {{dimension.width}}cm</text>
+        <text wx:if="{{dimension.depth}}"> · 深 {{dimension.depth}}cm</text>
+      </view>
+    </view>
+
+    <!-- 数量：仅交易模式需要 -->
+    <view wx:if="{{showTrade && !isCustom}}" class="block-card">
+      <view class="count-row">
+        <view class="block-title">购买数量</view>
+        <view class="stepper">
+          <view class="stepper-btn {{count <= 1 ? 'stepper-btn--disabled' : ''}}" data-delta="-1" bindtap="onCountChange">−</view>
+          <view class="stepper-value">{{count}}</view>
+          <view
+            class="stepper-btn {{isPresale || count >= detail.stock ? 'stepper-btn--disabled' : ''}}"
+            data-delta="1"
+            bindtap="onCountChange"
+          >+</view>
+        </view>
+      </view>
+      <view wx:if="{{isPresale}}" class="count-tip">限量作品每单限购 1 体，编号按下单顺序分配</view>
+    </view>
+
+    <!-- 详情图文 -->
+    <view wx:if="{{detailBlocks.length > 0}}" class="block-card">
+      <view class="block-title">作品详情</view>
+      <block wx:for="{{detailBlocks}}" wx:key="index">
+        <image
+          wx:if="{{item.type === 'image'}}"
+          class="detail-img"
+          src="{{item.value}}"
+          mode="widthFix"
+          data-src="{{item.value}}"
+          bindtap="previewDetailImage"
+          lazy-load="{{true}}"
+        />
+        <view wx:else class="detail-text">{{item.value}}</view>
+      </block>
+    </view>
+
+    <!-- 上色前后对比 -->
+    <view wx:if="{{compare}}" class="compare-block">
+      <view class="compare-head">
+        <view class="block-title">上色前后</view>
+        <view class="compare-sub">拖动分割线，对比素体与完成品</view>
+      </view>
+      <before-after before="{{compare.before}}" after="{{compare.after}}" />
+    </view>
+
+    <!-- 工序时间轴 -->
+    <view wx:if="{{craftProcess.length > 0}}" class="block-card">
+      <view class="block-title">制作工序</view>
+      <view class="craft-hint">全部工序由手作人独立完成，共 {{craftProcess.length}} 个阶段</view>
+
+      <view class="timeline">
+        <view wx:for="{{craftProcess}}" wx:key="stage" class="tl-item">
+          <view class="tl-axis">
+            <view class="tl-dot {{index === 0 ? 'tl-dot--first' : ''}}"></view>
+            <view wx:if="{{index < craftProcess.length - 1}}" class="tl-line"></view>
+          </view>
+          <view class="tl-body">
+            <view class="tl-head">
+              <text class="tl-stage">{{item.stage}}</text>
+              <text class="tl-date">{{item.date}}</text>
+            </view>
+            <view class="tl-desc">{{item.desc}}</view>
+            <view wx:if="{{item.meta}}" class="tl-meta">{{item.meta}}</view>
+            <image
+              wx:if="{{item.image}}"
+              class="tl-img"
+              src="{{item.image}}"
+              mode="widthFix"
+              data-src="{{item.image}}"
+              bindtap="previewDetailImage"
+              lazy-load="{{true}}"
+            />
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 须知：交易模式与纯展示模式的表述不同 -->
+    <view class="block-card">
+      <view class="block-title">{{showTrade ? '购买须知' : '作品说明'}}</view>
+      <block wx:if="{{showTrade}}">
+        <view class="rule-item">· 手工作品存在细微手工痕迹，属正常工艺特征，不视为瑕疵</view>
+        <view class="rule-item">· 现货商品付款后 48 小时内发出</view>
+        <view class="rule-item">· 限量作品编号唯一，售出后不接受以编号为由的退换</view>
+        <view class="rule-item">· 定制作品定金为总价 30%，制作启动后定金不予退还</view>
+      </block>
+      <block wx:else>
+        <view class="rule-item">· 全部作品由手作人单独完成，不是批量生产的工业品</view>
+        <view class="rule-item">· 手工作品存在细微手工痕迹，同款之间也会有细节差异</view>
+        <view class="rule-item">· 限量作品编号唯一，具体编号以实际沟通为准</view>
+        <view class="rule-item">· 价格与库存为参考信息，实际以微信沟通确认为准</view>
+      </block>
+    </view>
+
+    <!-- 同系列推荐 -->
+    <view wx:if="{{related.length > 0}}" class="related-block">
+      <view class="related-head">
+        <view class="related-head-left">
+          <view class="sec-bar"></view>
+          <text class="related-title">同系列作品</text>
+        </view>
+        <text class="related-more" bindtap="onMoreSeries">全部 ›</text>
+      </view>
+
+      <scroll-view class="related-scroll" scroll-x="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+        <view class="related-inner">
+          <view
+            wx:for="{{related}}"
+            wx:key="_id"
+            class="related-item"
+            data-id="{{item._id}}"
+            bindtap="onRelatedTap"
+            hover-class="related-item--hover"
+          >
+            <image class="related-img" src="{{item.cover}}" mode="aspectFill" lazy-load="{{true}}" />
+            <view class="related-name">{{item.name}}</view>
+            <view class="related-price">¥{{item.priceText}}</view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <view class="bottom-holder"></view>
+
+    <!-- 底部操作栏 -->
+    <view class="action-bar">
+      <view class="action-icon" bindtap="onToggleFavorite">
+        <text class="action-symbol {{favorited ? 'action-symbol--on' : ''}}">{{favorited ? '♥' : '♡'}}</text>
+        <text class="action-label">{{favorited ? '已收藏' : '收藏'}}</text>
+      </view>
+
+      <!-- 纯展示模式：交易入口全部替换为微信咨询 -->
+      <block wx:if="{{!showTrade}}">
+        <button class="action-icon action-icon--plain" open-type="contact" bindcontact="onContactTap">
+          <text class="action-symbol">✉</text>
+          <text class="action-label">客服</text>
+        </button>
+        <button
+          class="btn-primary-bar btn-contact-bar"
+          open-type="contact"
+          bindcontact="onContactTap"
+          hover-class="btn-bar--hover"
+        >
+          微信咨询定制
+        </button>
+      </block>
+
+      <block wx:else>
+        <button class="action-icon action-icon--plain" open-type="contact" bindcontact="onContactTap">
+          <text class="action-symbol">✉</text>
+          <text class="action-label">客服</text>
+        </button>
+
+        <block wx:if="{{isCustom}}">
+          <view class="btn-primary-bar" bindtap="onGoCustom" hover-class="btn-bar--hover">去定制</view>
+        </block>
+        <block wx:else>
+          <view class="btn-ghost-bar" bindtap="onAddCart" hover-class="btn-bar--hover">加入购物车</view>
+          <view class="btn-primary-bar" bindtap="onBuyNow" hover-class="btn-bar--hover">
+            {{isSoldOut ? '已售罄' : '立即购买'}}
+          </view>
+        </block>
+      </block>
+    </view>
+  </block>
+
+  <!-- 沉浸看图遮罩 -->
+  <view wx:if="{{viewerVisible}}" class="viewer" catchtouchmove="noop">
+    <swiper
+      class="viewer-swiper"
+      current="{{viewerIndex}}"
+      bindchange="onViewerSwiperChange"
+      circular="{{gallery.length > 1}}"
+    >
+      <swiper-item wx:for="{{gallery}}" wx:key="*this">
+        <movable-area class="viewer-area" scale-area="{{true}}">
+          <movable-view
+            class="viewer-move"
+            direction="all"
+            scale="{{true}}"
+            scale-min="1"
+            scale-max="4"
+            out-of-bounds="{{false}}"
+          >
+            <image class="viewer-img" src="{{item}}" mode="aspectFit" />
+          </movable-view>
+        </movable-area>
+      </swiper-item>
+    </swiper>
+
+    <view class="viewer-close" bindtap="onCloseViewer" hover-class="viewer-close--hover">×</view>
+    <view class="viewer-counter">{{viewerIndex + 1}} / {{gallery.length}}</view>
+
+    <scroll-view class="viewer-thumbs" scroll-x="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+      <view class="viewer-thumb-inner">
+        <image
+          wx:for="{{gallery}}"
+          wx:key="*this"
+          class="viewer-thumb {{viewerIndex === index ? 'viewer-thumb--on' : ''}}"
+          src="{{item}}"
+          mode="aspectFill"
+          data-index="{{index}}"
+          bindtap="onViewerThumbTap"
+        />
+      </view>
+    </scroll-view>
+  </view>
+
+</view>

@@ -1,0 +1,14 @@
+<!-- components/section-header/section-header.wxml -->
+<view class="sec-head">
+  <view class="sec-left">
+    <view class="sec-bar"></view>
+    <view class="sec-titles">
+      <view class="sec-title">{{title}}</view>
+      <view wx:if="{{subtitle}}" class="sec-sub">{{subtitle}}</view>
+    </view>
+  </view>
+  <view wx:if="{{moreText}}" class="sec-more" bindtap="onMore" hover-class="sec-more--hover">
+    <text>{{moreText}}</text>
+    <text class="sec-arrow">›</text>
+  </view>
+</view>

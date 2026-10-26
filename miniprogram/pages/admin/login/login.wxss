@@ -1,0 +1,110 @@
+/* pages/admin/login/login.wxss */
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+  padding: 0 48rpx;
+}
+
+.header {
+  padding: 120rpx 0 72rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lock {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 36rpx;
+  background-color: #1A1A24;
+  color: #FF5C39;
+  font-size: 44rpx;
+  line-height: 112rpx;
+  text-align: center;
+}
+
+.title {
+  margin-top: 28rpx;
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #1A1A24;
+  letter-spacing: 2rpx;
+}
+
+.sub {
+  margin-top: 10rpx;
+  font-size: 23rpx;
+  color: #8A8A9E;
+}
+
+.form {
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 36rpx 32rpx;
+}
+
+.label {
+  font-size: 25rpx;
+  color: #4A4A5A;
+}
+
+.input {
+  margin-top: 18rpx;
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-radius: 16rpx;
+  background-color: #F5F5F7;
+  font-size: 28rpx;
+  color: #1A1A24;
+  letter-spacing: 2rpx;
+}
+
+.ph {
+  color: #B0B0BE;
+  letter-spacing: 0;
+}
+
+.hint {
+  margin-top: 14rpx;
+  font-size: 21rpx;
+  color: #9C9CAC;
+  line-height: 1.6;
+}
+
+.submit {
+  margin-top: 36rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  background-color: #FF5C39;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit--disabled {
+  background-color: #D9D9E0;
+}
+
+.submit--hover {
+  opacity: 0.84;
+}
+
+.back {
+  margin-top: 28rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #8A8A9E;
+}
+
+.footer {
+  margin-top: 48rpx;
+  padding: 0 8rpx;
+  font-size: 21rpx;
+  color: #B0B0BE;
+  line-height: 1.8;
+  text-align: center;
+}

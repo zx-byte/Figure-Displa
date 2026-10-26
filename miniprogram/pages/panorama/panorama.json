@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "360° 环视",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "panorama": "/components/panorama/panorama"
+  }
+}

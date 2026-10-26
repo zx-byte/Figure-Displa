@@ -1,0 +1,13 @@
+<!-- components/empty-state/empty-state.wxml -->
+<view class="empty-wrap">
+  <view class="icon {{'icon--' + icon}}">
+    <text wx:if="{{icon === 'search'}}">⌕</text>
+    <text wx:elif="{{icon === 'error'}}">!</text>
+    <text wx:else>◇</text>
+  </view>
+  <view class="empty-text">{{text}}</view>
+  <view wx:if="{{subText}}" class="empty-sub">{{subText}}</view>
+  <view wx:if="{{actionText}}" class="empty-action" bindtap="onAction" hover-class="empty-action--hover">
+    {{actionText}}
+  </view>
+</view>

@@ -1,0 +1,264 @@
+/* pages/category/category.wxss */
+
+/* ---------- 最近搜索面板 ---------- */
+
+.search-panel {
+  position: absolute;
+  left: 24rpx;
+  right: 24rpx;
+  top: 104rpx;
+  padding: 24rpx 24rpx 8rpx;
+  border-radius: 16rpx;
+  background-color: #FFFFFF;
+  box-shadow: 0 12rpx 40rpx rgba(26, 26, 36, 0.12);
+  z-index: 20;
+}
+
+.panel-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16rpx;
+}
+
+.panel-title {
+  font-size: 21rpx;
+  color: #9C9CAC;
+  letter-spacing: 1rpx;
+}
+
+.panel-clear {
+  font-size: 21rpx;
+  color: #FF5C39;
+  padding: 4rpx 8rpx;
+}
+
+.panel-tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-bottom: 8rpx;
+}
+
+.panel-tag {
+  margin: 0 16rpx 16rpx 0;
+  padding: 10rpx 24rpx;
+  border-radius: 28rpx;
+  background-color: #F5F5F8;
+  font-size: 23rpx;
+  color: #4A4A5C;
+}
+
+.panel-tag--hover {
+  background-color: #EDEDF2;
+}
+
+.page {
+  min-height: 100vh;
+  background-color: #F5F5F7;
+}
+
+/* ---------- 吸顶头部 ---------- */
+
+.sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #FFFFFF;
+  box-shadow: 0 2rpx 12rpx rgba(26, 26, 36, 0.04);
+}
+
+.search-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20rpx 24rpx 12rpx;
+}
+
+.search-box {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 72rpx;
+  padding: 0 20rpx;
+  border-radius: 36rpx;
+  background-color: #F5F5F7;
+  min-width: 0;
+}
+
+.search-icon {
+  font-size: 30rpx;
+  color: #8A8A9E;
+  margin-right: 10rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 26rpx;
+  color: #1A1A24;
+  min-width: 0;
+}
+
+.placeholder {
+  color: #A8A8B8;
+}
+
+.search-clear {
+  padding: 0 8rpx;
+  font-size: 32rpx;
+  color: #B0B0BE;
+}
+
+.search-btn {
+  margin-left: 16rpx;
+  padding: 0 8rpx;
+  font-size: 27rpx;
+  color: #FF5C39;
+  font-weight: 500;
+}
+
+.search-btn--hover {
+  opacity: 0.6;
+}
+
+/* ---------- 维度 ---------- */
+
+.dim-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8rpx 24rpx 16rpx;
+}
+
+.dim-item {
+  margin-right: 40rpx;
+  font-size: 26rpx;
+  color: #4A4A5A;
+}
+
+.dim-item--active {
+  color: #FF5C39;
+  font-weight: 500;
+}
+
+.dim-arrow {
+  margin-left: 6rpx;
+  font-size: 18rpx;
+}
+
+.dim-clear {
+  margin-left: auto;
+  font-size: 24rpx;
+  color: #8A8A9E;
+}
+
+/* ---------- 选项面板 ---------- */
+
+.option-panel {
+  padding: 4rpx 24rpx 16rpx;
+  background-color: #FAFAFC;
+  border-top: 1rpx solid #F0F0F4;
+}
+
+.option-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.option {
+  margin: 12rpx 16rpx 0 0;
+  padding: 12rpx 28rpx;
+  border-radius: 32rpx;
+  background-color: #FFFFFF;
+  font-size: 25rpx;
+  color: #4A4A5A;
+  border: 1rpx solid #EDEDF2;
+}
+
+.option--active {
+  background-color: #FFF0EC;
+  border-color: #FF5C39;
+  color: #FF5C39;
+  font-weight: 500;
+}
+
+/* ---------- 排序 ---------- */
+
+.sort-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 24rpx 18rpx;
+}
+
+.sort-item {
+  margin-right: 32rpx;
+  font-size: 24rpx;
+  color: #8A8A9E;
+}
+
+.sort-item--active {
+  color: #1A1A24;
+  font-weight: 600;
+}
+
+/* ---------- 结果概览 ---------- */
+
+.result-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 24rpx 16rpx;
+}
+
+.result-total {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: #8A8A9E;
+}
+
+.result-filter {
+  margin-left: 16rpx;
+  max-width: 360rpx;
+  flex-shrink: 1;
+  font-size: 22rpx;
+  color: #FF5C39;
+}
+
+.result-clear {
+  margin-left: 12rpx;
+  flex-shrink: 0;
+  padding: 2rpx 14rpx;
+  font-size: 20rpx;
+  color: #FF5C39;
+  border: 1rpx solid rgba(255, 92, 57, 0.4);
+  border-radius: 20rpx;
+}
+
+/* ---------- 列表 ---------- */
+
+.list-wrap {
+  padding: 24rpx;
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.grid-cell {
+  width: 48.5%;
+  margin-bottom: 20rpx;
+}
+
+.load-more {
+  padding: 32rpx 0 48rpx;
+  text-align: center;
+  font-size: 23rpx;
+  color: #B0B0BE;
+}
