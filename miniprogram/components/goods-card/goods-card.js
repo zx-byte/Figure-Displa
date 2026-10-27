@@ -70,7 +70,7 @@ Component({
       const id = this.data.item && this.data.item._id
       if (!id) return
       wx.navigateTo({
-        url: `/pages/detail/detail?id=${id}`
+        url: `/subpackages/works/pages/detail/detail?id=${id}`
       })
     }
   }

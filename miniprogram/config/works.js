@@ -1,9 +1,11 @@
 // config/works.js
-// 作品数据。本文件由 scripts/studio.js 自动生成，请勿手工编辑。
+// 作品数据。本文件由 scripts/build-works.js 自动生成，请勿手工编辑。
 //
-// 手工重新生成的等价命令：
-//   python scripts/compress-images.py output/_picked --width 460 --quality 64
-//   node scripts/import-works.js
+// 图片分两套，物理隔离：
+//   cover  → /images/works-thumb/            主包，480px WebP，列表卡片用
+//   images → /subpackages/works/images/      分包，1000px WebP，详情页用
+//
+// 主包访问不到分包里的图，所以列表必须用 cover；反过来详情页两者都能用。
 //
 // 作品的分组、封面、进包图片由「作品工作室」维护：
 //   node scripts/studio.js
@@ -27,10 +29,10 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/蓝发少年-01.jpg",
+    "cover": "/images/works-thumb/蓝发少年-01.webp",
     "images": [
-      "/images/works/蓝发少年-01.jpg",
-      "/images/works/蓝发少年-02.jpg"
+      "/subpackages/works/images/蓝发少年-01.webp",
+      "/subpackages/works/images/蓝发少年-02.webp"
     ],
     "detail": [
       {
@@ -51,7 +53,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 900,
-    "createTime": new Date("2026-10-27T12:38:23.735Z")
+    "createTime": new Date("2026-10-27T13:02:35.476Z")
   },
   {
     "_id": "w02",
@@ -68,10 +70,10 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/敖丙-01.jpg",
+    "cover": "/images/works-thumb/敖丙-01.webp",
     "images": [
-      "/images/works/敖丙-01.jpg",
-      "/images/works/敖丙-02.jpg"
+      "/subpackages/works/images/敖丙-01.webp",
+      "/subpackages/works/images/敖丙-02.webp"
     ],
     "detail": [
       {
@@ -92,7 +94,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 899,
-    "createTime": new Date("2026-10-27T12:37:23.735Z")
+    "createTime": new Date("2026-10-27T13:01:35.477Z")
   },
   {
     "_id": "w03",
@@ -109,10 +111,10 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦Q版-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦Q版-01.webp",
     "images": [
-      "/images/works/任嘉伦Q版-01.jpg",
-      "/images/works/任嘉伦Q版-02.jpg"
+      "/subpackages/works/images/任嘉伦Q版-01.webp",
+      "/subpackages/works/images/任嘉伦Q版-02.webp"
     ],
     "detail": [
       {
@@ -133,7 +135,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 898,
-    "createTime": new Date("2026-10-27T12:36:23.735Z")
+    "createTime": new Date("2026-10-27T13:00:35.477Z")
   },
   {
     "_id": "w04",
@@ -150,10 +152,10 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/江澄-01.jpg",
+    "cover": "/images/works-thumb/江澄-01.webp",
     "images": [
-      "/images/works/江澄-01.jpg",
-      "/images/works/江澄-02.jpg"
+      "/subpackages/works/images/江澄-01.webp",
+      "/subpackages/works/images/江澄-02.webp"
     ],
     "detail": [
       {
@@ -174,7 +176,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 897,
-    "createTime": new Date("2026-10-27T12:35:23.735Z")
+    "createTime": new Date("2026-10-27T12:59:35.477Z")
   },
   {
     "_id": "w05",
@@ -191,10 +193,10 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦卫昭-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦卫昭-01.webp",
     "images": [
-      "/images/works/任嘉伦卫昭-01.jpg",
-      "/images/works/任嘉伦卫昭-02.jpg"
+      "/subpackages/works/images/任嘉伦卫昭-01.webp",
+      "/subpackages/works/images/任嘉伦卫昭-02.webp"
     ],
     "detail": [
       {
@@ -215,7 +217,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 896,
-    "createTime": new Date("2026-10-27T12:34:23.735Z")
+    "createTime": new Date("2026-10-27T12:58:35.477Z")
   },
   {
     "_id": "w06",
@@ -232,10 +234,10 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/赤金长袍-01.jpg",
+    "cover": "/images/works-thumb/赤金长袍-01.webp",
     "images": [
-      "/images/works/赤金长袍-01.jpg",
-      "/images/works/赤金长袍-02.jpg"
+      "/subpackages/works/images/赤金长袍-01.webp",
+      "/subpackages/works/images/赤金长袍-02.webp"
     ],
     "detail": [
       {
@@ -256,7 +258,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 895,
-    "createTime": new Date("2026-10-27T12:33:23.735Z")
+    "createTime": new Date("2026-10-27T12:57:35.477Z")
   },
   {
     "_id": "w07",
@@ -273,10 +275,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦长意-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦长意-01.webp",
     "images": [
-      "/images/works/任嘉伦长意-01.jpg",
-      "/images/works/任嘉伦长意-02.jpg"
+      "/subpackages/works/images/任嘉伦长意-01.webp"
     ],
     "detail": [
       {
@@ -297,7 +298,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 894,
-    "createTime": new Date("2026-10-27T12:32:23.735Z")
+    "createTime": new Date("2026-10-27T12:56:35.477Z")
   },
   {
     "_id": "w08",
@@ -314,10 +315,10 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/先知白-01.jpg",
+    "cover": "/images/works-thumb/先知白-01.webp",
     "images": [
-      "/images/works/先知白-01.jpg",
-      "/images/works/先知白-02.jpg"
+      "/subpackages/works/images/先知白-01.webp",
+      "/subpackages/works/images/先知白-02.webp"
     ],
     "detail": [
       {
@@ -338,7 +339,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 893,
-    "createTime": new Date("2026-10-27T12:31:23.735Z")
+    "createTime": new Date("2026-10-27T12:55:35.477Z")
   },
   {
     "_id": "w09",
@@ -355,9 +356,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦Q版长意-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦Q版长意-01.webp",
     "images": [
-      "/images/works/任嘉伦Q版长意-01.jpg"
+      "/subpackages/works/images/任嘉伦Q版长意-01.webp"
     ],
     "detail": [
       {
@@ -378,7 +379,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 892,
-    "createTime": new Date("2026-10-27T12:30:23.735Z")
+    "createTime": new Date("2026-10-27T12:54:35.477Z")
   },
   {
     "_id": "w10",
@@ -395,10 +396,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/白袍剑士-01.jpg",
+    "cover": "/images/works-thumb/白袍剑士-01.webp",
     "images": [
-      "/images/works/白袍剑士-01.jpg",
-      "/images/works/白袍剑士-02.jpg"
+      "/subpackages/works/images/白袍剑士-01.webp"
     ],
     "detail": [
       {
@@ -419,7 +419,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 891,
-    "createTime": new Date("2026-10-27T12:29:23.735Z")
+    "createTime": new Date("2026-10-27T12:53:35.477Z")
   },
   {
     "_id": "w11",
@@ -436,10 +436,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦陆绎-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦陆绎-01.webp",
     "images": [
-      "/images/works/任嘉伦陆绎-01.jpg",
-      "/images/works/任嘉伦陆绎-02.jpg"
+      "/subpackages/works/images/任嘉伦陆绎-01.webp"
     ],
     "detail": [
       {
@@ -460,7 +459,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 890,
-    "createTime": new Date("2026-10-27T12:28:23.735Z")
+    "createTime": new Date("2026-10-27T12:52:35.477Z")
   },
   {
     "_id": "w12",
@@ -477,9 +476,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/红衣剑客-01.jpg",
+    "cover": "/images/works-thumb/红衣剑客-01.webp",
     "images": [
-      "/images/works/红衣剑客-01.jpg"
+      "/subpackages/works/images/红衣剑客-01.webp"
     ],
     "detail": [
       {
@@ -500,7 +499,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 889,
-    "createTime": new Date("2026-10-27T12:27:23.735Z")
+    "createTime": new Date("2026-10-27T12:51:35.477Z")
   },
   {
     "_id": "w13",
@@ -517,10 +516,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦陆炎-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦陆炎-01.webp",
     "images": [
-      "/images/works/任嘉伦陆炎-01.jpg",
-      "/images/works/任嘉伦陆炎-02.jpg"
+      "/subpackages/works/images/任嘉伦陆炎-01.webp"
     ],
     "detail": [
       {
@@ -541,7 +539,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 888,
-    "createTime": new Date("2026-10-27T12:26:23.735Z")
+    "createTime": new Date("2026-10-27T12:50:35.477Z")
   },
   {
     "_id": "w14",
@@ -558,9 +556,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/绿蛙帽-01.jpg",
+    "cover": "/images/works-thumb/绿蛙帽-01.webp",
     "images": [
-      "/images/works/绿蛙帽-01.jpg"
+      "/subpackages/works/images/绿蛙帽-01.webp"
     ],
     "detail": [
       {
@@ -581,7 +579,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 887,
-    "createTime": new Date("2026-10-27T12:25:23.735Z")
+    "createTime": new Date("2026-10-27T12:49:35.477Z")
   },
   {
     "_id": "w15",
@@ -598,9 +596,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦无忧渡-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦无忧渡-01.webp",
     "images": [
-      "/images/works/任嘉伦无忧渡-01.jpg"
+      "/subpackages/works/images/任嘉伦无忧渡-01.webp"
     ],
     "detail": [
       {
@@ -621,7 +619,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 886,
-    "createTime": new Date("2026-10-27T12:24:23.735Z")
+    "createTime": new Date("2026-10-27T12:48:35.477Z")
   },
   {
     "_id": "w16",
@@ -638,9 +636,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/紫衣剑客-01.jpg",
+    "cover": "/images/works-thumb/紫衣剑客-01.webp",
     "images": [
-      "/images/works/紫衣剑客-01.jpg"
+      "/subpackages/works/images/紫衣剑客-01.webp"
     ],
     "detail": [
       {
@@ -661,7 +659,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 885,
-    "createTime": new Date("2026-10-27T12:23:23.735Z")
+    "createTime": new Date("2026-10-27T12:47:35.477Z")
   },
   {
     "_id": "w17",
@@ -678,10 +676,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦陆大人-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦陆大人-01.webp",
     "images": [
-      "/images/works/任嘉伦陆大人-01.jpg",
-      "/images/works/任嘉伦陆大人-02.jpg"
+      "/subpackages/works/images/任嘉伦陆大人-01.webp"
     ],
     "detail": [
       {
@@ -702,7 +699,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 884,
-    "createTime": new Date("2026-10-27T12:22:23.735Z")
+    "createTime": new Date("2026-10-27T12:46:35.477Z")
   },
   {
     "_id": "w18",
@@ -719,9 +716,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/艾因东冕织心-01.jpg",
+    "cover": "/images/works-thumb/艾因东冕织心-01.webp",
     "images": [
-      "/images/works/艾因东冕织心-01.jpg"
+      "/subpackages/works/images/艾因东冕织心-01.webp"
     ],
     "detail": [
       {
@@ -742,7 +739,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 883,
-    "createTime": new Date("2026-10-27T12:21:23.735Z")
+    "createTime": new Date("2026-10-27T12:45:35.477Z")
   },
   {
     "_id": "w19",
@@ -759,9 +756,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/任嘉伦流水迢迢-01.jpg",
+    "cover": "/images/works-thumb/任嘉伦流水迢迢-01.webp",
     "images": [
-      "/images/works/任嘉伦流水迢迢-01.jpg"
+      "/subpackages/works/images/任嘉伦流水迢迢-01.webp"
     ],
     "detail": [
       {
@@ -782,7 +779,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 882,
-    "createTime": new Date("2026-10-27T12:20:23.735Z")
+    "createTime": new Date("2026-10-27T12:44:35.477Z")
   },
   {
     "_id": "w20",
@@ -799,9 +796,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/古风头像-01.jpg",
+    "cover": "/images/works-thumb/古风头像-01.webp",
     "images": [
-      "/images/works/古风头像-01.jpg"
+      "/subpackages/works/images/古风头像-01.webp"
     ],
     "detail": [
       {
@@ -822,7 +819,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 881,
-    "createTime": new Date("2026-10-27T12:19:23.735Z")
+    "createTime": new Date("2026-10-27T12:43:35.477Z")
   },
   {
     "_id": "w21",
@@ -839,9 +836,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/银甲武士-01.jpg",
+    "cover": "/images/works-thumb/银甲武士-01.webp",
     "images": [
-      "/images/works/银甲武士-01.jpg"
+      "/subpackages/works/images/银甲武士-01.webp"
     ],
     "detail": [
       {
@@ -862,7 +859,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 880,
-    "createTime": new Date("2026-10-27T12:18:23.735Z")
+    "createTime": new Date("2026-10-27T12:42:35.477Z")
   },
   {
     "_id": "w22",
@@ -879,9 +876,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/龙首-01.jpg",
+    "cover": "/images/works-thumb/龙首-01.webp",
     "images": [
-      "/images/works/龙首-01.jpg"
+      "/subpackages/works/images/龙首-01.webp"
     ],
     "detail": [
       {
@@ -898,7 +895,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 879,
-    "createTime": new Date("2026-10-27T12:17:23.735Z")
+    "createTime": new Date("2026-10-27T12:41:35.477Z")
   },
   {
     "_id": "w23",
@@ -915,9 +912,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/黑袍长发-01.jpg",
+    "cover": "/images/works-thumb/黑袍长发-01.webp",
     "images": [
-      "/images/works/黑袍长发-01.jpg"
+      "/subpackages/works/images/黑袍长发-01.webp"
     ],
     "detail": [
       {
@@ -934,7 +931,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 878,
-    "createTime": new Date("2026-10-27T12:16:23.735Z")
+    "createTime": new Date("2026-10-27T12:40:35.477Z")
   },
   {
     "_id": "w24",
@@ -951,9 +948,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/白衣金饰-01.jpg",
+    "cover": "/images/works-thumb/白衣金饰-01.webp",
     "images": [
-      "/images/works/白衣金饰-01.jpg"
+      "/subpackages/works/images/白衣金饰-01.webp"
     ],
     "detail": [
       {
@@ -970,7 +967,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 877,
-    "createTime": new Date("2026-10-27T12:15:23.735Z")
+    "createTime": new Date("2026-10-27T12:39:35.477Z")
   },
   {
     "_id": "w25",
@@ -987,9 +984,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/迪卢克-01.jpg",
+    "cover": "/images/works-thumb/迪卢克-01.webp",
     "images": [
-      "/images/works/迪卢克-01.jpg"
+      "/subpackages/works/images/迪卢克-01.webp"
     ],
     "detail": [
       {
@@ -1006,7 +1003,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 876,
-    "createTime": new Date("2026-10-27T12:14:23.735Z")
+    "createTime": new Date("2026-10-27T12:38:35.477Z")
   },
   {
     "_id": "w26",
@@ -1023,9 +1020,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/素体人像-01.jpg",
+    "cover": "/images/works-thumb/素体人像-01.webp",
     "images": [
-      "/images/works/素体人像-01.jpg"
+      "/subpackages/works/images/素体人像-01.webp"
     ],
     "detail": [
       {
@@ -1042,7 +1039,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 875,
-    "createTime": new Date("2026-10-27T12:13:23.735Z")
+    "createTime": new Date("2026-10-27T12:37:35.477Z")
   },
   {
     "_id": "w27",
@@ -1059,9 +1056,9 @@ const WORKS = [
       "scale": "",
       "priceRange": ""
     },
-    "cover": "/images/works/粘土过程-01.jpg",
+    "cover": "/images/works-thumb/粘土过程-01.webp",
     "images": [
-      "/images/works/粘土过程-01.jpg"
+      "/subpackages/works/images/粘土过程-01.webp"
     ],
     "detail": [
       {
@@ -1078,7 +1075,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 874,
-    "createTime": new Date("2026-10-27T12:12:23.735Z")
+    "createTime": new Date("2026-10-27T12:36:35.477Z")
   }
 ]
 

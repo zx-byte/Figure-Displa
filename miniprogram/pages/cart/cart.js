@@ -223,6 +223,6 @@ Page({
   goDetail(e) {
     const id = e.currentTarget.dataset.id
     if (!id) return
-    wx.navigateTo({ url: `/pages/detail/detail?id=${id}` })
+    wx.navigateTo({ url: `/subpackages/works/pages/detail/detail?id=${id}` })
   }
 })

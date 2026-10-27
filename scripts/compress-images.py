@@ -13,10 +13,12 @@
 
 参数：
     --width    最大宽度，默认 750（手机屏逻辑宽度 375 的 2 倍，够清晰）
-    --quality  JPEG 质量，默认 75
+    --quality  质量，默认 75
+    --format   输出格式 jpg / webp，默认 jpg
+               webp 同画质下比 jpeg 小 25~35%，作品图一律用 webp
     --out      输出目录，默认 miniprogram/images/works
     --budget   图片总预算（KB），默认 1500，超出会告警
-    --rename   统一重命名为 work-01.jpg 形式，方便写进代码
+    --rename   统一重命名为 work-01 形式，方便写进代码
     --only     清单文件路径，每行一个文件名，只压清单里的图（挑图进主包时用）
 """
 
@@ -80,7 +82,7 @@ def collect(src, only=None):
     return files
 
 
-def compress(path, out_path, max_width, quality):
+def compress(path, out_path, max_width, quality, fmt='jpg'):
     """
     压缩单张图
     返回 (原宽, 原高, 原大小, 新宽, 新高, 新大小)
@@ -112,7 +114,11 @@ def compress(path, out_path, max_width, quality):
         nw, nh = ow, oh
 
     # 保存时去掉 EXIF，能省几 KB
-    img.save(out_path, 'JPEG', quality=quality, optimize=True, progressive=True)
+    if fmt == 'webp':
+        # method=6 是编码耗时与体积的最优档，单张毫秒级，不影响体验
+        img.save(out_path, 'WEBP', quality=quality, method=6)
+    else:
+        img.save(out_path, 'JPEG', quality=quality, optimize=True, progressive=True)
 
     return ow, oh, orig_size, nw, nh, os.path.getsize(out_path)
 
@@ -121,7 +127,8 @@ def main():
     ap = argparse.ArgumentParser(add_help=True)
     ap.add_argument('src', nargs='?', default=DEFAULT_SRC, help='源图目录')
     ap.add_argument('--width', type=int, default=750, help='最大宽度')
-    ap.add_argument('--quality', type=int, default=75, help='JPEG 质量')
+    ap.add_argument('--quality', type=int, default=75, help='压缩质量')
+    ap.add_argument('--format', default='jpg', choices=['jpg', 'webp'], help='输出格式')
     ap.add_argument('--out', default=DEFAULT_OUT, help='输出目录')
     ap.add_argument('--budget', type=int, default=1500, help='图片总预算 KB')
     ap.add_argument('--rename', action='store_true', help='统一重命名')
@@ -130,6 +137,7 @@ def main():
 
     src = os.path.abspath(args.src)
     out = os.path.abspath(args.out)
+    ext = '.webp' if args.format == 'webp' else '.jpg'
 
     only = None
     if args.only:
@@ -154,7 +162,7 @@ def main():
     print('=' * 78)
     print(f' 源目录 : {src}')
     print(f' 输出   : {out}')
-    print(f' 规格   : 最大宽 {args.width}px，质量 {args.quality}')
+    print(f' 规格   : 最大宽 {args.width}px，质量 {args.quality}，格式 {args.format.upper()}')
     print('=' * 78)
     print('')
 
@@ -178,14 +186,14 @@ def main():
     for i, path in enumerate(files, start=1):
         name = os.path.basename(path)
         if args.rename:
-            out_name = f'work-{i:02d}.jpg'
+            out_name = f'work-{i:02d}{ext}'
         else:
-            out_name = os.path.splitext(name)[0] + '.jpg'
+            out_name = os.path.splitext(name)[0] + ext
 
         out_path = os.path.join(out, out_name)
 
         try:
-            ow, oh, osz, nw, nh, nsz = compress(path, out_path, args.width, args.quality)
+            ow, oh, osz, nw, nh, nsz = compress(path, out_path, args.width, args.quality, args.format)
         except Exception as e:
             print(f'{pad(name, col["name"])}处理失败：{e}')
             continue
@@ -230,8 +238,9 @@ def main():
     print('=' * 78)
     print(' 输出清单（可直接写进 config/mock.js 的 images 数组）')
     print('=' * 78)
+    rel = os.path.relpath(out, os.path.join(ROOT, 'miniprogram')).replace('\\', '/')
     for name, w, h, size in table:
-        print(f"  '/images/works/{name}',   // {w}x{h}  {human(size)}")
+        print(f"  '/{rel}/{name}',   // {w}x{h}  {human(size)}")
     print('')
     print('提示：图片已按 EXIF 摆正、去掉了元数据。若原图是竖拍，方向会自动修正。')
 

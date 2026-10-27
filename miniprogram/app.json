@@ -2,7 +2,6 @@
   "pages": [
     "pages/index/index",
     "pages/category/category",
-    "pages/detail/detail",
     "pages/panorama/panorama",
     "pages/poster/poster",
     "pages/cart/cart",
@@ -27,6 +26,25 @@
     "pages/admin/custom/custom",
     "pages/admin/dashboard/dashboard"
   ],
+  "subPackages": [
+    {
+      "root": "subpackages/works",
+      "name": "works",
+      "pages": [
+        "pages/detail/detail"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/index/index": {
+      "network": "all",
+      "packages": ["works"]
+    },
+    "pages/category/category": {
+      "network": "all",
+      "packages": ["works"]
+    }
+  },
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#FFFFFF",

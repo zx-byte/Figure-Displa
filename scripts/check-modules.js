@@ -27,9 +27,21 @@ function fail(msg) {
   problems.push(msg)
 }
 
-// ---- 1. 读取 app.json 注册页 ----
+// ---- 1. 读取 app.json 注册页（主包 + 分包）----
 const appJson = JSON.parse(fs.readFileSync(path.join(MP, 'app.json'), 'utf8'))
-const registered = appJson.pages || []
+const mainPages = appJson.pages || []
+const subPackages = appJson.subPackages || appJson.subpackages || []
+
+const registered = mainPages.slice() // 全量注册路径（分包已展开为完整路径）
+const subPageSet = new Set() // 属于分包的页面路径
+for (const sp of subPackages) {
+  const root = String(sp.root || '').replace(/\/+$/, '')
+  for (const p of sp.pages || []) {
+    const full = root ? `${root}/${p}` : p
+    registered.push(full)
+    subPageSet.add(full)
+  }
+}
 
 // ---- 2. 展开清单 ----
 const moduleKeys = Object.keys(MODULE_MANIFEST)
@@ -121,7 +133,7 @@ console.log('=== 模块划分检查 ===')
 console.log('清单概览：')
 console.log(summary.join('\n'))
 console.log('')
-console.log(`app.json 注册页 ${registered.length} 个，清单登记页 ${manifestPages.length} 个`)
+console.log(`app.json 注册页 ${registered.length} 个（主包 ${mainPages.length} / 分包 ${subPageSet.size}），清单登记页 ${manifestPages.length} 个`)
 console.log(`云函数目录 ${cfDirs.length} 个，清单登记 ${manifestCloud.length} 个`)
 console.log(`付款模块开关 MODULE_SWITCH.trade = ${MODULE_SWITCH.trade}`)
 console.log('')

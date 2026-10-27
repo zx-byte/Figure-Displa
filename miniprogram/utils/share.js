@@ -15,7 +15,7 @@ function productShare(product, from = 'detail') {
   if (!product) return defaultShare()
   return {
     title: product.name + (product.subtitle ? ' · ' + product.subtitle : ''),
-    path: `/pages/detail/detail?id=${product._id}&from=${from}`,
+    path: `/subpackages/works/pages/detail/detail?id=${product._id}&from=${from}`,
     imageUrl: product.cover || ''
   }
 }

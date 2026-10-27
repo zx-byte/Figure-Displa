@@ -71,7 +71,7 @@ const MODULE_MANIFEST = {
     pages: [
       'pages/index/index', // 首页：轮播 / 限量专区 / 新品
       'pages/category/category', // 全部作品：多维筛选 / 搜索
-      'pages/detail/detail', // 作品详情：画廊 / 规格 / 相关推荐
+      'subpackages/works/pages/detail/detail', // 作品详情：画廊 / 规格 / 相关推荐（在分包内）
       'pages/panorama/panorama', // 多角度全景
       'pages/poster/poster', // 分享海报（真实小程序码）
       'pages/verify/verify', // 编号查询 / 防伪比对
@@ -129,9 +129,9 @@ const TRADE_ENTRY_GATES = [
   { page: 'pages/index/index', entry: '定制入口卡', file: 'miniprogram/pages/index/index.wxml' },
   { page: 'pages/user/user', entry: '订单 / 定制 / 收货地址', file: 'miniprogram/pages/user/user.wxml' },
   {
-    page: 'pages/detail/detail',
+    page: 'subpackages/works/pages/detail/detail',
     entry: '规格数量 / 加入购物车 / 立即购买 / 去定制',
-    file: 'miniprogram/pages/detail/detail.wxml'
+    file: 'miniprogram/subpackages/works/pages/detail/detail.wxml'
   }
 ]
 

@@ -48,7 +48,7 @@
   .meter-bar { width: 180px; height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
   .meter-fill { height: 100%; width: 0; background: var(--brand); transition: width .25s, background .25s; }
   .meter-fill.over { background: var(--bad); }
-  .meter-text { font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+  .meter-text { font-size: 12px; color: var(--ink-2); white-space: normal; line-height: 1.7; }
   .meter-text em { font-style: normal; font-weight: 600; color: var(--ink); }
 
   main { flex: 1; display: flex; min-height: 0; }
@@ -261,7 +261,7 @@
     <div class="meta">
       <span>原图 <i id="m-total">-</i> 张</span>
       <span>作品 <i id="m-works">-</i> 件</span>
-      <span>进包 <i id="m-picked">-</i> 张</span>
+      <span>展示 <i id="m-picked">-</i> 张</span>
     </div>
     <div class="meter">
       <div class="meter-bar"><div class="meter-fill" id="meter"></div></div>
@@ -346,10 +346,20 @@ function pickedTotal() {
 }
 
 function estimate() {
-  if (!S) return { bytes: 0, remain: 0 }
-  const n = pickedTotal()
-  const bytes = S.pkg.nonImage + n * S.pkg.avgPicked
-  return { bytes, remain: S.pkg.limit - bytes }
+  if (!S) return null
+  const nWorks = works().filter((w) => (w.files || []).length).length
+  const nShown = pickedTotal()
+  const thumb = S.pkg.avgThumb || 13000
+  const detail = S.pkg.avgDetail || 58000
+  // 主包只放缩略图（每件一张），详情大图全部进分包
+  return {
+    main: S.pkg.nonImage + nWorks * thumb,
+    sub: nShown * detail,
+    nWorks,
+    nShown,
+    thumb,
+    detail
+  }
 }
 
 // ── 渲染 ──
@@ -363,16 +373,33 @@ function render() {
 function renderMeter() {
   if (!S) return
   const est = estimate()
-  const pct = Math.min(100, (est.bytes / S.pkg.limit) * 100)
+  if (!est) return
+
   const fill = $('#meter')
-  fill.style.width = pct.toFixed(1) + '%'
-  fill.classList.toggle('over', est.bytes > S.pkg.limit)
+  fill.style.width = Math.min(100, (est.main / S.pkg.limit) * 100).toFixed(1) + '%'
+  fill.classList.toggle('over', est.main > S.pkg.limit)
 
   const mb = (b) => (b / 1024 / 1024).toFixed(2)
-  const room = Math.floor(Math.max(0, est.remain) / S.pkg.avgPicked)
-  $('#meter-text').innerHTML =
-    `主包预估 <em>${mb(est.bytes)} MB</em> / 2 MB · ` +
-    (est.remain >= 0 ? `还可放约 <em>${room}</em> 张` : `<em style="color:#E5352B">超出 ${mb(-est.remain)} MB</em>`)
+  const kb = (b) => Math.round(b / 1024)
+  const warn = 'color:#E5352B;font-weight:600'
+
+  // 主包：代码 + 界面图 + 每件一张缩略图
+  const mainRoom = Math.floor(Math.max(0, S.pkg.limit - est.main) / est.thumb)
+  const mainText =
+    `主包 <em>${mb(est.main)} MB</em> / 2 MB · ` +
+    (est.main <= S.pkg.limit
+      ? `还能加约 <em>${mainRoom}</em> 件`
+      : `<span style="${warn}">超出 ${mb(est.main - S.pkg.limit)} MB</span>`)
+
+  // 分包：勾选的详情图，超预算会在生成时按体积顺序截断
+  const subRoom = Math.floor(Math.max(0, S.pkg.subBudget - est.sub) / est.detail)
+  const subText =
+    `分包 <em>${kb(est.sub)} KB</em> / ${kb(S.pkg.subBudget)} KB · ` +
+    (est.sub <= S.pkg.subBudget
+      ? `还能放约 <em>${subRoom}</em> 张`
+      : `<span style="${warn}">超 ${kb(est.sub - S.pkg.subBudget)} KB，生成时按顺序截断</span>`)
+
+  $('#meter-text').innerHTML = mainText + '<br>' + subText
 
   $('#m-total').textContent = S.totalImages
   $('#m-works').textContent = works().length
@@ -484,7 +511,7 @@ function renderDetail() {
     if (i === 0) cell.appendChild(el('div', 'cover-tag', '封面'))
 
     const pick = el('div', 'pick', '✓')
-    pick.title = '进主包'
+    pick.title = '这张图要展示（进分包，受分包 2MB 预算约束）'
     pick.addEventListener('click', (e) => {
       e.stopPropagation()
       togglePick(file)
@@ -570,11 +597,15 @@ function renderSelbar() {
 
 function renderFooter() {
   const cloud = $('#opt-cloud').checked
-  $('#opt-width').disabled = cloud
-  $('#opt-quality').disabled = cloud
+  // 本地模式的规格由 build-works.js 决定（缩略图 480px / 详情图 1000px），
+  // 只有云存储模式还需要手填单张规格
+  $('#opt-width').disabled = !cloud
+  $('#opt-quality').disabled = !cloud
   $('#foot-hint').textContent = cloud
     ? '全量图片输出到 output/cloud-batch，主包不受限'
-    : `每张约 ${Math.round(S.pkg.avgPicked / 1024)} KB`
+    : `缩略图约 ${Math.round((S.pkg.avgThumb || 13000) / 1024)} KB 进主包 · 详情图约 ${Math.round(
+        (S.pkg.avgDetail || 58000) / 1024
+      )} KB 进分包`
 }
 
 // ── 操作 ──

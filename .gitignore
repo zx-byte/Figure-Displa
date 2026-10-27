@@ -33,7 +33,9 @@ Thumbs.db
 *~
 
 # 作品原图：高分辨率源文件留在本地即可，不进仓库。
-# 小程序实际使用的是压缩后的 miniprogram/images/works/，那部分正常提交。
+# 小程序实际使用的是压缩后的产物，那部分正常提交：
+#   miniprogram/images/works-thumb/            主包，列表缩略图
+#   miniprogram/subpackages/works/images/      分包，详情大图
 作品原图/**/*.jpg
 作品原图/**/*.jpeg
 作品原图/**/*.png

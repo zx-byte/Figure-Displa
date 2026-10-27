@@ -49,29 +49,48 @@
 ## 作品数据（红糖作品集，2026-10-27 定）
 - 来源：小红书博主「红糖」主页（已获授权），用户手动下载到 `作品原图/红糖/`
 - 规模：130 张原图 → 归组为 **27 件作品**，规范命名副本在 `作品原图/红糖/_规范/`（`作品名-01.jpg`）
-- 流水线：`python scripts/compress-images.py 作品原图/红糖/_规范 --width 460 --quality 64` → `node scripts/import-works.js` → `miniprogram/config/works.js`
+- 流水线：`node scripts/build-works.js` → 双规格压缩 + 按预算装箱 + 分包分发 + `miniprogram/config/works.js`
 - 元信息在 `作品原图/红糖/作品信息.json`，`works` 键名须与文件名前缀一致，`order` 字段控制展示顺序
-- **主包图片硬上限约 42 张**：非图片部分 866KB，可用 1.13MB，460px/q64 约 26KB/张。
-  当前 39 张（27 封面 + 12 重点各加 1 张）= 1.03MB，主包 1.94MB。全量 130 张必须走云存储
 - 小红书下载文件名不可信：`_N_` 是笔记内第几张、括号是重名副本、无标题笔记 35 张全无名，
   同一作品的图会跨不同笔记标题 → 归组只能靠看图（拼 contact sheet 一次看 35 张）
 - `mock.js`：`PRODUCTS = WORKS.length ? WORKS : DEMO_PRODUCTS`，有真实作品时不混入虚构演示商品
+
+## 图片与代码分离（2026-10-27 定，主包 2MB 的正解）
+用户明确要求「图片和代码分离 + 保证清晰度」，方案是**详情页整体移入分包**（不是复制一份）：
+
+| 用途 | 位置 | 规格 | 占谁额度 |
+| --- | --- | --- | --- |
+| 列表封面 | `miniprogram/images/works-thumb/` | 480px WebP q74 ≈ 20KB | 主包 2MB |
+| 详情大图 | `miniprogram/subpackages/works/images/` | 1000px WebP q78 ≈ 56KB | 分包 2MB（独立） |
+| 详情页 | `miniprogram/subpackages/works/pages/detail/` | — | 分包 |
+
+- **主包访问不到分包内的图**：列表只能用 `cover`（主包缩略图），详情页两者都能访问。
+  新增主包页面时绝对不能用 `product.images`，只用 `cover`。
+- 分包 `root = subpackages/works`，`name = works`；`preloadRule` 让首页/全部作品预下载分包。
+- 分包预算 1900KB（2048 减详情页 41KB 再留 88KB 垫），`build-works.js` 按体积装箱：
+  每件先保 1 张封面，剩余预算按勾选顺序轮流补图，放不下即停，不会爆包。
+- 实测：主包 1.39MB（余 627KB）/ 分包 1.89MB（余 110KB）；34 张详情图。
+  改造前主包 1.94MB 且详情图只有 460px JPEG。
+- **WebP 是关键**：同画质比 JPEG 小 25~35%，所以分辨率翻倍体积还没翻天。
+- 压缩有 `.spec` 缓存：规格没变且原图没动就跳过，重跑几秒完成。
+- 想放更多图只有降规格（`--detail 900 --detail-q 74`）或上云存储，分包 2MB 是硬限制。
 
 ## 作品工作室（2026-10-27 定，上传作品的唯一入口）
 `node scripts/studio.js` 或双击 `启动作品工作室.bat` → 浏览器操作 → 点「生成并上架」。
 用户明确要求「简单的方式」，后续任何作品增删改都走这个界面，不要再让他手改文件名或 JSON。
 
 - **分组真相源**：`作品原图/红糖/_分组记录.json`（`works[作品名] = {order, files[], picked[]}`）。
-  `files` 按展示顺序，第一张是封面；`picked` 是进主包的图，**只记用户真实勾选**。
+  `files` 按展示顺序，第一张是封面；`picked` 是**要展示的图**（按勾选顺序当装箱优先级）。
 - **云存储模式**只在压缩时忽略 `picked`，绝不把它改写成全量——
   否则切回本地会误压全部图、主包直接 4.22MB 超限。
+- 本地模式的 generate 直接调 `build-works.js`，工作室与命令行共用同一条链，避免两套逻辑漂移。
 - **删除一律交给 `scripts/prune-dir.py`（Python）**：Node 的 `unlinkSync` 在本机偶发 EBUSY，
   刚写完的图片尤其明显，重试也救不回来；`fs.rmSync(recursive)` 会触发批量删除保护（>50 文件）。
 - `compress-images.py --only <清单>` 支持只压清单里的图，挑图不再需要复制临时目录。
 - 跳过 `.` 开头文件：曾把 `miniprogram/images/works/.gitkeep` 误删。
 - 小红书文件名可提取笔记标题（`{标题}_{序号}_{博主}_来自小红书`）做预分组，无标题的落「未分组」。
 - `.bat` 必须 GBK 编码 + CRLF（`.gitattributes` 已固化 `*.bat eol=crlf`）。
-- 生成耗时约 29s（首次）/ 7s（幂等重跑），主包稳定 1.94MB。
+- 生成耗时：首次约 90s（压 130 张 1000px），缓存命中后约 10s。
 
 ## 文档风格偏好
 - 正式、第三人称、结论先行

@@ -27,7 +27,6 @@ const SRC_DIR = path.join(ROOT, '作品原图', '红糖')
 const NORM_DIR = path.join(SRC_DIR, '_规范')
 const RECORD_FILE = path.join(SRC_DIR, '_分组记录.json')
 const META_FILE = path.join(SRC_DIR, '作品信息.json')
-const WORK_IMG = path.join(ROOT, 'miniprogram', 'images', 'works')
 const OUT_DIR = path.join(ROOT, 'output')
 const THUMB_DIR = path.join(OUT_DIR, '_studio', 'thumbs')
 const BUILD_DIR = path.join(OUT_DIR, '_build')
@@ -36,6 +35,9 @@ const CLOUD_MODULE = path.join(OUT_DIR, 'cloud-works.js')
 
 const UI_FILE = path.join(__dirname, 'studio.ui.html')
 const COMPRESS_PY = path.join(__dirname, 'compress-images.py')
+const BUILD_JS = path.join(__dirname, 'build-works.js')
+const WORK_THUMB = path.join(ROOT, 'miniprogram', 'images', 'works-thumb')
+const WORK_SUB = path.join(ROOT, 'miniprogram', 'subpackages', 'works')
 const THUMB_PY = path.join(__dirname, 'studio-thumbs.py')
 const PRUNE_PY = path.join(__dirname, 'prune-dir.py')
 const IMPORT_JS = path.join(__dirname, 'import-works.js')
@@ -43,8 +45,13 @@ const IMPORT_JS = path.join(__dirname, 'import-works.js')
 // ── 常量 ────────────────────────────────────────────────────
 const IMG_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.bmp']
 const PKG_LIMIT = 2 * 1024 * 1024
-const DEFAULT_WIDTH = 460
-const DEFAULT_QUALITY = 64
+
+/** 分包图片预算（分包 2048KB 减详情页四件套与安全垫），与 build-works.js 保持一致 */
+const SUB_BUDGET = 1900 * 1024
+
+/** 云存储模式下的单张规格，主包模式下由 build-works.js 决定 */
+const DEFAULT_WIDTH = 1000
+const DEFAULT_QUALITY = 78
 const ILLEGAL_NAME = /[\\/:*?"<>|\r\n]/g
 
 // ── 小工具 ──────────────────────────────────────────────────
@@ -239,10 +246,20 @@ function buildState() {
     works.push({ name: title, files, picked: [], confirmed: false })
   }
 
-  // 体积口径
-  const mainBytes = dirSize(path.join(ROOT, 'miniprogram'))
-  const imgBytes = dirSize(WORK_IMG)
+  // 体积口径：主包 = miniprogram 全体减分包（分包单独 2MB，不占主包额度）
+  // 缩略图在主包、详情图在分包，两者分开算，界面上也要分开显示
+  const subImgDir = path.join(WORK_SUB, 'images')
+  const subBytes = dirSize(WORK_SUB)
+  const mainBytes = dirSize(path.join(ROOT, 'miniprogram')) - subBytes
+  const imgBytes = dirSize(WORK_THUMB)
+  const detailBytes = dirSize(subImgDir)
+  const detailCount = exists(subImgDir)
+    ? fs.readdirSync(subImgDir).filter((n) => /\.(webp|jpe?g|png)$/i.test(n)).length
+    : 0
   const pickedCount = works.reduce((s, w) => s + w.picked.length, 0)
+  const thumbCount = exists(WORK_THUMB)
+    ? fs.readdirSync(WORK_THUMB).filter((n) => /\.(webp|jpe?g|png)$/i.test(n)).length
+    : 0
 
   return {
     ok: true,
@@ -253,9 +270,16 @@ function buildState() {
     works,
     pkg: {
       limit: PKG_LIMIT,
+      mainBytes,
+      subBytes,
       nonImage: mainBytes - imgBytes,
       imgBytes,
-      avgPicked: pickedCount ? Math.round(imgBytes / pickedCount) : 26000
+      detailBytes,
+      detailCount,
+      subBudget: SUB_BUDGET,
+      avgThumb: thumbCount ? Math.round(imgBytes / thumbCount) : 13000,
+      avgDetail: detailCount ? Math.round(detailBytes / detailCount) : 58000,
+      avgPicked: pickedCount ? Math.round(imgBytes / pickedCount) : 13000
     },
     defaults: { width: DEFAULT_WIDTH, quality: DEFAULT_QUALITY },
     meta: Object.fromEntries(
@@ -344,107 +368,105 @@ function generate(payload) {
     `作品信息.json 顺序已同步` + (added.length ? `，新增 ${added.length} 条待补文案：${added.join('、')}` : '')
   )
 
-  // 5. 生成压缩清单
-  //    只压挑中的图，靠 --only 清单筛选，不复制临时目录——
-  //    临时目录里的副本在 Windows 上删不干净，白白占几十 MB。
-  const compressNames = []
-  for (const w of clean) {
-    w.files.forEach((f, i) => {
-      if (!cloud && !w.picked.includes(f)) return
-      compressNames.push(`${w.name}-${String(i + 1).padStart(2, '0')}.jpg`)
-    })
-  }
-  const listFile = path.join(OUT_DIR, '_picked.txt')
-  fs.mkdirSync(OUT_DIR, { recursive: true })
-  fs.writeFileSync(listFile, compressNames.join('\n'), 'utf8')
+  // 5. 云存储模式：全量压缩，路径写成裸文件名，运行时拼 IMG_BASE
+  if (cloud) {
+    const compressNames = []
+    for (const w of clean) {
+      w.files.forEach((f, i) => compressNames.push(`${w.name}-${String(i + 1).padStart(2, '0')}.jpg`))
+    }
+    const listFile = path.join(OUT_DIR, '_picked.txt')
+    fs.mkdirSync(OUT_DIR, { recursive: true })
+    fs.writeFileSync(listFile, compressNames.join('\n'), 'utf8')
 
-  // 6. 压缩到中间目录
-  //    先清掉上次的产物：此刻这批文件的句柄早已释放，才删得动。
-  fs.mkdirSync(BUILD_DIR, { recursive: true })
-  const staleBuild = pruneDir(BUILD_DIR, compressNames)
-  if (staleBuild) say(`清理上次压缩产物 ${staleBuild} 张`)
-  const r1 = spawnSync(
-    PYTHON.cmd,
-    [
-      COMPRESS_PY,
-      NORM_DIR,
-      '--width',
-      String(width),
-      '--quality',
-      String(quality),
-      '--out',
-      BUILD_DIR,
-      '--only',
-      listFile
-    ],
-    { encoding: 'utf8', env: pyEnv() }
-  )
-  if (r1.status !== 0) throw new Error('图片压缩失败：\n' + (r1.stderr || r1.stdout || '').slice(-1200))
-  let builtBytes = 0
-  let builtCount = 0
-  for (const n of compressNames) {
-    const p = path.join(BUILD_DIR, n)
-    if (exists(p)) {
-      builtBytes += fs.statSync(p).size
+    fs.mkdirSync(BUILD_DIR, { recursive: true })
+    const staleBuild = pruneDir(BUILD_DIR, compressNames)
+    if (staleBuild) say(`清理上次压缩产物 ${staleBuild} 张`)
+
+    const r1 = spawnSync(
+      PYTHON.cmd,
+      [
+        COMPRESS_PY, NORM_DIR,
+        '--width', String(width),
+        '--quality', String(quality),
+        '--format', 'webp',
+        '--out', BUILD_DIR,
+        '--only', listFile
+      ],
+      { encoding: 'utf8', env: pyEnv() }
+    )
+    if (r1.status !== 0) throw new Error('图片压缩失败：\n' + (r1.stderr || r1.stdout || '').slice(-1200))
+
+    fs.mkdirSync(CLOUD_DIR, { recursive: true })
+    const webpNames = compressNames.map((n) => n.replace(/\.jpg$/, '.webp'))
+    const staleOut = pruneDir(CLOUD_DIR, webpNames)
+    let builtBytes = 0
+    let builtCount = 0
+    for (const n of webpNames) {
+      const from = path.join(BUILD_DIR, n)
+      if (!exists(from)) continue
+      copyFile(from, path.join(CLOUD_DIR, n))
+      builtBytes += fs.statSync(from).size
       builtCount++
     }
-  }
-  if (!builtCount) throw new Error('压缩后没有任何图片，请检查 source 目录')
-  say(`压缩完成：${builtCount} 张，合计 ${human(builtBytes)}（${width}px / q${quality}）`)
+    if (!builtCount) throw new Error('压缩后没有任何图片，请检查源目录')
+    if (staleOut) say(`清理旧图 ${staleOut} 张`)
+    say(`压缩完成：${builtCount} 张，合计 ${human(builtBytes)}（${width}px / q${quality} / WebP）`)
 
-  // 6.5 分发到目标目录
-  const outDir = cloud ? CLOUD_DIR : WORK_IMG
-  fs.mkdirSync(outDir, { recursive: true })
-  const staleOut = pruneDir(outDir, compressNames)
-  for (const n of compressNames) copyFile(path.join(BUILD_DIR, n), path.join(outDir, n))
-  if (staleOut) say(`清理旧图 ${staleOut} 张`)
+    const r2 = spawnSync(process.execPath, [IMPORT_JS, '--dir', CLOUD_DIR, '--cloud', '--out', CLOUD_MODULE], {
+      encoding: 'utf8'
+    })
+    if (r2.status !== 0) throw new Error('生成云端数据失败：\n' + (r2.stderr || r2.stdout || '').slice(-1200))
+    say('已生成 output/cloud-works.js')
+    say('下一步：微信开发者工具 → 云开发 → 存储 → 新建 works 目录 → 上传 output/cloud-batch 里的全部图片')
+    say('上传后把 output/cloud-works.js 里的 IMG_BASE 改成 cloud://<环境ID>.<存储桶>/works/，再覆盖 miniprogram/config/works.js')
 
-  // 7. 生成数据文件
-  const impArgs = cloud
-    ? [IMPORT_JS, '--dir', outDir, '--cloud', '--out', CLOUD_MODULE]
-    : [IMPORT_JS]
-  const r2 = spawnSync(process.execPath, impArgs, { encoding: 'utf8' })
-  if (r2.status !== 0) throw new Error('生成作品数据失败：\n' + (r2.stderr || r2.stdout || '').slice(-1200))
-  say(cloud ? '已生成 output/cloud-works.js' : '已写入 miniprogram/config/works.js')
-
-  // 8. 三项自检（云存储模式不改小程序代码，跳过）
-  if (!cloud) {
-    const checks = [
-      ['模块归属', 'check-modules.js'],
-      ['WXML 结构', 'check-wxml.js'],
-      ['接口一致性', 'check-api.js']
-    ]
-    for (const [label, file] of checks) {
-      const c = spawnSync(process.execPath, [path.join(__dirname, file)], { encoding: 'utf8' })
-      if (c.status === 0) {
-        say(`✓ ${label}检查通过`)
-      } else {
-        say(`✗ ${label}检查未通过`)
-        say((c.stdout || c.stderr || '').split('\n').slice(-10).join('\n'))
-      }
+    return {
+      ok: true,
+      log,
+      cloud: true,
+      pkg: { mainBytes: 0, subBytes: 0, imgBytes: builtBytes, nonImage: 0, limit: PKG_LIMIT, remain: 0 }
     }
   }
 
-  // 9. 体积报告
-  const mainBytes = dirSize(path.join(ROOT, 'miniprogram'))
-  const imgBytes = dirSize(cloud ? CLOUD_DIR : WORK_IMG)
-  const nonImage = cloud ? 0 : mainBytes - imgBytes
+  // 6. 本地模式：整条构建链交给 build-works.js
+  //    压缩、按体积装箱、分发到主包/分包、生成数据都在那条链上。
+  //    工作室与命令行共用同一套逻辑，避免两边各写一份、迟早漂移。
+  const budget = Math.max(600, Math.min(1900, Number(p.budget) || 1900))
+  say(`开始构建：缩略图 → 主包，详情图 → 分包（分包预算 ${budget} KB）`)
 
-  if (cloud) {
-    say(`云存储图包 ${human(imgBytes)}，共 ${dirSize(CLOUD_DIR) ? countFiles(CLOUD_DIR) : 0} 张`)
-    say('下一步：微信开发者工具 → 云开发 → 存储 → 新建 works 目录 → 上传 output/cloud-batch 里的全部图片')
-    say('上传后把 output/cloud-works.js 里的 IMG_BASE 改成 cloud://<环境ID>.<存储桶>/works/，再覆盖 miniprogram/config/works.js')
-  } else {
-    const remain = PKG_LIMIT - mainBytes
-    say(`主包 ${human(mainBytes)}，余量 ${human(remain)}` + (remain < 0 ? '（已超出 2MB 上限）' : ''))
-    say('下一步：微信开发者工具里重新编译（Ctrl+B），首页与「全部作品」即可看到')
+  const r = spawnSync(process.execPath, [BUILD_JS, '--budget', String(budget)], { encoding: 'utf8' })
+  const wants = /^\[|^每件|^已用预算|^写入|^主包 |^分包 |^其中|^详情图|^✓|^✗|^全部命中/
+  ;(r.stdout || '').split('\n').forEach((line) => {
+    const t = line.trim()
+    if (t && wants.test(t)) say(t.replace(/^\[\d\/\d\]\s*/, ''))
+  })
+  if (r.status !== 0) {
+    const tail = (r.stderr || '').split('\n').filter((l) => l.trim()).slice(-5).join('\n')
+    throw new Error('构建失败' + (tail ? '：\n' + tail : ''))
   }
+
+  // 7. 体积收口
+  const subBytes = dirSize(WORK_SUB)
+  const mainBytes = dirSize(path.join(ROOT, 'miniprogram')) - subBytes
+  const imgBytes = dirSize(WORK_THUMB)
+  const nonImage = mainBytes - imgBytes
+
+  say(`主包 ${human(mainBytes)}（余 ${human(PKG_LIMIT - mainBytes)}），分包 ${human(subBytes)}（余 ${human(PKG_LIMIT - subBytes)}）`)
+  say('下一步：微信开发者工具里重新编译（Ctrl+B），首页与「全部作品」即可看到')
 
   return {
     ok: true,
     log,
-    cloud,
-    pkg: { mainBytes, imgBytes, nonImage, limit: PKG_LIMIT, remain: PKG_LIMIT - mainBytes }
+    cloud: false,
+    pkg: {
+      mainBytes,
+      subBytes,
+      imgBytes,
+      nonImage,
+      limit: PKG_LIMIT,
+      remain: PKG_LIMIT - mainBytes,
+      subRemain: PKG_LIMIT - subBytes
+    }
   }
 }
 

@@ -1,17 +1,26 @@
 // scripts/import-works.js
 // 作品导入：把压缩后的作品图整理成小程序可用的商品数据。
 //
+// ── 图片分离 ──────────────────────────────────────────────
+// 主包只有 2MB，作品图全塞进去会挤爆。因此图片分两套、放两个位置：
+//
+//   列表缩略图 → miniprogram/images/works-thumb/       （主包，480px WebP）
+//   详情大图   → miniprogram/subpackages/works/images/ （分包，1000px WebP）
+//
+// 数据里 cover 指向缩略图（主包页面可访问），images 指向分包大图
+// （只有分包内的详情页可访问）。分包容量独立 2MB，与主包互不挤占。
+//
 // ── 三步流程 ──────────────────────────────────────────────
-//   1. 把作品图按「作品名-01.jpg」命名，放进 作品原图/红糖/_规范/
-//   2. 压缩并输出到小程序
-//        python scripts/compress-images.py 作品原图/红糖/_规范 --width 460 --quality 64
+//   1. 作品图按「作品名-01.jpg」命名，放进 作品原图/红糖/_规范/
+//   2. 压缩（一条命令生成两套）
+//        node scripts/build-works.js
 //   3. 生成本数据文件
 //        node scripts/import-works.js
 //
 // ── 分组规则 ──────────────────────────────────────────────
 // 文件名最后一个连字符 / 下划线 / 空格之前的部分视为作品名：
-//   白老板-01.jpg  白老板-02.jpg  →  同一件作品「白老板」，两张图
-//   散兵.jpg                      →  作品「散兵」，一张图
+//   白老板-01.webp  白老板-02.webp  →  同一件作品「白老板」，两张图
+//   散兵.webp                       →  作品「散兵」，一张图
 //
 // ── 元信息 ────────────────────────────────────────────────
 // 价格、题材、比例、描述等写在 作品原图/红糖/作品信息.json，键名与文件名前缀一致。
@@ -24,6 +33,7 @@
 // 用法：
 //   node scripts/import-works.js
 //   node scripts/import-works.js --dir 其他图片目录
+//   node scripts/import-works.js --thumb ""     # 不用缩略图，cover 直接指向 images[0]
 
 const fs = require('fs')
 const path = require('path')
@@ -40,6 +50,12 @@ const OUT_MODULE = path.join(ROOT, 'miniprogram', 'config', 'works.js')
 /** 输出：云数据库种子 */
 const OUT_SEED = path.join(ROOT, 'output', 'works-seed.json')
 
+/** 详情大图默认路径前缀（分包内，只有分包页面能访问） */
+const DETAIL_PREFIX = '/subpackages/works/images/'
+
+/** 列表缩略图默认路径前缀（主包内，任何页面都能访问） */
+const THUMB_PREFIX = '/images/works-thumb/'
+
 /** 未在元信息里指定的字段，用这些兜底 */
 const DEFAULTS = {
   type: 0, // 0 现货 / 1 限量预售 / 2 定制预约
@@ -51,7 +67,13 @@ const DEFAULTS = {
 }
 
 function parseArgs(argv) {
-  const args = { dir: null, out: null, prefix: '/images/works/', cloud: false }
+  const args = {
+    dir: null,
+    out: null,
+    prefix: DETAIL_PREFIX,
+    thumb: THUMB_PREFIX,
+    cloud: false
+  }
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--dir' && argv[i + 1]) {
       args.dir = argv[i + 1]
@@ -61,6 +83,10 @@ function parseArgs(argv) {
       i++
     } else if (argv[i] === '--prefix' && argv[i + 1]) {
       args.prefix = argv[i + 1]
+      i++
+    } else if (argv[i] === '--thumb' && argv[i + 1] !== undefined) {
+      // 传空串表示不用缩略图
+      args.thumb = argv[i + 1]
       i++
     } else if (argv[i] === '--cloud') {
       // 云存储模式：图片路径写成裸文件名，运行时由 IMG_BASE 拼接
@@ -119,9 +145,18 @@ function scanImages(dir) {
 }
 
 /** 生单件作品对象 */
-function buildWork(key, files, index, meta, prefix) {
+function buildWork(key, files, index, meta, prefix, thumbPrefix) {
   const cfg = Object.assign({}, DEFAULTS, meta.defaults || {}, (meta.works || {})[key] || {})
   const images = files.map((n) => (prefix || '') + n)
+
+  // 封面单独指向主包缩略图：列表页在主包，访问不到分包里的图。
+  // 缩略图缺失时退化为详情图（主包页面会加载失败，但比数据里出现死路径好排查）。
+  let cover = images[0]
+  if (thumbPrefix) {
+    const candidate = thumbPrefix + files[0]
+    const abs = path.join(ROOT, 'miniprogram', candidate.replace(/^\/+/, ''))
+    if (fs.existsSync(abs)) cover = candidate
+  }
 
   // 详情文案：元信息里给了就用，否则按题材与比例自动拼一句
   let detail = cfg.detail
@@ -146,7 +181,7 @@ function buildWork(key, files, index, meta, prefix) {
       scale: cfg.scale || '',
       priceRange: ''
     },
-    cover: images[0],
+    cover,
     images,
     detail,
     specs: Array.isArray(cfg.specs) ? cfg.specs : [],
@@ -165,11 +200,13 @@ function renderModule(works, opt) {
   const cloud = !!opt.cloud
 
   const localHeader = `// config/works.js
-// 作品数据。本文件由 scripts/studio.js 自动生成，请勿手工编辑。
+// 作品数据。本文件由 scripts/build-works.js 自动生成，请勿手工编辑。
 //
-// 手工重新生成的等价命令：
-//   python scripts/compress-images.py output/_picked --width 460 --quality 64
-//   node scripts/import-works.js
+// 图片分两套，物理隔离：
+//   cover  → /images/works-thumb/            主包，480px WebP，列表卡片用
+//   images → /subpackages/works/images/      分包，1000px WebP，详情页用
+//
+// 主包访问不到分包里的图，所以列表必须用 cover；反过来详情页两者都能用。
 //
 // 作品的分组、封面、进包图片由「作品工作室」维护：
 //   node scripts/studio.js
@@ -220,13 +257,15 @@ module.exports = { WORKS }
 
 function main() {
   const args = parseArgs(process.argv.slice(2))
-  const imgDir = args.dir ? path.resolve(args.dir) : path.join(ROOT, 'miniprogram', 'images', 'works')
+  const imgDir = args.dir ? path.resolve(args.dir) : path.join(ROOT, 'miniprogram', 'subpackages', 'works', 'images')
   const outModule = args.out ? path.resolve(args.out) : OUT_MODULE
   const prefix = args.cloud ? '' : args.prefix
+  const thumbPrefix = args.cloud ? '' : args.thumb
 
   console.log('=== 作品导入 ===')
-  console.log('图片目录：' + path.relative(ROOT, imgDir))
+  console.log('详情图目录：' + path.relative(ROOT, imgDir))
   if (args.cloud) console.log('模式：云存储（图片路径为裸文件名，运行时拼 IMG_BASE）')
+  else if (thumbPrefix) console.log('列表缩略图：' + thumbPrefix)
 
   const groups = scanImages(imgDir)
 
@@ -261,7 +300,7 @@ function main() {
   }
   keys.sort((a, b) => orderOfKey(a) - orderOfKey(b))
 
-  const works = keys.map((key, i) => buildWork(key, groups.get(key), i, meta, prefix))
+  const works = keys.map((key, i) => buildWork(key, groups.get(key), i, meta, prefix, thumbPrefix))
 
   // 元信息里配了但没对应图片的作品，提示出来，避免以为配好了其实是错的
   const metaKeys = Object.keys(meta.works || {})
@@ -273,7 +312,8 @@ function main() {
   works.forEach((w, i) => {
     const tag = noMeta.includes(keys[i]) ? '  (用默认元信息)' : ''
     console.log(`  ${w._id}  ${w.name}  ${w.images.length} 张${tag}`)
-    w.images.forEach((p) => console.log('        ' + p))
+    console.log('        封面  ' + w.cover)
+    w.images.forEach((p) => console.log('        详情  ' + p))
   })
 
   if (orphanMeta.length) {
