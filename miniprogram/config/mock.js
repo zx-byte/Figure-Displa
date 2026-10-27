@@ -51,7 +51,11 @@ function ago(hours) {
 
 /* ---------------- 商品 ---------------- */
 
-const PRODUCTS = WORKS.concat([
+/**
+ * 演示商品。只在没有任何真实作品时用来撑页面结构。
+ * 一旦 import-works.js 生成了作品数据，就不再混入——虚构条目会和真实作品抢注意力。
+ */
+const DEMO_PRODUCTS = [
   {
     _id: 'p1',
     name: '原创 · 雾都游侠 1/7 手办',
@@ -183,7 +187,9 @@ const PRODUCTS = WORKS.concat([
     sort: 50,
     createTime: ago(12)
   }
-])
+]
+
+const PRODUCTS = WORKS.length ? WORKS : DEMO_PRODUCTS
 
 /* ---------------- 地址 ---------------- */
 

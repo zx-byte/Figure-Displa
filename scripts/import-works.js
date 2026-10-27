@@ -4,7 +4,7 @@
 // ── 三步流程 ──────────────────────────────────────────────
 //   1. 把作品图按「作品名-01.jpg」命名，放进 作品原图/红糖/_规范/
 //   2. 压缩并输出到小程序
-//        python scripts/compress-images.py 作品原图/红糖/_规范 --width 640 --quality 68
+//        python scripts/compress-images.py 作品原图/红糖/_规范 --width 460 --quality 64
 //   3. 生成本数据文件
 //        node scripts/import-works.js
 //
@@ -157,7 +157,7 @@ function renderModule(works) {
 //
 // 数据来源与重新生成方式：
 //   1. 作品图按「作品名-01.jpg」命名，放进  作品原图/红糖/_规范/
-//   2. 压缩          python scripts/compress-images.py 作品原图/红糖/_规范 --width 640 --quality 68
+//   2. 压缩          python scripts/compress-images.py 作品原图/红糖/_规范 --width 460 --quality 64
 //   3. 生成商品数据  node scripts/import-works.js
 //
 // 作品的价格、题材、描述等元信息在 作品原图/红糖/作品信息.json 中维护，
