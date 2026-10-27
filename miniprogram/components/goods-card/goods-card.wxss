@@ -123,6 +123,13 @@
   font-size: 34rpx;
 }
 
+/* 无标价作品：显示「询价」，字号回落到正文级别，不喧宾夺主 */
+.price--inquire {
+  font-size: 26rpx;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+}
+
 .price-origin {
   margin-left: 10rpx;
   font-size: 20rpx;

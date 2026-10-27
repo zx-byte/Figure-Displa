@@ -24,7 +24,8 @@
     <view class="name ellipsis-2">{{item.name}}</view>
     <view wx:if="{{item.subtitle}}" class="subtitle ellipsis">{{item.subtitle}}</view>
     <view class="price-row">
-      <text class="price"><text class="price-symbol">¥</text><text class="price-value">{{priceText}}</text></text>
+      <text wx:if="{{inquire}}" class="price price--inquire">询价</text>
+      <text wx:else class="price"><text class="price-symbol">¥</text><text class="price-value">{{priceText}}</text></text>
       <text wx:if="{{originText}}" class="price-origin">¥{{originText}}</text>
     </view>
     <view wx:if="{{showSold}}" class="sold-line">已售 {{item.soldCount || 0}}</view>

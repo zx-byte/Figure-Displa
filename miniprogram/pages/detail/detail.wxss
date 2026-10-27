@@ -130,6 +130,12 @@
   font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
 }
 
+/* 无标价作品：字号回落到标题级，避免「询价」二字过大 */
+.price-main--inquire {
+  font-size: 36rpx;
+  letter-spacing: 2rpx;
+}
+
 .price-symbol {
   font-size: 28rpx;
 }

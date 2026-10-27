@@ -24,6 +24,8 @@ Component({
 
   data: {
     priceText: '0.00',
+    /** 无标价作品显示「询价」，避免出现 ¥0.00 */
+    inquire: false,
     originText: '',
     typeText: '',
     isPresale: false,
@@ -42,7 +44,8 @@ Component({
       const type = Number(val.type)
 
       this.setData({
-        priceText: (price / 100).toFixed(2),
+        priceText: price > 0 ? (price / 100).toFixed(2) : '',
+        inquire: price <= 0,
         originText: origin > price ? (origin / 100).toFixed(2) : '',
         typeText: type === 1 ? '限量' : type === 2 ? '可定制' : '',
         isPresale: type === 1,

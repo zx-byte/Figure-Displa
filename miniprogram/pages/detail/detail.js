@@ -19,6 +19,8 @@ Page({
     detail: null,
     priceText: '0.00',
     originPriceText: '0.00',
+    /** 无标价作品：价格位显示「询价」 */
+    inquire: false,
 
     /** 轮播当前索引 */
     currentIndex: 0,
@@ -100,6 +102,7 @@ Page({
           detail: item,
           priceText: ((Number(item.price) || 0) / 100).toFixed(2),
           originPriceText: ((Number(item.originPrice) || 0) / 100).toFixed(2),
+          inquire: (Number(item.price) || 0) <= 0,
           gallery: item.images || [],
           specs: item.specs || [],
           selectedSpec,

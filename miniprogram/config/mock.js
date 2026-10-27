@@ -7,6 +7,10 @@
 
 const DEMO_IMG = '/images/demo/demo-'
 
+// 真实作品数据。由 scripts/import-works.js 根据压缩后的作品图生成，
+// 排在最前面，优先于下方的演示商品展示。
+const { WORKS } = require('./works')
+
 /** 360° 环视帧序列，24 帧一圈 */
 const PANO_FRAMES = Array.from(
   { length: 24 },
@@ -47,7 +51,7 @@ function ago(hours) {
 
 /* ---------------- 商品 ---------------- */
 
-const PRODUCTS = [
+const PRODUCTS = WORKS.concat([
   {
     _id: 'p1',
     name: '原创 · 雾都游侠 1/7 手办',
@@ -179,7 +183,7 @@ const PRODUCTS = [
     sort: 50,
     createTime: ago(12)
   }
-]
+])
 
 /* ---------------- 地址 ---------------- */
 

@@ -64,7 +64,8 @@
     <!-- 基本信息 -->
     <view class="info-card">
       <view class="price-block">
-        <text class="price-main"><text class="price-symbol">¥</text>{{priceText}}</text>
+        <text wx:if="{{inquire}}" class="price-main price-main--inquire">询价</text>
+        <text wx:else class="price-main"><text class="price-symbol">¥</text>{{priceText}}</text>
         <text wx:if="{{detail.originPrice > detail.price}}" class="price-origin">¥{{originPriceText}}</text>
         <view wx:if="{{isPresale}}" class="tag-gold-inline">限量 {{detail.limitNum}} 体</view>
         <view wx:elif="{{isCustom}}" class="tag-inline">支持定制</view>
