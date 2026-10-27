@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>作品工作室 · 拾光手办</title>
+<style>
+  :root {
+    --brand: #FF5C39;
+    --brand-soft: #FFF1EC;
+    --ink: #1A1A24;
+    --ink-2: #5A5A6E;
+    --ink-3: #9191A3;
+    --line: #E9E9F0;
+    --bg: #F6F7F9;
+    --card: #FFFFFF;
+    --ok: #1FAA5E;
+    --warn: #E8A100;
+    --bad: #E5352B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    overflow: hidden;
+  }
+  button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input, select { font: inherit; color: inherit; }
+
+  /* ── 布局 ── */
+  #app { display: flex; flex-direction: column; height: 100vh; }
+
+  header {
+    display: flex; align-items: center; gap: 20px;
+    padding: 0 20px; height: 60px; flex: none;
+    background: var(--card); border-bottom: 1px solid var(--line);
+  }
+  .logo { display: flex; align-items: baseline; gap: 8px; }
+  .logo b { font-size: 16px; letter-spacing: .5px; }
+  .logo span { font-size: 12px; color: var(--ink-3); }
+
+  .meta { display: flex; gap: 16px; font-size: 12px; color: var(--ink-2); }
+  .meta i { font-style: normal; color: var(--ink); font-weight: 600; }
+
+  .meter { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .meter-bar { width: 180px; height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+  .meter-fill { height: 100%; width: 0; background: var(--brand); transition: width .25s, background .25s; }
+  .meter-fill.over { background: var(--bad); }
+  .meter-text { font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+  .meter-text em { font-style: normal; font-weight: 600; color: var(--ink); }
+
+  main { flex: 1; display: flex; min-height: 0; }
+
+  /* ── 左栏 ── */
+  aside {
+    width: 268px; flex: none; display: flex; flex-direction: column;
+    background: var(--card); border-right: 1px solid var(--line);
+  }
+  .side-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px 10px; border-bottom: 1px solid var(--line);
+  }
+  .side-head h2 { font-size: 13px; color: var(--ink-2); font-weight: 600; flex: 1; }
+  .btn-mini {
+    padding: 5px 10px; border-radius: 6px; font-size: 12px;
+    background: var(--brand-soft); color: var(--brand); font-weight: 600;
+  }
+  .btn-mini:hover { background: #FFE3DA; }
+
+  #side { flex: 1; overflow-y: auto; padding: 8px; }
+  #side::-webkit-scrollbar, #detail::-webkit-scrollbar { width: 8px; }
+  #side::-webkit-scrollbar-thumb, #detail::-webkit-scrollbar-thumb { background: #DCDCE4; border-radius: 4px; }
+
+  .work {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px; border-radius: 8px; cursor: pointer;
+    border: 1px solid transparent; margin-bottom: 4px;
+    transition: background .15s, border-color .15s;
+  }
+  .work:hover { background: #FAFAFC; }
+  .work.on { background: var(--brand-soft); border-color: #FFD3C7; }
+  .work.drop { border-color: var(--brand); background: #FFF6F3; border-style: dashed; }
+  .work.ghost { opacity: .35; }
+
+  .work-thumb {
+    width: 42px; height: 42px; border-radius: 6px; flex: none;
+    background: var(--line) center/cover no-repeat;
+  }
+  .work-info { min-width: 0; flex: 1; }
+  .work-name {
+    font-size: 13px; font-weight: 500; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .work-sub { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+  .work.is-new .work-name::after {
+    content: "新"; margin-left: 6px; font-size: 10px; color: var(--brand);
+    background: var(--brand-soft); padding: 1px 5px; border-radius: 4px; vertical-align: 1px;
+  }
+  .work.alarm .work-sub { color: var(--bad); }
+
+  /* ── 右栏 ── */
+  section { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
+
+  .detail-head {
+    display: flex; align-items: center; gap: 12px; flex: none;
+    padding: 14px 20px; background: var(--card); border-bottom: 1px solid var(--line);
+  }
+  .name-input {
+    font-size: 17px; font-weight: 600; padding: 6px 10px;
+    border: 1px solid transparent; border-radius: 6px; background: transparent;
+    width: 280px; outline: none;
+  }
+  .name-input:hover { background: #FAFAFC; }
+  .name-input:focus { background: #fff; border-color: var(--brand); }
+  .badge {
+    font-size: 12px; padding: 3px 9px; border-radius: 20px;
+    background: var(--brand-soft); color: var(--brand); font-weight: 600;
+  }
+  .badge.gray { background: #F1F1F5; color: var(--ink-2); }
+  .badge.warn { background: #FFF7E0; color: var(--warn); }
+
+  .order-btns { margin-left: auto; display: flex; gap: 6px; }
+  .icon-btn {
+    width: 30px; height: 30px; border-radius: 6px; font-size: 13px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink-2);
+    display: grid; place-content: center;
+  }
+  .icon-btn:hover { border-color: var(--ink-3); color: var(--ink); }
+  .icon-btn.danger:hover { border-color: var(--bad); color: var(--bad); }
+
+  #detail { flex: 1; overflow-y: auto; padding: 16px 20px 90px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 10px; }
+  .cell {
+    position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+    background: var(--line); cursor: grab; border: 2px solid transparent;
+    transition: border-color .12s, transform .12s;
+  }
+  .cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cell:hover { transform: translateY(-1px); }
+  .cell.sel { border-color: var(--brand); }
+  .cell.dragging { opacity: .4; }
+
+  .pick {
+    position: absolute; top: 6px; left: 6px; width: 22px; height: 22px;
+    border-radius: 50%; background: rgba(255,255,255,.92);
+    border: 1.5px solid rgba(26,26,36,.2); display: grid; place-content: center;
+    font-size: 12px; color: transparent; font-weight: 700; transition: all .12s;
+  }
+  .cell.picked .pick { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .pick:hover { transform: scale(1.08); }
+
+  .cover-tag {
+    position: absolute; top: 6px; right: 6px; font-size: 10px; font-weight: 600;
+    padding: 2px 6px; border-radius: 4px; background: rgba(26,26,36,.78); color: #fff;
+  }
+  .cell-tools {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    display: flex; gap: 1px; opacity: 0; transition: opacity .12s;
+    background: linear-gradient(transparent, rgba(0,0,0,.55));
+    padding: 14px 4px 4px;
+  }
+  .cell:hover .cell-tools { opacity: 1; }
+  .cell-tools button {
+    flex: 1; font-size: 11px; padding: 4px 0; color: #fff;
+    border-radius: 4px; background: rgba(255,255,255,.16); backdrop-filter: blur(2px);
+  }
+  .cell-tools button:hover { background: rgba(255,255,255,.32); }
+
+  .empty {
+    text-align: center; color: var(--ink-3); font-size: 13px;
+    padding: 60px 20px; border: 1px dashed var(--line); border-radius: 10px;
+  }
+
+  /* ── 选中操作条 ── */
+  .selbar {
+    position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%) translateY(120%);
+    display: flex; align-items: center; gap: 10px;
+    background: var(--ink); color: #fff; padding: 9px 14px;
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    transition: transform .2s; z-index: 20; white-space: nowrap;
+  }
+  .selbar.on { transform: translateX(-50%) translateY(0); }
+  .selbar select {
+    padding: 4px 8px; border-radius: 5px; border: none;
+    background: rgba(255,255,255,.14); color: #fff; max-width: 160px;
+  }
+  .selbar select option { color: var(--ink); }
+  .selbar button { font-size: 12px; padding: 4px 8px; border-radius: 5px; color: #fff; }
+  .selbar button:hover { background: rgba(255,255,255,.14); }
+
+  /* ── 底栏 ── */
+  footer {
+    flex: none; display: flex; align-items: center; gap: 16px;
+    padding: 10px 20px; background: var(--card); border-top: 1px solid var(--line);
+  }
+  .field { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); }
+  .field input {
+    width: 58px; padding: 4px 8px; border: 1px solid var(--line);
+    border-radius: 5px; text-align: center; outline: none;
+  }
+  .field input:focus { border-color: var(--brand); }
+  .switch { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); cursor: pointer; }
+  .switch input { width: 14px; height: 14px; accent-color: var(--brand); cursor: pointer; }
+  .hint { font-size: 11px; color: var(--ink-3); }
+
+  .spacer { margin-left: auto; }
+  .btn {
+    padding: 8px 16px; border-radius: 7px; font-size: 13px; font-weight: 600;
+    background: #F1F1F5; color: var(--ink-2);
+  }
+  .btn:hover { background: #E8E8EF; }
+  .btn.primary { background: var(--brand); color: #fff; }
+  .btn.primary:hover { background: #F04A26; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  /* ── 遮罩 ── */
+  #mask {
+    position: fixed; inset: 0; background: rgba(26,26,36,.62);
+    display: grid; place-content: center; z-index: 100;
+    backdrop-filter: blur(2px);
+  }
+  #mask[hidden] { display: none; }
+  .panel {
+    width: min(620px, 90vw); max-height: 76vh; background: #fff;
+    border-radius: 12px; padding: 22px 24px; display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,.28);
+  }
+  .panel h3 { font-size: 15px; margin-bottom: 4px; }
+  .panel .sub { font-size: 12px; color: var(--ink-3); margin-bottom: 14px; }
+  .log {
+    flex: 1; overflow-y: auto; font: 12px/1.7 ui-monospace, Menlo, Consolas, monospace;
+    background: #FAFAFC; border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px 14px; white-space: pre-wrap; word-break: break-all; min-height: 200px;
+  }
+  .log .err { color: var(--bad); }
+  .log .done { color: var(--ok); font-weight: 600; }
+  .panel-foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+
+  .spinner {
+    width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.35);
+    border-top-color: #fff; border-radius: 50%; display: inline-block;
+    vertical-align: -2px; margin-right: 6px; animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .toast {
+    position: fixed; top: 74px; left: 50%; transform: translateX(-50%) translateY(-16px);
+    background: var(--ink); color: #fff; padding: 9px 16px; border-radius: 8px;
+    font-size: 13px; opacity: 0; transition: all .22s; z-index: 200; pointer-events: none;
+  }
+  .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logo"><b>作品工作室</b><span>拾光手办</span></div>
+    <div class="meta">
+      <span>原图 <i id="m-total">-</i> 张</span>
+      <span>作品 <i id="m-works">-</i> 件</span>
+      <span>进包 <i id="m-picked">-</i> 张</span>
+    </div>
+    <div class="meter">
+      <div class="meter-bar"><div class="meter-fill" id="meter"></div></div>
+      <div class="meter-text" id="meter-text">计算中…</div>
+    </div>
+  </header>
+
+  <main>
+    <aside>
+      <div class="side-head">
+        <h2>作品列表</h2>
+        <button class="btn-mini" id="btn-new">+ 新建</button>
+      </div>
+      <div id="side"></div>
+    </aside>
+
+    <section>
+      <div class="detail-head">
+        <input class="name-input" id="name" spellcheck="false" placeholder="作品名">
+        <span class="badge" id="count">0 张</span>
+        <span class="badge gray" id="picked-count">0 进包</span>
+        <span class="badge warn" id="new-flag" hidden>待确认</span>
+        <div class="order-btns">
+          <button class="icon-btn" id="btn-up" title="上移（展示更靠前）">↑</button>
+          <button class="icon-btn" id="btn-down" title="下移">↓</button>
+          <button class="icon-btn danger" id="btn-del" title="删除作品（图片退回未分组）">✕</button>
+        </div>
+      </div>
+      <div id="detail"></div>
+
+      <div class="selbar" id="selbar">
+        <span id="sel-text">已选 0 张</span>
+        <select id="sel-target"><option value="">移到…</option></select>
+        <button id="btn-sel-clear">取消</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="field">宽 <input id="opt-width" type="number" min="200" max="1200" step="20"> px</div>
+    <div class="field">质 <input id="opt-quality" type="number" min="30" max="95"></div>
+    <label class="switch"><input type="checkbox" id="opt-cloud"> 云存储模式（全量，不限张数）</label>
+    <span class="hint" id="foot-hint"></span>
+    <div class="spacer"></div>
+    <button class="btn" id="btn-refresh">刷新</button>
+    <button class="btn primary" id="btn-gen">生成并上架</button>
+  </footer>
+</div>
+
+<div id="mask" hidden>
+  <div class="panel">
+    <h3 id="panel-title">生成中…</h3>
+    <div class="sub" id="panel-sub"></div>
+    <div class="log" id="panel-log"></div>
+    <div class="panel-foot">
+      <button class="btn" id="btn-close" hidden>关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s)
+const el = (tag, cls, txt) => {
+  const n = document.createElement(tag)
+  if (cls) n.className = cls
+  if (txt != null) n.textContent = txt
+  return n
+}
+
+let S = null          // 服务端状态
+let cur = 0           // 当前作品下标
+const sel = new Set() // 选中的文件名
+
+// ── 数据访问 ──
+const works = () => (S ? S.works : [])
+const work = () => works()[cur] || null
+
+function pickedTotal() {
+  return works().reduce((n, w) => n + (w.picked || []).length, 0)
+}
+
+function estimate() {
+  if (!S) return { bytes: 0, remain: 0 }
+  const n = pickedTotal()
+  const bytes = S.pkg.nonImage + n * S.pkg.avgPicked
+  return { bytes, remain: S.pkg.limit - bytes }
+}
+
+// ── 渲染 ──
+function render() {
+  renderMeter()
+  renderSide()
+  renderDetail()
+  renderFooter()
+}
+
+function renderMeter() {
+  if (!S) return
+  const est = estimate()
+  const pct = Math.min(100, (est.bytes / S.pkg.limit) * 100)
+  const fill = $('#meter')
+  fill.style.width = pct.toFixed(1) + '%'
+  fill.classList.toggle('over', est.bytes > S.pkg.limit)
+
+  const mb = (b) => (b / 1024 / 1024).toFixed(2)
+  const room = Math.floor(Math.max(0, est.remain) / S.pkg.avgPicked)
+  $('#meter-text').innerHTML =
+    `主包预估 <em>${mb(est.bytes)} MB</em> / 2 MB · ` +
+    (est.remain >= 0 ? `还可放约 <em>${room}</em> 张` : `<em style="color:#E5352B">超出 ${mb(-est.remain)} MB</em>`)
+
+  $('#m-total').textContent = S.totalImages
+  $('#m-works').textContent = works().length
+  $('#m-picked').textContent = pickedTotal()
+}
+
+function renderSide() {
+  const box = $('#side')
+  box.innerHTML = ''
+
+  works().forEach((w, i) => {
+    const row = el('div', 'work' + (i === cur ? ' on' : '') + (w.confirmed ? '' : ' is-new'))
+    row.dataset.idx = i
+    row.draggable = true
+
+    const cover = w.files[0]
+    const thumb = el('div', 'work-thumb')
+    if (cover) thumb.style.backgroundImage = `url(/thumb/${idOf(cover)})`
+    row.appendChild(thumb)
+
+    const info = el('div', 'work-info')
+    info.appendChild(el('div', 'work-name', w.name || '（未命名）'))
+    const sub = el('div', 'work-sub', `${w.files.length} 张 · ${(w.picked || []).length} 进包`)
+    if (w.picked && w.picked.length === 0) {
+      sub.textContent = `${w.files.length} 张 · 未选进包`
+      row.classList.add('alarm')
+    }
+    info.appendChild(sub)
+    row.appendChild(info)
+
+    row.addEventListener('click', () => {
+      cur = i
+      sel.clear()
+      render()
+    })
+
+    // 拖动作品排序
+    row.addEventListener('dragstart', (e) => {
+      dragWork = i
+      row.classList.add('ghost')
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.setData('text/plain', 'work:' + i)
+    })
+    row.addEventListener('dragend', () => {
+      dragWork = null
+      row.classList.remove('ghost')
+      box.querySelectorAll('.work').forEach((n) => n.classList.remove('drop'))
+    })
+    row.addEventListener('dragover', (e) => {
+      e.preventDefault()
+      row.classList.add('drop')
+    })
+    row.addEventListener('dragleave', () => row.classList.remove('drop'))
+    row.addEventListener('drop', (e) => {
+      e.preventDefault()
+      row.classList.remove('drop')
+      const files = dragFiles
+      if (files.length) {
+        moveFiles(cur, i, files)
+      } else if (dragWork != null && dragWork !== i) {
+        const list = works()
+        const [moved] = list.splice(dragWork, 1)
+        list.splice(i, 0, moved)
+        cur = i
+        render()
+      }
+    })
+
+    box.appendChild(row)
+  })
+}
+
+let imgIndex = {}
+function idOf(filename) {
+  return imgIndex[filename] || ''
+}
+
+function renderDetail() {
+  const w = work()
+  const box = $('#detail')
+  const keepScroll = box.scrollTop
+  box.innerHTML = ''
+
+  if (!w) {
+    box.appendChild(el('div', 'empty', '左栏没有作品，点「+ 新建」开始'))
+    $('#name').value = ''
+    return
+  }
+
+  $('#name').value = w.name || ''
+  $('#count').textContent = w.files.length + ' 张'
+  $('#picked-count').textContent = (w.picked || []).length + ' 进包'
+  $('#new-flag').hidden = !!w.confirmed
+
+  const grid = el('div', 'grid')
+  w.files.forEach((file, i) => {
+    const cell = el('div', 'cell')
+    cell.draggable = true
+    cell.dataset.file = file
+    if (sel.has(file)) cell.classList.add('sel')
+    if ((w.picked || []).includes(file)) cell.classList.add('picked')
+
+    const img = el('img')
+    img.src = `/thumb/${idOf(file)}`
+    img.loading = 'lazy'
+    img.draggable = false
+    cell.appendChild(img)
+
+    if (i === 0) cell.appendChild(el('div', 'cover-tag', '封面'))
+
+    const pick = el('div', 'pick', '✓')
+    pick.title = '进主包'
+    pick.addEventListener('click', (e) => {
+      e.stopPropagation()
+      togglePick(file)
+    })
+    cell.appendChild(pick)
+
+    const tools = el('div', 'cell-tools')
+    const bCover = el('button', null, '设为封面')
+    bCover.addEventListener('click', (e) => {
+      e.stopPropagation()
+      setCover(file)
+    })
+    const bOut = el('button', null, '移出')
+    bOut.addEventListener('click', (e) => {
+      e.stopPropagation()
+      moveFiles(cur, -1, [file])
+    })
+    tools.appendChild(bCover)
+    tools.appendChild(bOut)
+    cell.appendChild(tools)
+
+    // 点选：支持 Ctrl 多选
+    cell.addEventListener('click', (e) => {
+      if (e.ctrlKey || e.metaKey || e.shiftKey) {
+        if (sel.has(file)) sel.delete(file)
+        else sel.add(file)
+      } else {
+        sel.clear()
+        sel.add(file)
+      }
+      renderDetail()
+      renderSelbar()
+    })
+
+    cell.addEventListener('dragstart', (e) => {
+      dragFiles = sel.has(file) ? Array.from(sel) : [file]
+      cell.classList.add('dragging')
+      e.dataTransfer.effectAllowed = 'move'
+      e.dataTransfer.setData('text/plain', 'files')
+    })
+    cell.addEventListener('dragend', () => {
+      dragFiles = []
+      cell.classList.remove('dragging')
+    })
+
+    grid.appendChild(cell)
+  })
+
+  if (!w.files.length) {
+    box.appendChild(el('div', 'empty', '这件作品还没有图片。从左栏「未分组」里把图拖进来，或先删掉它。'))
+  } else {
+    box.appendChild(grid)
+  }
+
+  box.scrollTop = keepScroll
+  renderSelbar()
+}
+
+let dragFiles = []
+let dragWork = null
+
+function renderSelbar() {
+  const bar = $('#selbar')
+  const n = sel.size
+  bar.classList.toggle('on', n > 0)
+  if (!n) return
+  $('#sel-text').textContent = `已选 ${n} 张`
+
+  const selTarget = $('#sel-target')
+  selTarget.innerHTML = '<option value="">移到…</option>'
+  works().forEach((w, i) => {
+    if (i === cur) return
+    const o = document.createElement('option')
+    o.value = String(i)
+    o.textContent = w.name || '（未命名）'
+    selTarget.appendChild(o)
+  })
+  const o2 = document.createElement('option')
+  o2.value = 'new'
+  o2.textContent = '→ 新建作品'
+  selTarget.appendChild(o2)
+}
+
+function renderFooter() {
+  const cloud = $('#opt-cloud').checked
+  $('#opt-width').disabled = cloud
+  $('#opt-quality').disabled = cloud
+  $('#foot-hint').textContent = cloud
+    ? '全量图片输出到 output/cloud-batch，主包不受限'
+    : `每张约 ${Math.round(S.pkg.avgPicked / 1024)} KB`
+}
+
+// ── 操作 ──
+function togglePick(file) {
+  const w = work()
+  const list = w.picked || (w.picked = [])
+  const i = list.indexOf(file)
+  if (i > -1) list.splice(i, 1)
+  else list.push(file)
+  renderMeter()
+  renderDetail()
+  renderSide()
+}
+
+function setCover(file) {
+  const w = work()
+  const i = w.files.indexOf(file)
+  if (i <= 0) return
+  w.files.splice(i, 1)
+  w.files.unshift(file)
+  renderDetail()
+  renderSide()
+  toast('已设为封面')
+}
+
+/** 把 files 从 cur 移到目标作品；to === -1 表示退回未分组 */
+function moveFiles(from, to, files) {
+  const list = works()
+  const src = list[from]
+  if (!src || !files.length) return
+
+  let target
+  if (to === -1) {
+    target = list.find((w) => w.name === '未分组')
+    if (!target) {
+      target = { name: '未分组', files: [], picked: [], confirmed: false, untitled: true }
+      list.push(target)
+    }
+  } else {
+    target = list[to]
+  }
+  if (!target || target === src) return
+
+  for (const f of files) {
+    const i = src.files.indexOf(f)
+    if (i < 0) continue
+    src.files.splice(i, 1)
+    if (!target.files.includes(f)) target.files.push(f)
+    // 进包状态跟随图片
+    const pi = (src.picked || []).indexOf(f)
+    if (pi > -1) {
+      src.picked.splice(pi, 1)
+      target.picked = target.picked || []
+      target.picked.push(f)
+    }
+  }
+
+  // 移空的作品自动移除（保留未分组）
+  if (!src.files.length && src.name !== '未分组') {
+    const idx = list.indexOf(src)
+    list.splice(idx, 1)
+    cur = Math.min(cur, list.length - 1)
+  }
+  if (list.indexOf(target) !== -1) cur = list.indexOf(target)
+
+  sel.clear()
+  render()
+  toast(`已移动 ${files.length} 张到「${target.name}」`)
+}
+
+function newWork() {
+  const list = works()
+  let n = list.length + 1
+  let name = '新作品 ' + n
+  while (list.some((w) => w.name === name)) name = '新作品 ' + ++n
+  list.push({ name, files: [], picked: [], confirmed: false })
+  cur = list.length - 1
+  sel.clear()
+  render()
+  const input = $('#name')
+  input.focus()
+  input.select()
+}
+
+function deleteWork() {
+  const w = work()
+  if (!w) return
+  if (!confirm(`删除「${w.name}」？\n\n${w.files.length} 张图会退回「未分组」，不会删掉原文件。`)) return
+  const list = works()
+  const idx = list.indexOf(w)
+  list.splice(idx, 1)
+  if (w.files.length) {
+    let un = list.find((x) => x.name === '未分组')
+    if (!un) {
+      un = { name: '未分组', files: [], picked: [], confirmed: false, untitled: true }
+      list.push(un)
+    }
+    un.files.push(...w.files)
+    if (w.picked) {
+      un.picked = un.picked || []
+      un.picked.push(...w.picked)
+    }
+  }
+  cur = Math.max(0, Math.min(idx, list.length - 1))
+  sel.clear()
+  render()
+}
+
+function reorder(delta) {
+  const list = works()
+  const to = cur + delta
+  if (to < 0 || to >= list.length) return
+  const [moved] = list.splice(cur, 1)
+  list.splice(to, 0, moved)
+  cur = to
+  render()
+}
+
+// ── 与服务端交互 ──
+async function load(refresh) {
+  const url = refresh ? '/api/refresh' : '/api/state'
+  const r = await fetch(url)
+  S = await r.json()
+
+  imgIndex = {}
+  S.images.forEach((i) => (imgIndex[i.file] = i.id))
+
+  $('#opt-width').value = S.defaults.width
+  $('#opt-quality').value = S.defaults.quality
+
+  if (cur >= works().length) cur = Math.max(0, works().length - 1)
+  render()
+}
+
+async function generate() {
+  const cloud = $('#opt-cloud').checked
+  const payload = {
+    works: works().map((w) => ({ name: w.name, files: w.files, picked: w.picked || [] })),
+    cloud,
+    width: Number($('#opt-width').value),
+    quality: Number($('#opt-quality').value)
+  }
+
+  const mask = $('#mask')
+  mask.hidden = false
+  $('#panel-title').textContent = cloud ? '生成云存储图包…' : '生成并上架…'
+  $('#panel-sub').textContent = cloud
+    ? '全量压缩输出到 output/cloud-batch'
+    : '规范命名 → 压缩 → 写 works.js → 三项自检'
+  const logBox = $('#panel-log')
+  logBox.textContent = '处理中，请稍候…'
+  const btnClose = $('#btn-close')
+  btnClose.hidden = true
+  const btnGen = $('#btn-gen')
+  btnGen.disabled = true
+  btnGen.innerHTML = '<span class="spinner"></span>生成中'
+
+  try {
+    const r = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    const out = await r.json()
+    logBox.innerHTML = ''
+    if (!out.ok) {
+      logBox.appendChild(el('div', 'err', '✗ ' + (out.error || '生成失败')))
+    } else {
+      out.log.forEach((line) => logBox.appendChild(el('div', null, line)))
+      logBox.appendChild(el('div', 'done', '完成。'))
+      $('#panel-title').textContent = '已生成'
+    }
+  } catch (err) {
+    logBox.innerHTML = ''
+    logBox.appendChild(el('div', 'err', '✗ ' + err.message))
+  } finally {
+    btnClose.hidden = false
+    btnGen.disabled = false
+    btnGen.textContent = '生成并上架'
+  }
+}
+
+let toastTimer = null
+function toast(text) {
+  const t = $('#toast')
+  t.textContent = text
+  t.classList.add('on')
+  clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => t.classList.remove('on'), 1600)
+}
+
+// ── 事件绑定 ──
+$('#btn-new').addEventListener('click', newWork)
+$('#btn-del').addEventListener('click', deleteWork)
+$('#btn-up').addEventListener('click', () => reorder(-1))
+$('#btn-down').addEventListener('click', () => reorder(1))
+$('#btn-refresh').addEventListener('click', async () => {
+  await load(true)
+  toast('已重新扫描源目录')
+})
+$('#btn-gen').addEventListener('click', generate)
+$('#btn-close').addEventListener('click', async () => {
+  $('#mask').hidden = true
+  await load(false)
+})
+$('#opt-cloud').addEventListener('change', renderFooter)
+
+$('#name').addEventListener('input', (e) => {
+  const w = work()
+  if (!w) return
+  w.name = e.target.value
+  renderSide()
+})
+
+$('#sel-target').addEventListener('change', (e) => {
+  const v = e.target.value
+  if (v === '') return
+  e.target.value = ''
+  if (v === 'new') {
+    const list = works()
+    list.push({ name: '新作品 ' + (list.length + 1), files: [], picked: [], confirmed: false })
+    moveFiles(cur, list.length - 1, Array.from(sel))
+  } else {
+    moveFiles(cur, Number(v), Array.from(sel))
+  }
+})
+
+$('#btn-sel-clear').addEventListener('click', () => {
+  sel.clear()
+  renderDetail()
+})
+
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return
+  if (e.key === 'Escape') {
+    sel.clear()
+    renderDetail()
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+    e.preventDefault()
+    const w = work()
+    if (w) {
+      w.files.forEach((f) => sel.add(f))
+      renderDetail()
+    }
+  }
+})
+
+load(false)
+</script>
+</body>
+</html>

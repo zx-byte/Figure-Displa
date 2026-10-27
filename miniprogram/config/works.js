@@ -1,13 +1,14 @@
 // config/works.js
-// 作品数据。本文件由 scripts/import-works.js 自动生成，请勿手工编辑。
+// 作品数据。本文件由 scripts/studio.js 自动生成，请勿手工编辑。
 //
-// 数据来源与重新生成方式：
-//   1. 作品图按「作品名-01.jpg」命名，放进  作品原图/红糖/_规范/
-//   2. 压缩          python scripts/compress-images.py 作品原图/红糖/_规范 --width 460 --quality 64
-//   3. 生成商品数据  node scripts/import-works.js
+// 手工重新生成的等价命令：
+//   python scripts/compress-images.py output/_picked --width 460 --quality 64
+//   node scripts/import-works.js
+//
+// 作品的分组、封面、进包图片由「作品工作室」维护：
+//   node scripts/studio.js
 //
 // 作品的价格、题材、描述等元信息在 作品原图/红糖/作品信息.json 中维护，
-// 键名与图片文件名前缀一致（如「白老板-01.jpg」对应键「白老板」），
 // 展示顺序由该文件里的 order 字段控制。
 
 const WORKS = [
@@ -50,7 +51,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 900,
-    "createTime": new Date("2026-10-27T12:01:24.826Z")
+    "createTime": new Date("2026-10-27T12:38:23.735Z")
   },
   {
     "_id": "w02",
@@ -91,11 +92,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 899,
-    "createTime": new Date("2026-10-27T12:00:24.826Z")
+    "createTime": new Date("2026-10-27T12:37:23.735Z")
   },
   {
     "_id": "w03",
-    "name": "任嘉伦 Q 版手办",
+    "name": "任嘉伦Q版",
     "subtitle": "Q 版 · 多套造型",
     "price": 0,
     "originPrice": 0,
@@ -132,7 +133,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 898,
-    "createTime": new Date("2026-10-27T11:59:24.826Z")
+    "createTime": new Date("2026-10-27T12:36:23.735Z")
   },
   {
     "_id": "w04",
@@ -173,11 +174,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 897,
-    "createTime": new Date("2026-10-27T11:58:24.826Z")
+    "createTime": new Date("2026-10-27T12:35:23.735Z")
   },
   {
     "_id": "w05",
-    "name": "卫昭",
+    "name": "任嘉伦卫昭",
     "subtitle": "蒙眼白衣 · 蓝纹披风",
     "price": 0,
     "originPrice": 0,
@@ -214,7 +215,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 896,
-    "createTime": new Date("2026-10-27T11:57:24.826Z")
+    "createTime": new Date("2026-10-27T12:34:23.735Z")
   },
   {
     "_id": "w06",
@@ -255,11 +256,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 895,
-    "createTime": new Date("2026-10-27T11:56:24.826Z")
+    "createTime": new Date("2026-10-27T12:33:23.735Z")
   },
   {
     "_id": "w07",
-    "name": "长意",
+    "name": "任嘉伦长意",
     "subtitle": "白衣抚琴 · 真人转 Q",
     "price": 0,
     "originPrice": 0,
@@ -296,7 +297,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 894,
-    "createTime": new Date("2026-10-27T11:55:24.826Z")
+    "createTime": new Date("2026-10-27T12:32:23.735Z")
   },
   {
     "_id": "w08",
@@ -337,11 +338,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 893,
-    "createTime": new Date("2026-10-27T11:54:24.826Z")
+    "createTime": new Date("2026-10-27T12:31:23.735Z")
   },
   {
     "_id": "w09",
-    "name": "长意 Q 版",
+    "name": "任嘉伦Q版长意",
     "subtitle": "黑金长袍 · 持剑",
     "price": 0,
     "originPrice": 0,
@@ -377,7 +378,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 892,
-    "createTime": new Date("2026-10-27T11:53:24.826Z")
+    "createTime": new Date("2026-10-27T12:30:23.735Z")
   },
   {
     "_id": "w10",
@@ -418,11 +419,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 891,
-    "createTime": new Date("2026-10-27T11:52:24.826Z")
+    "createTime": new Date("2026-10-27T12:29:23.735Z")
   },
   {
     "_id": "w11",
-    "name": "陆绎",
+    "name": "任嘉伦陆绎",
     "subtitle": "黑衣金纹 · 锦衣卫",
     "price": 0,
     "originPrice": 0,
@@ -459,7 +460,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 890,
-    "createTime": new Date("2026-10-27T11:51:24.826Z")
+    "createTime": new Date("2026-10-27T12:28:23.735Z")
   },
   {
     "_id": "w12",
@@ -499,11 +500,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 889,
-    "createTime": new Date("2026-10-27T11:50:24.826Z")
+    "createTime": new Date("2026-10-27T12:27:23.735Z")
   },
   {
     "_id": "w13",
-    "name": "陆炎",
+    "name": "任嘉伦陆炎",
     "subtitle": "玄蓝长袍 · Q 版",
     "price": 0,
     "originPrice": 0,
@@ -540,11 +541,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 888,
-    "createTime": new Date("2026-10-27T11:49:24.826Z")
+    "createTime": new Date("2026-10-27T12:26:23.735Z")
   },
   {
     "_id": "w14",
-    "name": "蛙帽小人",
+    "name": "绿蛙帽",
     "subtitle": "蛙帽童装 · Q 版",
     "price": 0,
     "originPrice": 0,
@@ -580,11 +581,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 887,
-    "createTime": new Date("2026-10-27T11:48:24.826Z")
+    "createTime": new Date("2026-10-27T12:25:23.735Z")
   },
   {
     "_id": "w15",
-    "name": "宣夜",
+    "name": "任嘉伦无忧渡",
     "subtitle": "蓝衫持剑 · Q 版",
     "price": 0,
     "originPrice": 0,
@@ -620,7 +621,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 886,
-    "createTime": new Date("2026-10-27T11:47:24.826Z")
+    "createTime": new Date("2026-10-27T12:24:23.735Z")
   },
   {
     "_id": "w16",
@@ -660,11 +661,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 885,
-    "createTime": new Date("2026-10-27T11:46:24.826Z")
+    "createTime": new Date("2026-10-27T12:23:23.735Z")
   },
   {
     "_id": "w17",
-    "name": "陆大人",
+    "name": "任嘉伦陆大人",
     "subtitle": "白袍绿饰 · 官服",
     "price": 0,
     "originPrice": 0,
@@ -701,11 +702,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 884,
-    "createTime": new Date("2026-10-27T11:45:24.826Z")
+    "createTime": new Date("2026-10-27T12:22:23.735Z")
   },
   {
     "_id": "w18",
-    "name": "艾因 · 东冕织心",
+    "name": "艾因东冕织心",
     "subtitle": "黑白蓝袍 · 立姿",
     "price": 0,
     "originPrice": 0,
@@ -741,11 +742,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 883,
-    "createTime": new Date("2026-10-27T11:44:24.826Z")
+    "createTime": new Date("2026-10-27T12:21:23.735Z")
   },
   {
     "_id": "w19",
-    "name": "流水迢迢 · 黑金",
+    "name": "任嘉伦流水迢迢",
     "subtitle": "黑金纹 · 持剑",
     "price": 0,
     "originPrice": 0,
@@ -781,7 +782,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 882,
-    "createTime": new Date("2026-10-27T11:43:24.826Z")
+    "createTime": new Date("2026-10-27T12:20:23.735Z")
   },
   {
     "_id": "w20",
@@ -821,7 +822,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 881,
-    "createTime": new Date("2026-10-27T11:42:24.826Z")
+    "createTime": new Date("2026-10-27T12:19:23.735Z")
   },
   {
     "_id": "w21",
@@ -861,7 +862,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 880,
-    "createTime": new Date("2026-10-27T11:41:24.826Z")
+    "createTime": new Date("2026-10-27T12:18:23.735Z")
   },
   {
     "_id": "w22",
@@ -897,7 +898,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 879,
-    "createTime": new Date("2026-10-27T11:40:24.826Z")
+    "createTime": new Date("2026-10-27T12:17:23.735Z")
   },
   {
     "_id": "w23",
@@ -933,7 +934,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 878,
-    "createTime": new Date("2026-10-27T11:39:24.826Z")
+    "createTime": new Date("2026-10-27T12:16:23.735Z")
   },
   {
     "_id": "w24",
@@ -969,11 +970,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 877,
-    "createTime": new Date("2026-10-27T11:38:24.826Z")
+    "createTime": new Date("2026-10-27T12:15:23.735Z")
   },
   {
     "_id": "w25",
-    "name": "迪卢克 Q 版",
+    "name": "迪卢克",
     "subtitle": "赤衣红角 · Q 版",
     "price": 0,
     "originPrice": 0,
@@ -1005,7 +1006,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 876,
-    "createTime": new Date("2026-10-27T11:37:24.826Z")
+    "createTime": new Date("2026-10-27T12:14:23.735Z")
   },
   {
     "_id": "w26",
@@ -1041,11 +1042,11 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 875,
-    "createTime": new Date("2026-10-27T11:36:24.826Z")
+    "createTime": new Date("2026-10-27T12:13:23.735Z")
   },
   {
     "_id": "w27",
-    "name": "制作记录",
+    "name": "粘土过程",
     "subtitle": "分解部件 · 逐件打磨",
     "price": 0,
     "originPrice": 0,
@@ -1077,7 +1078,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 874,
-    "createTime": new Date("2026-10-27T11:35:24.826Z")
+    "createTime": new Date("2026-10-27T12:12:23.735Z")
   }
 ]
 

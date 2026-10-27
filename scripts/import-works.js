@@ -51,11 +51,20 @@ const DEFAULTS = {
 }
 
 function parseArgs(argv) {
-  const args = { dir: null }
+  const args = { dir: null, out: null, prefix: '/images/works/', cloud: false }
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--dir' && argv[i + 1]) {
       args.dir = argv[i + 1]
       i++
+    } else if (argv[i] === '--out' && argv[i + 1]) {
+      args.out = argv[i + 1]
+      i++
+    } else if (argv[i] === '--prefix' && argv[i + 1]) {
+      args.prefix = argv[i + 1]
+      i++
+    } else if (argv[i] === '--cloud') {
+      // 云存储模式：图片路径写成裸文件名，运行时由 IMG_BASE 拼接
+      args.cloud = true
     }
   }
   return args
@@ -110,9 +119,9 @@ function scanImages(dir) {
 }
 
 /** 生单件作品对象 */
-function buildWork(key, files, index, meta) {
+function buildWork(key, files, index, meta, prefix) {
   const cfg = Object.assign({}, DEFAULTS, meta.defaults || {}, (meta.works || {})[key] || {})
-  const images = files.map((n) => '/images/works/' + n)
+  const images = files.map((n) => (prefix || '') + n)
 
   // 详情文案：元信息里给了就用，否则按题材与比例自动拼一句
   let detail = cfg.detail
@@ -151,20 +160,36 @@ function buildWork(key, files, index, meta) {
 }
 
 /** 生成 works.js 模块源码 */
-function renderModule(works) {
-  const header = `// config/works.js
-// 作品数据。本文件由 scripts/import-works.js 自动生成，请勿手工编辑。
+function renderModule(works, opt) {
+  opt = opt || {}
+  const cloud = !!opt.cloud
+
+  const localHeader = `// config/works.js
+// 作品数据。本文件由 scripts/studio.js 自动生成，请勿手工编辑。
 //
-// 数据来源与重新生成方式：
-//   1. 作品图按「作品名-01.jpg」命名，放进  作品原图/红糖/_规范/
-//   2. 压缩          python scripts/compress-images.py 作品原图/红糖/_规范 --width 460 --quality 64
-//   3. 生成商品数据  node scripts/import-works.js
+// 手工重新生成的等价命令：
+//   python scripts/compress-images.py output/_picked --width 460 --quality 64
+//   node scripts/import-works.js
+//
+// 作品的分组、封面、进包图片由「作品工作室」维护：
+//   node scripts/studio.js
 //
 // 作品的价格、题材、描述等元信息在 作品原图/红糖/作品信息.json 中维护，
-// 键名与图片文件名前缀一致（如「白老板-01.jpg」对应键「白老板」），
 // 展示顺序由该文件里的 order 字段控制。
 
 const WORKS = `
+
+  const cloudHeader = `// config/works.js（云存储模式）
+// 本文件由「作品工作室」的云存储模式生成，请勿手工编辑。
+//
+// 图片已输出到 output/cloud-batch/，需上传到云开发存储的 works/ 目录。
+// 上传完成后把下方 IMG_BASE 改成存储里的实际前缀，形如：
+//   const IMG_BASE = 'cloud://<环境ID>.<存储桶>/works/'
+// 完整 fileID 可在 微信开发者工具 → 云开发 → 存储 里复制其中一张图查看。
+
+const IMG_BASE = ''
+
+const RAW = `
 
   const body = works.length
     ? JSON.stringify(works, null, 2)
@@ -172,15 +197,36 @@ const WORKS = `
         .replace(/"createTime": "([^"]+)"/g, (_, iso) => `"createTime": new Date("${iso}")`)
     : '[]'
 
-  return header + body + '\n\nmodule.exports = { WORKS }\n'
+  if (cloud) {
+    return (
+      cloudHeader +
+      body +
+      `
+
+const WORKS = RAW.map((w) =>
+  Object.assign({}, w, {
+    cover: IMG_BASE + w.cover,
+    images: w.images.map((n) => IMG_BASE + n)
+  })
+)
+
+module.exports = { WORKS }
+`
+    )
+  }
+
+  return localHeader + body + '\n\nmodule.exports = { WORKS }\n'
 }
 
 function main() {
   const args = parseArgs(process.argv.slice(2))
   const imgDir = args.dir ? path.resolve(args.dir) : path.join(ROOT, 'miniprogram', 'images', 'works')
+  const outModule = args.out ? path.resolve(args.out) : OUT_MODULE
+  const prefix = args.cloud ? '' : args.prefix
 
   console.log('=== 作品导入 ===')
   console.log('图片目录：' + path.relative(ROOT, imgDir))
+  if (args.cloud) console.log('模式：云存储（图片路径为裸文件名，运行时拼 IMG_BASE）')
 
   const groups = scanImages(imgDir)
 
@@ -197,9 +243,9 @@ function main() {
     console.log('  把原图放进 作品原图/红糖/ 后，执行：')
     console.log('    python scripts/compress-images.py 作品原图/红糖/_规范')
     console.log('    node scripts/import-works.js')
-    fs.writeFileSync(OUT_MODULE, renderModule([]), 'utf8')
+    fs.writeFileSync(outModule, renderModule([]), 'utf8')
     console.log('')
-    console.log('已写入：' + path.relative(ROOT, OUT_MODULE) + '（空列表）')
+    console.log('已写入：' + path.relative(ROOT, outModule) + '（空列表）')
     return
   }
 
@@ -215,7 +261,7 @@ function main() {
   }
   keys.sort((a, b) => orderOfKey(a) - orderOfKey(b))
 
-  const works = keys.map((key, i) => buildWork(key, groups.get(key), i, meta))
+  const works = keys.map((key, i) => buildWork(key, groups.get(key), i, meta, prefix))
 
   // 元信息里配了但没对应图片的作品，提示出来，避免以为配好了其实是错的
   const metaKeys = Object.keys(meta.works || {})
@@ -236,15 +282,17 @@ function main() {
     orphanMeta.forEach((k) => console.log('    ' + k))
   }
 
-  fs.writeFileSync(OUT_MODULE, renderModule(works), 'utf8')
-  fs.mkdirSync(path.dirname(OUT_SEED), { recursive: true })
-  fs.writeFileSync(OUT_SEED, JSON.stringify(works, null, 2), 'utf8')
+  fs.writeFileSync(outModule, renderModule(works, { cloud: args.cloud }), 'utf8')
+  if (!args.cloud) {
+    fs.mkdirSync(path.dirname(OUT_SEED), { recursive: true })
+    fs.writeFileSync(OUT_SEED, JSON.stringify(works, null, 2), 'utf8')
+  }
 
   const total = works.reduce((s, w) => s + w.images.length, 0)
   console.log('')
   console.log(`✓ 共 ${works.length} 件作品 / ${total} 张图`)
-  console.log('  已写入 ' + path.relative(ROOT, OUT_MODULE))
-  console.log('  已写入 ' + path.relative(ROOT, OUT_SEED))
+  console.log('  已写入 ' + path.relative(ROOT, outModule))
+  if (!args.cloud) console.log('  已写入 ' + path.relative(ROOT, OUT_SEED))
   console.log('')
   console.log('下一步：重新编译小程序，首页与「全部作品」即可看到。')
 }

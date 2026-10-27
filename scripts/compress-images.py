@@ -17,6 +17,7 @@
     --out      输出目录，默认 miniprogram/images/works
     --budget   图片总预算（KB），默认 1500，超出会告警
     --rename   统一重命名为 work-01.jpg 形式，方便写进代码
+    --only     清单文件路径，每行一个文件名，只压清单里的图（挑图进主包时用）
 """
 
 import argparse
@@ -54,10 +55,22 @@ def pad(text, width, align='left'):
     return text + ' ' * space
 
 
-def collect(src):
-    """收集源目录下的所有图片（不含子目录）"""
+def collect(src, only=None):
+    """收集源目录下的所有图片（不含子目录）
+
+    only 给定时只处理清单里列出的文件名，顺序按清单顺序。
+    挑图进主包的场景靠这个，避免为了"只敲几张"而复制一整个临时目录。
+    """
     if not os.path.isdir(src):
         return []
+    if only:
+        files = []
+        for name in only:
+            full = os.path.join(src, name)
+            if os.path.isfile(full):
+                files.append(full)
+        return files
+
     files = []
     for name in sorted(os.listdir(src)):
         if name.lower().endswith(EXTS):
@@ -112,12 +125,18 @@ def main():
     ap.add_argument('--out', default=DEFAULT_OUT, help='输出目录')
     ap.add_argument('--budget', type=int, default=1500, help='图片总预算 KB')
     ap.add_argument('--rename', action='store_true', help='统一重命名')
+    ap.add_argument('--only', default=None, help='清单文件，每行一个文件名，只压这些')
     args = ap.parse_args()
 
     src = os.path.abspath(args.src)
     out = os.path.abspath(args.out)
 
-    files = collect(src)
+    only = None
+    if args.only:
+        with open(args.only, encoding='utf-8') as f:
+            only = [line.strip() for line in f if line.strip()]
+
+    files = collect(src, only)
     if not files:
         print(f'✗ 在 {src} 下没有找到图片')
         print('')
