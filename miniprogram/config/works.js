@@ -26,6 +26,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -53,7 +54,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 900,
-    "createTime": new Date("2026-10-27T13:02:35.476Z")
+    "createTime": new Date("2025-12-31T16:00:00.000Z")
   },
   {
     "_id": "w02",
@@ -66,7 +67,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "哪吒之魔童降世",
+      "ip": "动漫游戏",
+      "ipDetail": "哪吒之魔童降世",
       "scale": "",
       "priceRange": ""
     },
@@ -94,7 +96,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 899,
-    "createTime": new Date("2026-10-27T13:01:35.477Z")
+    "createTime": new Date("2025-12-31T15:59:00.000Z")
   },
   {
     "_id": "w03",
@@ -108,6 +110,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "任嘉伦",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -135,7 +138,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 898,
-    "createTime": new Date("2026-10-27T13:00:35.477Z")
+    "createTime": new Date("2025-12-31T15:58:00.000Z")
   },
   {
     "_id": "w04",
@@ -148,7 +151,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "魔道祖师",
+      "ip": "动漫游戏",
+      "ipDetail": "魔道祖师",
       "scale": "",
       "priceRange": ""
     },
@@ -176,7 +180,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 897,
-    "createTime": new Date("2026-10-27T12:59:35.477Z")
+    "createTime": new Date("2025-12-31T15:57:00.000Z")
   },
   {
     "_id": "w05",
@@ -189,7 +193,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "任嘉伦 · 流水迢迢",
+      "ip": "任嘉伦",
+      "ipDetail": "流水迢迢",
       "scale": "",
       "priceRange": ""
     },
@@ -217,7 +222,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 896,
-    "createTime": new Date("2026-10-27T12:58:35.477Z")
+    "createTime": new Date("2025-12-31T15:56:00.000Z")
   },
   {
     "_id": "w06",
@@ -231,6 +236,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -258,7 +264,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 895,
-    "createTime": new Date("2026-10-27T12:57:35.477Z")
+    "createTime": new Date("2025-12-31T15:55:00.000Z")
   },
   {
     "_id": "w07",
@@ -271,7 +277,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "任嘉伦 · 与君初相识",
+      "ip": "任嘉伦",
+      "ipDetail": "与君初相识",
       "scale": "",
       "priceRange": ""
     },
@@ -298,7 +305,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 894,
-    "createTime": new Date("2026-10-27T12:56:35.477Z")
+    "createTime": new Date("2025-12-31T15:54:00.000Z")
   },
   {
     "_id": "w08",
@@ -312,6 +319,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -339,7 +347,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 893,
-    "createTime": new Date("2026-10-27T12:55:35.477Z")
+    "createTime": new Date("2025-12-31T15:53:00.000Z")
   },
   {
     "_id": "w09",
@@ -352,7 +360,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "任嘉伦 · 与君初相识",
+      "ip": "任嘉伦",
+      "ipDetail": "与君初相识",
       "scale": "",
       "priceRange": ""
     },
@@ -379,7 +388,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 892,
-    "createTime": new Date("2026-10-27T12:54:35.477Z")
+    "createTime": new Date("2025-12-31T15:52:00.000Z")
   },
   {
     "_id": "w10",
@@ -393,6 +402,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -419,7 +429,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 891,
-    "createTime": new Date("2026-10-27T12:53:35.477Z")
+    "createTime": new Date("2025-12-31T15:51:00.000Z")
   },
   {
     "_id": "w11",
@@ -432,7 +442,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "任嘉伦 · 锦衣之下",
+      "ip": "任嘉伦",
+      "ipDetail": "锦衣之下",
       "scale": "",
       "priceRange": ""
     },
@@ -459,7 +470,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 890,
-    "createTime": new Date("2026-10-27T12:52:35.477Z")
+    "createTime": new Date("2025-12-31T15:50:00.000Z")
   },
   {
     "_id": "w12",
@@ -473,6 +484,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -499,7 +511,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 889,
-    "createTime": new Date("2026-10-27T12:51:35.477Z")
+    "createTime": new Date("2025-12-31T15:49:00.000Z")
   },
   {
     "_id": "w13",
@@ -512,7 +524,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "任嘉伦 · 请君",
+      "ip": "任嘉伦",
+      "ipDetail": "请君",
       "scale": "",
       "priceRange": ""
     },
@@ -539,7 +552,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 888,
-    "createTime": new Date("2026-10-27T12:50:35.477Z")
+    "createTime": new Date("2025-12-31T15:48:00.000Z")
   },
   {
     "_id": "w14",
@@ -553,6 +566,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -579,7 +593,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 887,
-    "createTime": new Date("2026-10-27T12:49:35.477Z")
+    "createTime": new Date("2025-12-31T15:47:00.000Z")
   },
   {
     "_id": "w15",
@@ -592,7 +606,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "任嘉伦 · 无忧渡",
+      "ip": "任嘉伦",
+      "ipDetail": "无忧渡",
       "scale": "",
       "priceRange": ""
     },
@@ -619,7 +634,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 886,
-    "createTime": new Date("2026-10-27T12:48:35.477Z")
+    "createTime": new Date("2025-12-31T15:46:00.000Z")
   },
   {
     "_id": "w16",
@@ -633,6 +648,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -659,7 +675,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 885,
-    "createTime": new Date("2026-10-27T12:47:35.477Z")
+    "createTime": new Date("2025-12-31T15:45:00.000Z")
   },
   {
     "_id": "w17",
@@ -672,7 +688,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "任嘉伦 · 锦衣之下",
+      "ip": "任嘉伦",
+      "ipDetail": "锦衣之下",
       "scale": "",
       "priceRange": ""
     },
@@ -699,7 +716,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 884,
-    "createTime": new Date("2026-10-27T12:46:35.477Z")
+    "createTime": new Date("2025-12-31T15:44:00.000Z")
   },
   {
     "_id": "w18",
@@ -713,6 +730,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -739,7 +757,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 883,
-    "createTime": new Date("2026-10-27T12:45:35.477Z")
+    "createTime": new Date("2025-12-31T15:43:00.000Z")
   },
   {
     "_id": "w19",
@@ -752,7 +770,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "任嘉伦 · 流水迢迢",
+      "ip": "任嘉伦",
+      "ipDetail": "流水迢迢",
       "scale": "",
       "priceRange": ""
     },
@@ -779,7 +798,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 882,
-    "createTime": new Date("2026-10-27T12:44:35.477Z")
+    "createTime": new Date("2025-12-31T15:42:00.000Z")
   },
   {
     "_id": "w20",
@@ -793,6 +812,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -819,7 +839,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 881,
-    "createTime": new Date("2026-10-27T12:43:35.477Z")
+    "createTime": new Date("2025-12-31T15:41:00.000Z")
   },
   {
     "_id": "w21",
@@ -833,6 +853,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -859,7 +880,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 880,
-    "createTime": new Date("2026-10-27T12:42:35.477Z")
+    "createTime": new Date("2025-12-31T15:40:00.000Z")
   },
   {
     "_id": "w22",
@@ -873,6 +894,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -895,7 +917,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 879,
-    "createTime": new Date("2026-10-27T12:41:35.477Z")
+    "createTime": new Date("2025-12-31T15:39:00.000Z")
   },
   {
     "_id": "w23",
@@ -909,6 +931,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -931,7 +954,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 878,
-    "createTime": new Date("2026-10-27T12:40:35.477Z")
+    "createTime": new Date("2025-12-31T15:38:00.000Z")
   },
   {
     "_id": "w24",
@@ -945,6 +968,7 @@ const WORKS = [
     "category": {
       "series": "粘土手办",
       "ip": "原创",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -967,7 +991,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 877,
-    "createTime": new Date("2026-10-27T12:39:35.477Z")
+    "createTime": new Date("2025-12-31T15:37:00.000Z")
   },
   {
     "_id": "w25",
@@ -980,7 +1004,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "粘土手办",
-      "ip": "原神",
+      "ip": "动漫游戏",
+      "ipDetail": "原神",
       "scale": "",
       "priceRange": ""
     },
@@ -1003,7 +1028,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 876,
-    "createTime": new Date("2026-10-27T12:38:35.477Z")
+    "createTime": new Date("2025-12-31T15:36:00.000Z")
   },
   {
     "_id": "w26",
@@ -1016,7 +1041,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "制作记录",
-      "ip": "过程",
+      "ip": "制作过程",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -1039,7 +1065,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 875,
-    "createTime": new Date("2026-10-27T12:37:35.477Z")
+    "createTime": new Date("2025-12-31T15:35:00.000Z")
   },
   {
     "_id": "w27",
@@ -1052,7 +1078,8 @@ const WORKS = [
     "type": 0,
     "category": {
       "series": "制作记录",
-      "ip": "过程",
+      "ip": "制作过程",
+      "ipDetail": "",
       "scale": "",
       "priceRange": ""
     },
@@ -1075,7 +1102,7 @@ const WORKS = [
     "presaleDate": "",
     "dimension": null,
     "sort": 874,
-    "createTime": new Date("2026-10-27T12:36:35.477Z")
+    "createTime": new Date("2025-12-31T15:34:00.000Z")
   }
 ]
 

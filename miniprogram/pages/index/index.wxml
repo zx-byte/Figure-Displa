@@ -79,8 +79,11 @@
         bindtap="onEntryTap"
         hover-class="entry-item--hover"
       >
-        <view class="entry-dot" style="background-color: {{item.color}};">
-          <text class="entry-symbol">{{item.symbol}}</text>
+        <view
+          class="entry-dot {{item.ghost ? 'entry-dot--ghost' : ''}}"
+          style="{{item.ghost ? '' : 'background-color: ' + item.color + ';'}}"
+        >
+          <text class="entry-symbol {{item.ghost ? 'entry-symbol--ghost' : ''}}">{{item.symbol}}</text>
         </view>
         <text class="entry-label">{{item.label}}</text>
       </view>

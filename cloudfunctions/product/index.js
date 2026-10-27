@@ -183,7 +183,7 @@ async function list(event) {
     applyDimension(where, event.categoryKey, event.categoryValue)
   }
 
-  // 关键词覆盖名称、副标题与三个分类维度，
+  // 关键词覆盖名称、副标题与分类维度（含题材下的具体选题），
   // 与首页「搜索作品名称、题材或系列」的提示保持同一口径
   let condition = where
   const keyword = String(event.keyword || '').trim()
@@ -196,6 +196,7 @@ async function list(event) {
         { subtitle: reg },
         { 'category.series': reg },
         { 'category.ip': reg },
+        { 'category.ipDetail': reg },
         { 'category.scale': reg }
       ])
     ])

@@ -34,7 +34,7 @@ function buildSeedProducts() {
       stock: 12,
       soldCount: 0,
       type: 0,
-      category: { series: '原创系列', ip: '原创角色', scale: '1/7', priceRange: '' },
+      category: { series: '粘土手办', ip: '原创', scale: '1/7', priceRange: '' },
       images: [],
       detail: [
         { type: 'text', value: '原创角色「雾都游侠」，1/7 比例，高约 24cm，树脂材质手工涂装。' },
@@ -56,7 +56,7 @@ function buildSeedProducts() {
       stock: 30,
       soldCount: 0,
       type: 1,
-      category: { series: '限定复刻', ip: '机械机甲', scale: '1/6', priceRange: '' },
+      category: { series: '粘土手办', ip: '动漫游戏', scale: '1/6', priceRange: '' },
       images: [],
       detail: [
         { type: 'text', value: '机械螳螂 1/6 比例，多层装甲结构，关节可动。' },
@@ -78,7 +78,7 @@ function buildSeedProducts() {
       stock: 999,
       soldCount: 0,
       type: 2,
-      category: { series: '原创系列', ip: '原创角色', scale: '1/6', priceRange: '' },
+      category: { series: '粘土手办', ip: '原创', scale: '1/6', priceRange: '' },
       images: [],
       detail: [
         { type: 'text', value: '按你的设定单独制作，可选比例、风格与配色。' },

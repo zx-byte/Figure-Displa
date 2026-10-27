@@ -1,9 +1,10 @@
 // pages/admin/product-edit/product-edit.js
-// 商品新增与编辑。价格以元输入，提交前统一转成分；分类四维与买家端筛选保持一致。
+// 商品新增与编辑。价格以元输入，提交前统一转成分；分类维度用完整清单，
+// 不跟随买家端的模式裁剪——纯展示形态下后台仍要能录入比例、价位。
 
 const { callAdmin } = require('../../../utils/admin')
 const { uploadBatch } = require('../../../utils/cloud')
-const { FILTER_DIMENSIONS, PRODUCT_TYPE } = require('../../../config/constants')
+const { CATEGORY_DIMENSIONS, PRODUCT_TYPE } = require('../../../config/constants')
 const toast = require('../../../utils/toast')
 const { fenToYuan, yuanToFen } = require('../../../utils/format')
 
@@ -12,10 +13,10 @@ const MAX_IMAGES = 9
 /** 详情图上限 */
 const MAX_DETAIL_IMAGES = 15
 
-/** 从筛选维度生成商品分类选项，首位为「未分类」 */
+/** 从分类维度生成商品选项，首位为「未分类」 */
 function buildCategoryOptions() {
   const result = {}
-  FILTER_DIMENSIONS.forEach((dim) => {
+  CATEGORY_DIMENSIONS.forEach((dim) => {
     if (dim.key === 'priceRange') return
     const options = dim.options.filter((o) => o !== '全部')
     result[dim.key] = ['未分类'].concat(options)

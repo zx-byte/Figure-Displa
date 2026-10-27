@@ -153,17 +153,25 @@ const CUSTOM_STATUS_MAP = {
 /** 定金比例：需求文档固定为 30% */
 const DEPOSIT_RATE = 0.3
 
-/** 分类筛选维度。value 为提交给云函数的筛选值 */
-const FILTER_DIMENSIONS = [
+/**
+ * 分类维度的完整定义。value 为提交给云函数的筛选值。
+ *
+ * options 里的取值必须是商品 category 中真实存在的值，否则用户点开某一项
+ * 只会看到空列表。新增题材、系列时，这里的选项要跟作品信息同步维护。
+ *
+ * 这份清单是「数据的全部可能维度」，后台录入商品用它；
+ * 买家端看到的筛选维度见下方 FILTER_DIMENSIONS，会按模式裁剪。
+ */
+const CATEGORY_DIMENSIONS = [
   {
     key: 'series',
     label: '系列',
-    options: ['全部', '原创系列', '联名系列', '限定复刻']
+    options: ['全部', '粘土手办', '制作记录']
   },
   {
     key: 'ip',
     label: '题材',
-    options: ['全部', '原创角色', '机械机甲', '幻想生物', '和风物语', '都市怪谈']
+    options: ['全部', '原创', '任嘉伦', '动漫游戏', '制作过程']
   },
   {
     key: 'scale',
@@ -176,6 +184,16 @@ const FILTER_DIMENSIONS = [
     options: ['全部', '0-199', '200-499', '500-999', '1000以上']
   }
 ]
+
+/**
+ * 买家端的筛选维度。
+ *
+ * 比例与价位只对已定价的商品有意义，纯展示形态（SHOW_TRADE=false）下不出现：
+ * 那时所有作品 price 都是 0，价位维度选任何区间结果都一样，属于无效操作。
+ */
+const FILTER_DIMENSIONS = SHOW_TRADE
+  ? CATEGORY_DIMENSIONS
+  : CATEGORY_DIMENSIONS.filter((dim) => dim.key === 'series' || dim.key === 'ip')
 
 /** 定制可选比例，与商品比例保持同一套口径 */
 const CUSTOM_SCALES = ['1/4', '1/6', '1/7', '1/8', '1/12', 'Q版']
@@ -245,6 +263,7 @@ module.exports = {
   CUSTOM_STATUS_MAP,
   DEPOSIT_RATE,
   FILTER_DIMENSIONS,
+  CATEGORY_DIMENSIONS,
   CUSTOM_SCALES,
   CUSTOM_STYLES,
   PAGE_SIZE,

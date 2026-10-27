@@ -156,6 +156,18 @@
   color: #FFFFFF;
 }
 
+/* 「全部作品」是动作型入口，浅底描边，不跟前面的分类抢视觉 */
+.entry-dot--ghost {
+  background-color: #FFFFFF;
+  border: 2rpx solid #FFD3C7;
+  box-sizing: border-box;
+  box-shadow: none;
+}
+
+.entry-symbol--ghost {
+  color: #FF5C39;
+}
+
 .entry-label {
   margin-top: 14rpx;
   font-size: 23rpx;

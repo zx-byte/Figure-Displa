@@ -1,5 +1,5 @@
 // pages/category/category.js
-// 分类页：四维筛选（系列 / 题材 / 比例 / 价位）+ 关键词搜索 + 分页加载。
+// 分类页：多维筛选（维度清单见 config/constants.js）+ 关键词搜索 + 分页加载。
 // 筛选状态集中放在 filterValues 里，任一维度变化都从第一页重新查询。
 
 const app = getApp()
@@ -8,25 +8,32 @@ const {
   FILTER_DIMENSIONS,
   PAGE_SIZE,
   STORAGE_KEYS,
-  PRODUCT_TYPE_TEXT
+  PRODUCT_TYPE_TEXT,
+  SHOW_TRADE
 } = require('../../config/constants')
 const share = require('../../utils/share')
 
-/** 排序选项 */
+/** 排序选项：价格排序只对有定价的商品有意义，纯展示形态下不出现 */
 const SORT_OPTIONS = [
   { key: 'new', label: '最新' },
-  { key: 'hot', label: '热销' },
-  { key: 'priceAsc', label: '价格升序' },
-  { key: 'priceDesc', label: '价格降序' }
-]
+  { key: 'hot', label: '热销' }
+].concat(
+  SHOW_TRADE
+    ? [
+        { key: 'priceAsc', label: '价格升序' },
+        { key: 'priceDesc', label: '价格降序' }
+      ]
+    : []
+)
 
-/** 筛选默认值：四个维度互相独立，全部为「全部」即不限 */
-const DEFAULT_FILTER_VALUES = {
-  series: '全部',
-  ip: '全部',
-  scale: '全部',
-  priceRange: '全部'
-}
+/**
+ * 筛选默认值：维度清单由 FILTER_DIMENSIONS 决定，
+ * 全部为「全部」即不限。维度增减时这里不用跟着改。
+ */
+const DEFAULT_FILTER_VALUES = {}
+FILTER_DIMENSIONS.forEach((dim) => {
+  DEFAULT_FILTER_VALUES[dim.key] = '全部'
+})
 
 Page({
   data: {
@@ -154,7 +161,7 @@ Page({
       params.type = this.data.type
     }
 
-    // 四个维度全部叠加，只有取到「全部」的维度不带条件
+    // 各维度全部叠加，只有取到「全部」的维度不带条件
     const filters = {}
     Object.keys(values).forEach((key) => {
       const value = values[key]
@@ -197,7 +204,7 @@ Page({
 
   /**
    * 生成筛选摘要
-   * 四个维度现在会同时生效，摘要需要把所有已选条件都列出来，
+   * 各维度会同时生效，摘要需要把所有已选条件都列出来，
    * 否则用户看到列表变短却不知道是哪几个条件叠加的结果。
    */
   buildSummary() {

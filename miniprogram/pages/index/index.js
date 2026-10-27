@@ -7,12 +7,19 @@ const { query } = require('../../utils/cloud')
 const { PRODUCT_TYPE, SHOW_TRADE } = require('../../config/constants')
 const share = require('../../utils/share')
 
-/** 分类快捷入口，跳分类页时带上预设维度 */
+/**
+ * 分类快捷入口，跳分类页时带上预设维度。
+ * key 对应 category 里的字段，value 必须是该字段真实存在的取值，
+ * 否则点进去是一张空列表。取值口径与 config/constants.js 的 FILTER_DIMENSIONS 保持一致。
+ *
+ * 前三项是分类（实色块，用品牌色板），第四项是「看全部」这个动作，
+ * 用浅底描边区分层级，不跟分类抢视觉。
+ */
 const QUICK_ENTRIES = [
-  { key: 'series', value: '原创系列', label: '原创系列', symbol: '◆', color: '#FF5C39' },
-  { key: 'ip', value: '机械机甲', label: '机械机甲', symbol: '▲', color: '#1A1A24' },
-  { key: 'ip', value: '幻想生物', label: '幻想生物', symbol: '●', color: '#C9A227' },
-  { key: 'all', value: '', label: '全部作品', symbol: '✦', color: '#6C5CE7' }
+  { key: 'ip', value: '原创', label: '原创角色', symbol: '◆', color: '#FF5C39' },
+  { key: 'ip', value: '任嘉伦', label: '任嘉伦', symbol: '▲', color: '#1A1A24' },
+  { key: 'ip', value: '动漫游戏', label: '动漫游戏', symbol: '●', color: '#C9A227' },
+  { key: 'all', value: '', label: '全部作品', symbol: '✦', color: '', ghost: true }
 ]
 
 /**

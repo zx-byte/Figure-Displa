@@ -65,7 +65,7 @@ const DEMO_PRODUCTS = [
     stock: 12,
     soldCount: 36,
     type: 0,
-    category: { series: '原创系列', ip: '原创角色', scale: '1/7', priceRange: '' },
+    category: { series: '粘土手办', ip: '原创', scale: '1/7', priceRange: '' },
     cover: DEMO_IMG + '1.jpg',
     images: [DEMO_IMG + '1.jpg', DEMO_IMG + '6.jpg', DEMO_IMG + '4.jpg'],
     detail: [
@@ -91,7 +91,7 @@ const DEMO_PRODUCTS = [
     stock: 28,
     soldCount: 2,
     type: 1,
-    category: { series: '限定复刻', ip: '机械机甲', scale: '1/6', priceRange: '' },
+    category: { series: '粘土手办', ip: '动漫游戏', scale: '1/6', priceRange: '' },
     cover: DEMO_IMG + '2.jpg',
     images: [DEMO_IMG + '2.jpg', DEMO_IMG + '6.jpg'],
     detail: [
@@ -117,7 +117,7 @@ const DEMO_PRODUCTS = [
     stock: 6,
     soldCount: 18,
     type: 0,
-    category: { series: '原创系列', ip: '幻想生物', scale: '1/8', priceRange: '' },
+    category: { series: '粘土手办', ip: '动漫游戏', scale: '1/8', priceRange: '' },
     cover: DEMO_IMG + '3.jpg',
     images: [DEMO_IMG + '3.jpg', DEMO_IMG + '4.jpg'],
     detail: [{ type: 'text', value: '深海档案馆系列第一弹，1/8 比例，高约 20cm。' }],
@@ -136,7 +136,7 @@ const DEMO_PRODUCTS = [
     stock: 9,
     soldCount: 24,
     type: 0,
-    category: { series: '联名系列', ip: '和风物语', scale: '1/7', priceRange: '' },
+    category: { series: '粘土手办', ip: '动漫游戏', scale: '1/7', priceRange: '' },
     cover: DEMO_IMG + '4.jpg',
     images: [DEMO_IMG + '4.jpg', DEMO_IMG + '5.jpg'],
     detail: [{ type: 'text', value: '和风系列「樱守」，1/7 比例，和服褶皱与樱瓣为手工雕刻。' }],
@@ -155,7 +155,7 @@ const DEMO_PRODUCTS = [
     stock: 20,
     soldCount: 0,
     type: 1,
-    category: { series: '联名系列', ip: '幻想生物', scale: '1/7', priceRange: '' },
+    category: { series: '粘土手办', ip: '动漫游戏', scale: '1/7', priceRange: '' },
     cover: DEMO_IMG + '5.jpg',
     images: [DEMO_IMG + '5.jpg', DEMO_IMG + '2.jpg'],
     detail: [{ type: 'text', value: '星海观测者，限量 20 体，星空渐变涂装，随作品附带编号卡。' }],
@@ -174,7 +174,7 @@ const DEMO_PRODUCTS = [
     stock: 999,
     soldCount: 7,
     type: 2,
-    category: { series: '原创系列', ip: '原创角色', scale: '1/6', priceRange: '' },
+    category: { series: '粘土手办', ip: '原创', scale: '1/6', priceRange: '' },
     cover: DEMO_IMG + '6.jpg',
     images: [DEMO_IMG + '6.jpg'],
     detail: [
@@ -433,7 +433,7 @@ function filterProducts(event) {
     applyDimension(event.categoryKey, event.categoryValue)
   }
 
-  // 关键词覆盖名称、副标题与三个分类维度，与云函数的匹配范围一致
+  // 关键词覆盖名称、副标题与分类维度（含题材下的具体选题），与云函数的匹配范围一致
   const kw = String(event.keyword || '').trim()
   if (kw) {
     list = list.filter((p) => {
@@ -443,6 +443,7 @@ function filterProducts(event) {
         (p.subtitle || '').indexOf(kw) > -1 ||
         (category.series || '').indexOf(kw) > -1 ||
         (category.ip || '').indexOf(kw) > -1 ||
+        (category.ipDetail || '').indexOf(kw) > -1 ||
         (category.scale || '').indexOf(kw) > -1
       )
     })

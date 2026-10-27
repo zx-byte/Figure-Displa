@@ -56,6 +56,14 @@ const DETAIL_PREFIX = '/subpackages/works/images/'
 /** 列表缩略图默认路径前缀（主包内，任何页面都能访问） */
 const THUMB_PREFIX = '/images/works-thumb/'
 
+/**
+ * 作品发布时间基准。
+ * 作品没有真实发布时间，展示顺序由作品信息里的 order 决定，
+ * 这里只提供一个稳定递增的时间戳。取固定值而非 Date.now()，
+ * 是为了让重复生成 works.js 时内容完全一致，diff 里只剩真实改动。
+ */
+const BASE_TIME = new Date('2026-01-01T00:00:00+08:00').getTime()
+
 /** 未在元信息里指定的字段，用这些兜底 */
 const DEFAULTS = {
   type: 0, // 0 现货 / 1 限量预售 / 2 定制预约
@@ -161,7 +169,7 @@ function buildWork(key, files, index, meta, prefix, thumbPrefix) {
   // 详情文案：元信息里给了就用，否则按题材与比例自动拼一句
   let detail = cfg.detail
   if (!Array.isArray(detail) || detail.length === 0) {
-    const bits = [cfg.series, cfg.ip, cfg.scale].filter(Boolean).join(' · ')
+    const bits = [cfg.series, cfg.ipDetail || cfg.ip, cfg.scale].filter(Boolean).join(' · ')
     detail = bits ? [`${cfg.series || '手办'}，${bits}。`, '实物拍摄，手工制作。'] : ['手工作品，实物拍摄。']
   }
   detail = detail.map((t) => (typeof t === 'string' ? { type: 'text', value: t } : t))
@@ -178,6 +186,8 @@ function buildWork(key, files, index, meta, prefix, thumbPrefix) {
     category: {
       series: cfg.series || '',
       ip: cfg.ip || '',
+      // 题材下的具体选题（剧名 / 作品名），ip 收敛为枚举后靠它保留细节
+      ipDetail: cfg.ipDetail || '',
       scale: cfg.scale || '',
       priceRange: ''
     },
@@ -190,7 +200,9 @@ function buildWork(key, files, index, meta, prefix, thumbPrefix) {
     dimension: cfg.dimension || null,
     // 排序权重高，保证真实作品排在演示商品前面
     sort: 900 - index,
-    createTime: new Date(Date.now() - index * 60 * 1000)
+    // 发布时间用固定基准而不是 Date.now()：作品顺序由 order 决定，
+    // 每次重建都换时间戳只会让 works.js 产生一堆无意义的 diff。
+    createTime: new Date(BASE_TIME - index * 60 * 1000)
   }
 }
 
