@@ -2,9 +2,9 @@
 // 作品导入：把压缩后的作品图整理成小程序可用的商品数据。
 //
 // ── 三步流程 ──────────────────────────────────────────────
-//   1. 把作品原图放进   作品原图/红糖/
+//   1. 把作品图按「作品名-01.jpg」命名，放进 作品原图/红糖/_规范/
 //   2. 压缩并输出到小程序
-//        python scripts/compress-images.py 作品原图/红糖
+//        python scripts/compress-images.py 作品原图/红糖/_规范 --width 640 --quality 68
 //   3. 生成本数据文件
 //        node scripts/import-works.js
 //
@@ -15,7 +15,7 @@
 //
 // ── 元信息 ────────────────────────────────────────────────
 // 价格、题材、比例、描述等写在 作品原图/红糖/作品信息.json，键名与文件名前缀一致。
-// 该文件不是必需的，缺失时按默认值生成。
+// 该文件不是必需的，缺失时按默认值生成。order 字段控制展示顺序，越小越靠前。
 //
 // ── 产物 ──────────────────────────────────────────────────
 //   miniprogram/config/works.js   小程序演示数据（mock.js 自动合并）
@@ -156,12 +156,13 @@ function renderModule(works) {
 // 作品数据。本文件由 scripts/import-works.js 自动生成，请勿手工编辑。
 //
 // 数据来源与重新生成方式：
-//   1. 作品原图放进  作品原图/红糖/
-//   2. 压缩          python scripts/compress-images.py 作品原图/红糖
+//   1. 作品图按「作品名-01.jpg」命名，放进  作品原图/红糖/_规范/
+//   2. 压缩          python scripts/compress-images.py 作品原图/红糖/_规范 --width 640 --quality 68
 //   3. 生成商品数据  node scripts/import-works.js
 //
 // 作品的价格、题材、描述等元信息在 作品原图/红糖/作品信息.json 中维护，
-// 键名与图片文件名前缀一致（如「白老板-01.jpg」对应键「白老板」）。
+// 键名与图片文件名前缀一致（如「白老板-01.jpg」对应键「白老板」），
+// 展示顺序由该文件里的 order 字段控制。
 
 const WORKS = `
 
@@ -186,7 +187,7 @@ function main() {
   if (groups === null) {
     console.log('')
     console.log('✗ 图片目录不存在：' + path.relative(ROOT, imgDir))
-    console.log('  先执行：python scripts/compress-images.py 作品原图/红糖')
+    console.log('  先执行：python scripts/compress-images.py 作品原图/红糖/_规范')
     process.exit(1)
   }
 
@@ -194,7 +195,7 @@ function main() {
     console.log('')
     console.log('⚠ 目录里没有图片，已写入空作品列表。')
     console.log('  把原图放进 作品原图/红糖/ 后，执行：')
-    console.log('    python scripts/compress-images.py 作品原图/红糖')
+    console.log('    python scripts/compress-images.py 作品原图/红糖/_规范')
     console.log('    node scripts/import-works.js')
     fs.writeFileSync(OUT_MODULE, renderModule([]), 'utf8')
     console.log('')
@@ -204,6 +205,16 @@ function main() {
 
   const meta = readMeta()
   const keys = Array.from(groups.keys())
+
+  // 元信息里可以用 order 指定展示顺序（升序，越小越靠前）。
+  // 没配 order 的排在后面，彼此之间保持文件名顺序。
+  const orderOfKey = (k) => {
+    const w = (meta.works || {})[k]
+    const o = w && w.order
+    return typeof o === 'number' && isFinite(o) ? o : 9999
+  }
+  keys.sort((a, b) => orderOfKey(a) - orderOfKey(b))
+
   const works = keys.map((key, i) => buildWork(key, groups.get(key), i, meta))
 
   // 元信息里配了但没对应图片的作品，提示出来，避免以为配好了其实是错的
