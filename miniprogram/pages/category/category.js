@@ -64,7 +64,9 @@ Page({
     loadingMore: false,
     loadError: false,
     /** 已生效的筛选条件摘要，用于顶部提示 */
-    filterSummary: ''
+    filterSummary: '',
+    /** 空结果时的客服来源标记，带上用户搜的词或筛选条件 */
+    contactFrom: ''
   },
 
   onLoad() {
@@ -194,7 +196,8 @@ Page({
           loading: false,
           loadingMore: false,
           loadError: false,
-          filterSummary: this.buildSummary()
+          filterSummary: this.buildSummary(),
+          contactFrom: this.buildContactFrom()
         })
       })
       .finally(() => {
@@ -222,6 +225,25 @@ Page({
     })
 
     return parts.join(' · ')
+  },
+
+  /**
+   * 生成客服来源标记
+   * 空结果时用户点「直接问手作人」，商家需要立刻知道他在找什么——
+   * 带了搜索词的优先用词，否则列出当前筛选值，都没有就退化成「列表为空」。
+   */
+  buildContactFrom() {
+    const kw = String(this.data.keyword || '').trim()
+    if (kw) return `搜索无结果·${kw}`
+
+    const values = this.data.filterValues || {}
+    const picked = []
+    const dimensions = this.data.dimensions || []
+    dimensions.forEach((dim) => {
+      const value = values[dim.key]
+      if (value && value !== '全部') picked.push(value)
+    })
+    return picked.length > 0 ? `筛选无结果·${picked.join('/')}` : '列表为空'
   },
 
   /** 展开 / 收起某个维度 */

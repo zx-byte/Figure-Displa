@@ -252,6 +252,10 @@
   border: none;
 }
 
+.action-plain--hover {
+  opacity: 0.6;
+}
+
 .btn {
   margin-left: 16rpx;
   padding: 16rpx 32rpx;

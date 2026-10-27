@@ -261,6 +261,13 @@ Page({
 
   /** 切换收藏 */
   onToggleFavorite() {
+    // 收藏会把 openid 与作品 ID 写进收藏表，属收集个人信息，先确认协议。
+    // 取消收藏不拦——已经收藏过说明同意过，不该让用户撤不回来。
+    if (!this.data.favorited && app.needPrivacy()) {
+      toast.info('请先到「我的」页同意协议后再收藏')
+      return
+    }
+
     call('favorite', 'toggle', { productId: this.data.productId }, { showError: true }).then(
       (res) => {
         if (res.code === 0) {
@@ -338,22 +345,6 @@ Page({
       url: `/pages/custom-apply/custom-apply?productId=${item._id}&name=${encodeURIComponent(
         item.name
       )}`
-    })
-  },
-
-  /** 联系客服 */
-  onContactService() {
-    wx.showModal({
-      title: '联系手作人',
-      content: '可通过小程序客服会话咨询作品细节、制作周期与售后问题',
-      confirmText: '去咨询',
-      confirmColor: '#FF5C39',
-      success: (res) => {
-        if (res.confirm) {
-          // button open-type="contact" 必须在页面内触发，这里给出兜底引导
-          toast.info('请点击右下角客服按钮发起会话')
-        }
-      }
     })
   },
 
@@ -462,10 +453,14 @@ Page({
     wx.navigateTo({ url: `/pages/poster/poster?id=${item._id}` })
   },
 
-  /** 点击客服按钮（open-type="contact" 触发），用于统计咨询转化 */
-  onContactTap() {
+  /**
+   * 点击客服（open-type="contact" 触发），用于统计咨询转化。
+   * 会话由微信接管，这里只做埋点；form 参数区分是底部图标还是主按钮。
+   */
+  onContactTap(e) {
     const item = this.data.detail
-    if (item) track.trackConsult(item._id, 'detail-service')
+    const from = (e && e.currentTarget && e.currentTarget.dataset.from) || 'detail-service'
+    if (item) track.trackConsult(item._id, from)
   },
 
   /** 重试 */

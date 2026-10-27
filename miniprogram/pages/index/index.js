@@ -6,6 +6,7 @@ const app = getApp()
 const { query } = require('../../utils/cloud')
 const { PRODUCT_TYPE, SHOW_TRADE } = require('../../config/constants')
 const share = require('../../utils/share')
+const track = require('../../utils/track')
 
 /**
  * 分类快捷入口，跳分类页时带上预设维度。
@@ -100,7 +101,7 @@ Page({
     app.dismissPrivacy()
     this.setData({ privacyShow: false })
     wx.showToast({
-      title: '可继续浏览作品，收藏与定制需先同意协议',
+      title: '可继续浏览与咨询，收藏和定制需先同意协议',
       icon: 'none',
       duration: 2600
     })
@@ -204,6 +205,11 @@ Page({
   /** 定制入口 */
   goCustom() {
     wx.navigateTo({ url: '/pages/custom-apply/custom-apply' })
+  },
+
+  /** 点击客服（open-type="contact" 触发），纯展示形态下这是主要转化路径 */
+  onContactTap() {
+    track.trackConsult('', 'index-card')
   },
 
   /** 失败重试 */

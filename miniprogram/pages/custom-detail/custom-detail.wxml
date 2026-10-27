@@ -121,7 +121,13 @@
 
     <!-- 操作栏 -->
     <view class="action-bar">
-      <button class="action-plain" open-type="contact">联系客服</button>
+      <button
+        class="action-plain"
+        open-type="contact"
+        session-from="定制单·{{requirement.character}}"
+        bindcontact="onContactTap"
+        hover-class="action-plain--hover"
+      >联系客服</button>
       <view wx:if="{{canCancel}}" class="btn btn-line" bindtap="onCancel">取消定制</view>
       <view wx:if="{{canPayDeposit}}" class="btn btn-fill" bindtap="onPayDeposit">支付定金 ¥{{depositText}}</view>
       <view wx:if="{{canPayRest}}" class="btn btn-fill" bindtap="onPayRest">支付尾款 ¥{{restText}}</view>

@@ -19,6 +19,8 @@
     subText="遇到心动的作品，点一下收藏就不会错过"
     actionText="去逛逛"
     bind:action="goShopping"
+    contactText="想要特定角色？直接问手作人"
+    contactFrom="收藏为空"
   />
 
   <view wx:else class="list">

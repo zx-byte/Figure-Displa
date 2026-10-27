@@ -54,6 +54,26 @@
 - 小红书下载文件名不可信：`_N_` 是笔记内第几张、括号是重名副本、无标题笔记 35 张全无名，
   同一作品的图会跨不同笔记标题 → 归组只能靠看图（拼 contact sheet 一次看 35 张）
 - `mock.js`：`PRODUCTS = WORKS.length ? WORKS : DEMO_PRODUCTS`，有真实作品时不混入虚构演示商品
+- **分类是固定枚举，不能随手写**：`series` = 粘土手办 / 制作记录；`ip` = 原创 / 任嘉伦 / 动漫游戏 / 制作过程。
+  题材下的具体选题（剧名、游戏名）写 `ipDetail`，不进 `ip`——`ip` 一旦发散，首页入口与分类页筛选项全部失配。
+  新增分类要同步三处：`constants.js` 的 `CATEGORY_DIMENSIONS`、`index.js` 的 `QUICK_ENTRIES`、作品信息.json
+- 买家端筛选维度 `FILTER_DIMENSIONS` 按 `SHOW_TRADE` 裁剪（纯展示只留 series/ip），
+  后台录入用不裁剪的 `CATEGORY_DIMENSIONS`，两者不要合并
+- `import-works.js` 的 `createTime` 用固定基准 `BASE_TIME`（2026-01-01）而非 `Date.now()`，
+  保证重复生成 works.js 字节一致，diff 里只剩真实改动
+
+## 客服（纯展示形态的唯一转化路径，2026-10-27 定）
+- 小程序客服必须是 `<button open-type="contact">`，**view + bindtap 无法拉起会话**；
+  原生按钮行不通时（如空状态组件），由组件内部渲染 button，父页面只传文案
+- **三件套缺一不可**：`session-from`（商家端看来源）+ `bindcontact`（埋点）+ `hover-class`（按压反馈）。
+  新增客服入口照此检查，`scripts` 里没有自动校验，靠人工核对
+- `session-from` 必须带上下文：详情页 `作品·<作品名>`、列表空状态
+  `搜索无结果·<关键词>` / `筛选无结果·<筛选值>`、编号查询带编号、订单带订单号
+- 同页多入口用 `data-from` 区分统计口径（`detail-icon` / `detail-bar`、`user-card` / `user-menu`）
+- 客服**不需要**隐私协议前置（微信接管会话，不落库）；收藏需要——detail 页收藏前查
+  `app.needPrivacy()`，取消收藏不拦
+- 代码查不出、必须人工在后台配的：小程序后台 → 功能 → 客服 → 添加客服人员微信号。
+  没配时用户能发消息但无人收到，微信不报任何错
 
 ## 图片与代码分离（2026-10-27 定，主包 2MB 的正解）
 用户明确要求「图片和代码分离 + 保证清晰度」，方案是**详情页整体移入分包**（不是复制一份）：

@@ -52,7 +52,14 @@
       <view class="custom-tip">
         想要独一份的作品？把你的想法告诉我们——角色设定、比例、配色、底座样式都可以聊。
       </view>
-      <button class="custom-btn custom-btn--contact" open-type="contact">
+      <button
+        class="custom-btn custom-btn--contact"
+        open-type="contact"
+        session-from="我的·定制咨询"
+        data-from="user-card"
+        bindcontact="onContactTap"
+        hover-class="custom-btn--hover"
+      >
         微信咨询定制
       </button>
     </block>
@@ -60,39 +67,46 @@
 
   <!-- 功能列表 -->
   <view class="menu">
-    <view class="menu-item" bindtap="goFavorite">
+    <view class="menu-item" hover-class="menu-item--hover" bindtap="goFavorite">
       <text class="menu-label">我的收藏</text>
       <text class="menu-arrow">›</text>
     </view>
-    <view class="menu-item" bindtap="goHistory">
+    <view class="menu-item" hover-class="menu-item--hover" bindtap="goHistory">
       <text class="menu-label">浏览历史</text>
       <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{showTrade}}" class="menu-item" bindtap="goAddress">
+    <view wx:if="{{showTrade}}" class="menu-item" hover-class="menu-item--hover" bindtap="goAddress">
       <text class="menu-label">收货地址</text>
       <text class="menu-arrow">›</text>
     </view>
-    <view class="menu-item" bindtap="goVerify">
+    <view class="menu-item" hover-class="menu-item--hover" bindtap="goVerify">
       <text class="menu-label">作品编号查询</text>
       <text class="menu-arrow">›</text>
     </view>
-    <button class="menu-item menu-item--button" open-type="contact">
+    <button
+      class="menu-item menu-item--button"
+      open-type="contact"
+      session-from="我的·联系手作人"
+      data-from="user-menu"
+      bindcontact="onContactTap"
+      hover-class="menu-item--hover"
+    >
       <text class="menu-label">联系手作人</text>
       <text class="menu-arrow">›</text>
     </button>
-    <view class="menu-item" bindtap="goAbout">
+    <view class="menu-item" hover-class="menu-item--hover" bindtap="goAbout">
       <text class="menu-label">关于</text>
       <text class="menu-arrow">›</text>
     </view>
-    <view class="menu-item" bindtap="goPrivacy">
+    <view class="menu-item" hover-class="menu-item--hover" bindtap="goPrivacy">
       <text class="menu-label">隐私政策</text>
       <text class="menu-arrow">›</text>
     </view>
-    <view class="menu-item" bindtap="goTerms">
+    <view class="menu-item" hover-class="menu-item--hover" bindtap="goTerms">
       <text class="menu-label">用户协议</text>
       <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{isAdmin}}" class="menu-item" bindtap="goAdmin">
+    <view wx:if="{{isAdmin}}" class="menu-item" hover-class="menu-item--hover" bindtap="goAdmin">
       <text class="menu-label">商家管理后台</text>
       <text class="menu-tag">管理员</text>
       <text class="menu-arrow">›</text>

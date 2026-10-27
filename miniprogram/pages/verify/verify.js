@@ -1,6 +1,7 @@
 // pages/verify/verify.js
 const share = require('../../utils/share')
 const { query } = require('../../utils/cloud')
+const track = require('../../utils/track')
 // 作品编号查询。
 //
 // 编号规则：SG-年份-四位序号，最后一位是校验位。
@@ -136,6 +137,11 @@ Page({
   /** 清空重输 */
   onReset() {
     this.setData({ code: '', checked: false, result: null, verifying: false })
+  },
+
+  /** 点击客服（open-type="contact" 触发），用于统计「编号有疑问」的咨询量 */
+  onContactTap() {
+    track.trackConsult('', 'verify')
   },
 
   /** 转发给朋友 */

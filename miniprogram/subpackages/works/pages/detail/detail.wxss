@@ -379,6 +379,11 @@
   border: none;
 }
 
+/* 收藏是 view、客服是 button，两者共用这个按压反馈保持手感一致 */
+.action-icon--hover {
+  opacity: 0.6;
+}
+
 .action-symbol {
   font-size: 32rpx;
   color: #4A4A5A;

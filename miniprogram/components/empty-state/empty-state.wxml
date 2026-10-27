@@ -10,4 +10,17 @@
   <view wx:if="{{actionText}}" class="empty-action" bindtap="onAction" hover-class="empty-action--hover">
     {{actionText}}
   </view>
+  <!--
+    客服出口：搜不到、列表为空时，用户的真实需求往往不是「换个词再搜」，
+    而是「你有没有我要的」。这条路径只能走 open-type="contact" 的原生 button，
+    所以由组件内渲染，父页面只管传文案与来源标记。
+  -->
+  <button
+    wx:if="{{contactText}}"
+    class="empty-contact"
+    open-type="contact"
+    session-from="{{contactFrom}}"
+    bindcontact="onContactTap"
+    hover-class="empty-contact--hover"
+  >{{contactText}}</button>
 </view>

@@ -164,6 +164,10 @@
   border: none;
 }
 
+.contact-btn--hover {
+  opacity: 0.88;
+}
+
 /* ---------- 协议入口 ---------- */
 
 .legal {

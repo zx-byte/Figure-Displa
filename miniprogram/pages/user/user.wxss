@@ -190,6 +190,12 @@
   border: none;
 }
 
+/* 整行按压反馈。列表里既有 view 项也有 button 项（客服），
+   统一用同一个 hover-class，避免只有客服那行点下去有反应 */
+.menu-item--hover {
+  background-color: #FAFAFC;
+}
+
 .menu-label {
   flex: 1;
   font-size: 27rpx;

@@ -137,6 +137,8 @@
       wx:else
       class="custom-card custom-card--contact"
       open-type="contact"
+      session-from="首页·定制咨询"
+      bindcontact="onContactTap"
       hover-class="custom-card--hover"
     >
       <view class="custom-left">

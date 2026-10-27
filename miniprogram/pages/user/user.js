@@ -5,6 +5,7 @@ const app = getApp()
 const { call } = require('../../utils/cloud')
 const { STORAGE_KEYS, ORDER_TABS, SHOW_TRADE } = require('../../config/constants')
 const toast = require('../../utils/toast')
+const track = require('../../utils/track')
 
 Page({
   data: {
@@ -190,11 +191,6 @@ const share = require('../../utils/share')
       })
   },
 
-  /** 联系客服 */
-  onContact() {
-    toast.info('请点击下方客服按钮发起会话')
-  },
-
   /** 浏览历史 */
   goHistory() {
     wx.navigateTo({ url: '/pages/history/history' })
@@ -203,6 +199,15 @@ const share = require('../../utils/share')
   /** 作品编号查询 */
   goVerify() {
     wx.navigateTo({ url: '/pages/verify/verify' })
+  },
+
+  /**
+   * 点击客服（open-type="contact" 触发）
+   * 本页有两个客服入口：定制卡片里的和菜单里的，靠 data-from 区分统计口径。
+   */
+  onContactTap(e) {
+    const from = (e && e.currentTarget && e.currentTarget.dataset.from) || 'user'
+    track.trackConsult('', from)
   },
 
   /** 关于 */

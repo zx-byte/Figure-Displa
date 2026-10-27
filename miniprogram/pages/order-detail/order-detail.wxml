@@ -180,7 +180,13 @@
 
     <!-- 操作栏 -->
     <view class="action-bar">
-      <button class="action-plain" open-type="contact">联系客服</button>
+      <button
+        class="action-plain"
+        open-type="contact"
+        session-from="订单·{{order.orderNo}}"
+        bindcontact="onContactTap"
+        hover-class="action-plain--hover"
+      >联系客服</button>
       <view wx:if="{{canAfterSale}}" class="btn btn-line" bindtap="onAfterSale">申请售后</view>
       <view wx:if="{{canCancelAfterSale}}" class="btn btn-line" bindtap="onCancelAfterSale">撤销申请</view>
       <view wx:if="{{canCancel}}" class="btn btn-line" bindtap="onCancel">取消订单</view>

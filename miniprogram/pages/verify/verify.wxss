@@ -226,6 +226,10 @@
   border: none;
 }
 
+.contact-btn--hover {
+  background-color: #FFF0EC;
+}
+
 .bottom-space {
   height: calc(60rpx + env(safe-area-inset-bottom));
 }

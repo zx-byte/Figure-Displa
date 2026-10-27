@@ -95,7 +95,13 @@
     <view class="tip">· 查询会到登记库核对是否真实出品，确保可追溯</view>
   </view>
 
-  <button class="contact-btn" open-type="contact">编号有疑问？联系手作人</button>
+  <button
+    class="contact-btn"
+    open-type="contact"
+    session-from="{{code ? '编号查询·' + code : '编号查询'}}"
+    bindcontact="onContactTap"
+    hover-class="contact-btn--hover"
+  >编号有疑问？联系手作人</button>
 
   <view class="bottom-space"></view>
 </view>

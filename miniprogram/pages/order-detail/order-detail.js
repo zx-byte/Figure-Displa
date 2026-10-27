@@ -13,6 +13,7 @@ const {
   AFTER_SALE_REASONS
 } = require('../../config/constants')
 const toast = require('../../utils/toast')
+const track = require('../../utils/track')
 const { fenToYuan, formatTime, payCountdown, orderStatusDesc } = require('../../utils/format')
 const { requestPayFollowUps } = require('../../utils/subscribe')
 
@@ -498,6 +499,12 @@ Page({
           }
         })
       })
+  },
+
+  /** 点击客服（open-type="contact" 触发），用于统计订单咨询量 */
+  onContactTap() {
+    const order = this.data.order || {}
+    track.trackConsult('', 'order-detail:' + (order.orderNo || ''))
   },
 
   /** 重试 */

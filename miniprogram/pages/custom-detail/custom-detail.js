@@ -4,6 +4,7 @@
 const { query, call } = require('../../utils/cloud')
 const { CUSTOM_STATUS_MAP, CUSTOM_STATUS } = require('../../config/constants')
 const toast = require('../../utils/toast')
+const track = require('../../utils/track')
 const { fenToYuan, formatTime, customStatusDesc } = require('../../utils/format')
 
 Page({
@@ -176,9 +177,9 @@ Page({
     })
   },
 
-  /** 联系客服 */
-  onContact() {
-    toast.info('请点击右下角客服按钮发起会话')
+  /** 点击客服（open-type="contact" 触发），用于统计定制单的咨询量 */
+  onContactTap() {
+    track.trackConsult('', 'custom-detail')
   },
 
   /** 重试 */

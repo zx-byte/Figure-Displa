@@ -1,5 +1,6 @@
 // pages/about/about.js
 const share = require('../../utils/share')
+const track = require('../../utils/track')
 // 手作人介绍。小众品类里，「你是谁」对成交的影响大于「你卖什么」。
 
 Page({
@@ -15,9 +16,12 @@ Page({
     wx.setNavigationBarTitle({ title: '关于' })
   },
 
-  /** 联系客服 */
-  onContact() {
-    // open-type="contact" 由 button 承担，此方法仅用于埋点
+  /**
+   * 点击客服（open-type="contact" 触发）
+   * 会话由微信接管，这里只做来源埋点；后台没配事件时内部吞掉异常。
+   */
+  onContactTap() {
+    track.trackConsult('', 'about')
   },
 
   /** 隐私政策 */

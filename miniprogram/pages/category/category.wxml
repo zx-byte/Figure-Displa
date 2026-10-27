@@ -117,6 +117,8 @@
       subText="换个关键词或重置筛选条件试试"
       actionText="重置筛选"
       bind:action="clearFilter"
+      contactText="没找到想要的？直接问手作人"
+      contactFrom="{{contactFrom}}"
     />
 
     <block wx:else>

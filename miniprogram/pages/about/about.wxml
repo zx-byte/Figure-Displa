@@ -59,7 +59,13 @@
     </view>
   </view>
 
-  <button class="contact-btn" open-type="contact">联系手作人</button>
+  <button
+    class="contact-btn"
+    open-type="contact"
+    session-from="关于页"
+    bindcontact="onContactTap"
+    hover-class="contact-btn--hover"
+  >联系手作人</button>
 
   <view class="legal">
     <text class="legal-link" bindtap="goPrivacy">隐私政策</text>

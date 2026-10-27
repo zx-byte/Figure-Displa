@@ -260,30 +260,46 @@
 
     <!-- 底部操作栏 -->
     <view class="action-bar">
-      <view class="action-icon" bindtap="onToggleFavorite">
+      <view class="action-icon" bindtap="onToggleFavorite" hover-class="action-icon--hover">
         <text class="action-symbol {{favorited ? 'action-symbol--on' : ''}}">{{favorited ? '♥' : '♡'}}</text>
         <text class="action-label">{{favorited ? '已收藏' : '收藏'}}</text>
       </view>
 
       <!-- 纯展示模式：交易入口全部替换为微信咨询 -->
       <block wx:if="{{!showTrade}}">
-        <button class="action-icon action-icon--plain" open-type="contact" bindcontact="onContactTap">
-          <text class="action-symbol">✉</text>
+        <button
+          class="action-icon action-icon--plain"
+          open-type="contact"
+          session-from="作品·{{detail.name}}"
+          data-from="detail-icon"
+          bindcontact="onContactTap"
+          hover-class="action-icon--hover"
+        >
+          <text class="action-symbol">✉︎</text>
           <text class="action-label">客服</text>
         </button>
         <button
           class="btn-primary-bar btn-contact-bar"
           open-type="contact"
+          session-from="作品·{{detail.name}}"
+          data-from="detail-bar"
           bindcontact="onContactTap"
           hover-class="btn-bar--hover"
         >
-          微信咨询定制
+          微信咨询
         </button>
       </block>
 
       <block wx:else>
-        <button class="action-icon action-icon--plain" open-type="contact" bindcontact="onContactTap">
-          <text class="action-symbol">✉</text>
+        <button
+          class="action-icon action-icon--plain"
+          open-type="contact"
+          session-from="作品·{{detail.name}}"
+          data-from="detail-icon"
+          bindcontact="onContactTap"
+          hover-class="action-icon--hover"
+        >
+          <text class="action-symbol">✉︎</text>
           <text class="action-label">客服</text>
         </button>
 
