@@ -13,7 +13,19 @@ const db = cloud.database()
 const _ = db.command
 const $ = db.command.aggregate
 
-const SECRET = process.env.ADMIN_SECRET || 'fd-admin-secret-change-me'
+/**
+ * 令牌签名密钥，与 admin 云函数必须一致。
+ * 不设置硬编码默认值：默认值随代码公开即可被用来伪造管理员令牌。
+ * 未配置或过短时一律拒绝校验，错误信息指明缺哪个变量。
+ */
+const SECRET = process.env.ADMIN_SECRET || ''
+const SECRET_MIN_LEN = 16
+const SECRET_HINT = `后台密钥未正确配置，请在云函数环境变量中设置 ADMIN_SECRET（至少 ${SECRET_MIN_LEN} 位随机字符串）`
+
+/** 密钥是否已正确配置 */
+function secretReady() {
+  return SECRET.length >= SECRET_MIN_LEN
+}
 
 function ok(data) {
   return { code: 0, msg: 'ok', data: data === undefined ? null : data }
@@ -32,6 +44,7 @@ function getAdminOpenids() {
 
 /** 令牌校验，与 admin 云函数同算法 */
 function verifyToken(token, openid) {
+  if (!secretReady()) return { ok: false, msg: SECRET_HINT }
   if (!token || typeof token !== 'string') return { ok: false, msg: '请先登录管理后台' }
   const parts = token.split('.')
   if (parts.length !== 2) return { ok: false, msg: '登录凭证无效，请重新登录' }

@@ -10,6 +10,8 @@ const DEMO_IMG = '/images/demo/demo-'
 // 真实作品数据。由 scripts/import-works.js 根据压缩后的作品图生成，
 // 排在最前面，优先于下方的演示商品展示。
 const { WORKS } = require('./works')
+// 收藏状态存本地：纯展示形态没有用户体系，写云数据库既无 openid 可依，也属多余的收集
+const favoriteStore = require('../utils/favorite')
 
 /** 360° 环视帧序列，24 帧一圈 */
 const PANO_FRAMES = Array.from(
@@ -481,7 +483,9 @@ function handle(name, action, event = {}) {
     }
     return ok({
       openid: 'demo-openid',
-      isAdmin: true,
+      // 演示模式没有管理员身份。返回 true 会让「我的」页对所有访客显示「管理后台」，
+      // 而真实云端是靠 ADMIN_OPENIDS 白名单判定的，两端口径必须一致。
+      isAdmin: false,
       userInfo: { nickname: '演示用户', avatar: '', phone: '13800138000' }
     })
   }
@@ -660,19 +664,35 @@ function handle(name, action, event = {}) {
   }
 
   // ---- favorite ----
+  // 收藏落在本地存储（utils/favorite.js），因此这里必须真实读写，
+  // 否则会出现「点了变实心、退出再进又空心、收藏页恒定两件」的假象。
   if (name === 'favorite') {
     if (action === 'list') {
-      return ok({ list: PRODUCTS.slice(0, 2).map(slim) })
+      return ok({ list: favoriteStore.list() })
     }
-    if (action === 'check') return ok({ favorited: false })
-    if (action === 'toggle') return ok({ favorited: true, count: 3 })
+    if (action === 'check') {
+      return ok({ favorited: favoriteStore.has(event.productId) })
+    }
+    if (action === 'toggle') {
+      const p = PRODUCTS.find((x) => x._id === event.productId)
+      if (!p) return fail(404, '作品不存在或已下架')
+      const res = favoriteStore.toggle(p)
+      if (res.full) return fail(400, '收藏夹已满，请先清理一些作品')
+      return ok({ favorited: res.favorited, count: res.count })
+    }
     return fail(400, '演示模式未实现该动作')
   }
 
   // ---- admin ----
   if (name === 'admin') {
     if (action === 'checkAuth') {
-      return ok({ token: 'demo-token', expireAt: Date.now() + 2 * 3600 * 1000 })
+      // 演示模式不签发令牌。管理口令是 ADMIN_PASSWORD 环境变量，只在 admin 云函数里比对，
+      // 本地没有任何凭据可供验证——假装通过只会让人以为后台真的能用，
+      // 而实际改的全是假数据，误判成本比拒绝更高。
+      return fail(
+        403,
+        '演示模式不提供管理后台。请部署 admin 云函数并配置 ADMIN_OPENIDS / ADMIN_PASSWORD / ADMIN_SECRET 后使用'
+      )
     }
     if (action === 'productList') {
       return ok({

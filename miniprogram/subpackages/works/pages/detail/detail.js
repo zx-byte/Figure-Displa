@@ -261,9 +261,11 @@ Page({
 
   /** 切换收藏 */
   onToggleFavorite() {
-    // 收藏会把 openid 与作品 ID 写进收藏表，属收集个人信息，先确认协议。
-    // 取消收藏不拦——已经收藏过说明同意过，不该让用户撤不回来。
-    if (!this.data.favorited && app.needPrivacy()) {
+    // 纯展示形态下收藏只写本地存储（utils/favorite.js），不上云、不关联 openid，
+    // 不构成收集个人信息，因此不设协议前置。
+    // 切回交易模式后收藏会写进 users.favorites，那时才需要先同意协议。
+    // 取消收藏任何时候都不拦——不该让用户撤不回来。
+    if (SHOW_TRADE && !this.data.favorited && app.needPrivacy()) {
       toast.info('请先到「我的」页同意协议后再收藏')
       return
     }

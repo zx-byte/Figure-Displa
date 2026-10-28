@@ -100,7 +100,7 @@ python scripts/gen-tabbar-icons.py
 | ---------------- | ----------------------- | ----------------------------- |
 | `ADMIN_OPENIDS`  | `login`、`admin`、`stats` | 管理员 openid，多个用英文逗号分隔。三处必须完全一致 |
 | `ADMIN_PASSWORD` | `admin`                 | 管理后台登录口令，建议 8 位以上             |
-| `ADMIN_SECRET`   | `admin`、`stats`         | 令牌签名密钥，两处必须一致，建议 32 位随机串      |
+| `ADMIN_SECRET`   | `admin`、`stats`         | 令牌签名密钥，两处必须一致，**至少 16 位随机串**（代码里不再有默认值，未配则后台拒绝签发令牌）      |
 | `PAY_SUB_MCH_ID` | `pay`                   | 微信支付商户号                       |
 | `INIT_TOKEN`     | `initdb`                | 初始化口令，任意随机串，初始化后删除该函数         |
 
@@ -375,6 +375,8 @@ const SHOW_TRADE = false  // 纯展示，交易走微信
 ```
 
 这个组合的效果：**不需要云开发、不需要营业执照、不需要微信支付，可以直接提交审核上线**。用户看作品，感兴趣的通过微信客服联系。
+
+该形态下只有两处数据写在本地，都不上云、不关联身份：**浏览历史**（`utils/history.js`）与**收藏夹**（`utils/favorite.js`）。换设备或清缓存即丢失，这是不用登录的代价；接入云开发后收藏改由 `favorite` 云函数写 `users.favorites`。
 
 ### 上线前置：开通客服
 
