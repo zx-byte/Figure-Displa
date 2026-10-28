@@ -21,7 +21,8 @@
 ## 云函数环境变量（部署必配）
 - `ADMIN_OPENIDS` → login、admin、stats（三处必须一致）
 - `ADMIN_PASSWORD` → admin
-- `ADMIN_SECRET` → admin、stats（两处必须一致，用于令牌签名）
+- `ADMIN_SECRET` → admin、stats（两处必须一致）。**代码里无默认值且要求 ≥16 位**，
+  漏配时 checkAuth 返回 500、verifyToken 返回 401 并提示变量名——早期写死的默认串等于公开密钥
 - `PAY_SUB_MCH_ID` → pay
 - `INIT_TOKEN` → initdb（初始化后删除该函数）
 
@@ -32,6 +33,10 @@
 - 用户身份只从 `cloud.getWXContext()` 取，云端不信任前端传入的 userId
 - 管理员 = openid 白名单 + 管理口令双因子，在云函数内判定
 - 购物车走本地存储，不进云数据库，结算时服务端重算校验
+- **收藏与浏览历史同样走本地存储**（`utils/favorite.js` / `utils/history.js`），纯展示形态不写库、不关联 openid；
+  收藏字段对齐 `favorite` 云函数返回的商品摘要，切换云开发时渲染不用改。换设备即丢失是可接受的代价
+- **`mock.js` 里任何「恒定返回值」都是隐患**：收藏曾因 check 恒 false / toggle 恒 true / list 恒前两件
+  而整条链路假成功；新增 mock action 必须真实读写状态，不能图省事返回固定值
 - 支付三重保障：下单前服务端重算金额 / 回调幂等（orderNo + transactionId）/ 前端主动查单兜底
 - 样式单位 rpx，基准宽度 750rpx；变量与函数小驼峰，页面目录小写英文加中划线
 - 协议同意状态存版本号（`PRIVACY_VERSION`）而非布尔，条款实质变更时递增即强制重弹；拒绝只降级提示不强制退出
